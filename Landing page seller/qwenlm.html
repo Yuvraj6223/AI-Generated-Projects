@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxCraft Pro - Premium Landing Page Builder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1d4ed8;
+            --accent: #7c3aed;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --border-radius: 16px;
+            --box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: var(--dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--box-shadow);
+            padding: 1.2rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            font-family: 'DM Serif Display', serif;
+            letter-spacing: -0.5px;
+        }
+
+        .logo i {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 1.05rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px -5px rgba(37, 99, 235, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-4px);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 90px);
+            padding: 2.5rem;
+            gap: 2.5rem;
+        }
+
+        /* Template Selector */
+        .template-selector {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 140px);
+            position: relative;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--light-gray);
+            color: var(--dark);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'DM Serif Display', serif;
+            letter-spacing: -0.5px;
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 90px;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            z-index: 999;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .templates-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+        }
+
+        .template-card {
+            aspect-ratio: 3/4;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .template-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 40px -5px rgba(0,0,0,0.2);
+        }
+
+        .template-card.active {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        }
+
+        .template-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .template-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .template-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.85);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+            font-family: 'Inter', sans-serif;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .template-card:hover .template-name {
+            transform: translateY(0);
+        }
+
+        /* Preview Area */
+        .preview-area {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .preview-header {
+            padding: 1.2rem 2rem;
+            background: rgba(248, 250, 252, 0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .preview-title {
+            font-weight: 800;
+            color: var(--dark);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'DM Serif Display', serif;
+            letter-spacing: -0.5px;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .preview-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 1px solid var(--light-gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .preview-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .preview-frame {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+            position: relative;
+        }
+
+        /* Customization Panel */
+        .customization-panel {
+            width: 340px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 140px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.05rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            background: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .color-picker {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .color-option {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: var(--transition);
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .color-option:hover, .color-option.active {
+            transform: scale(1.2) rotate(8deg);
+            border-color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .color-label {
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: var(--gray);
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .cta-section {
+            margin-top: 2.5rem;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1300px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .template-selector, .customization-panel {
+                width: 100%;
+                max-height: 320px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-buttons {
+                display: none;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1.2rem;
+                padding: 1.2rem;
+            }
+            
+            .templates-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .templates-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .preview-frame {
+                height: 400px;
+            }
+            
+            .btn {
+                padding: 0.7rem 1.4rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Premium Template Styles */
+        .premium-template {
+            padding: 0;
+            min-height: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Tech Startup Template */
+        .tech-hero {
+            position: relative;
+            padding: 8rem 2rem;
+            text-align: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.05) 2px, transparent 2px),
+                radial-gradient(circle at 80% 70%, rgba(124, 58, 237, 0.05) 2px, transparent 2px);
+            background-size: 40px 40px;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.15);
+            color: var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            font-family: 'Inter', sans-serif;
+            animation: pulse 2s infinite;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            font-family: 'DM Serif Display', serif;
+            letter-spacing: -1px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+        
+        .hero-cta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-hero {
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn-hero:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary-hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 15px 35px -5px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn-primary-hero:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px -5px rgba(37, 99, 235, 0.6);
+        }
+        
+        .btn-outline-hero {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline-hero:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-6px);
+        }
+        
+        .hero-image {
+            max-width: 1000px;
+            margin: 4rem auto 0;
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+        }
+        
+        .hero-image-inner {
+            transform: translateZ(50px);
+            transition: var(--transition);
+        }
+        
+        .hero-image:hover .hero-image-inner {
+            transform: translateZ(80px) scale(1.03);
+        }
+        
+        .features {
+            padding: 6rem 2rem;
+            background: white;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+        
+        .section-header .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            font-family: 'DM Serif Display', serif;
+            letter-spacing: -0.5px;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            border: 1px solid var(--light-gray);
+        }
+        
+        .feature-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, transparent 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -10px rgba(0,0,0,0.2);
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.3);
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .feature-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 1.2rem;
+            color: var(--dark);
+            font-family: 'DM Serif Display', serif;
+        }
+        
+        .feature-desc {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+        
+        .stats {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .stat-item {
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(to right, white, #c7d2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'DM Serif Display', serif;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .testimonials {
+            padding: 6rem 2rem;
+            background: var(--light);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            border: 1px solid var(--light-gray);
+            transition: var(--transition);
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -10px rgba(0,0,0,0.15);
+        }
+        
+        .testimonial-card::before {
+            content: """;
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            font-size: 5rem;
+            color: rgba(37, 99, 235, 0.1);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        
+        .testimonial-content {
+            margin-bottom: 2rem;
+            font-style: italic;
+            color: var(--gray);
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .author-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-family: 'DM Serif Display', serif;
+            transition: var(--transition);
+        }
+        
+        .testimonial-card:hover .author-avatar {
+            transform: scale(1.1);
+        }
+        
+        .author-info h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+            font-family: 'DM Serif Display', serif;
+        }
+        
+        .author-info p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+        
+        .cta-section-main {
+            padding: 8rem 2rem;
+            text-align: center;
+            background: white;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid var(--light-gray);
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cta-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            font-family: 'DM Serif Display', serif;
+            letter-spacing: -0.5px;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.4rem;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+        
+        .cta-form {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .cta-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 1.2rem 1.5rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+        
+        .cta-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        }
+        
+        .cta-button {
+            padding: 1.2rem 2.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 15px 35px -5px rgba(37, 99, 235, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 45px -5px rgba(37, 99, 235, 0.6);
+        }
+        
+        .footer {
+            padding: 4rem 2rem 2rem;
+            background: var(--dark);
+            color: white;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.8rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+            font-family: 'DM Serif Display', serif;
+            letter-spacing: -0.5px;
+        }
+        
+        .footer-column h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.05rem;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        
+        .floating {
+            animation: float 7s ease-in-out infinite;
+        }
+        
+        /* Parallax Effect */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="#" class="logo">
+            <i class="fas fa-rocket"></i>
+            <span>LuxCraft Pro</span>
+        </a>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-buttons">
+            <button class="btn btn-outline" id="downloadBtn">
+                <i class="fas fa-download"></i> Export HTML
+            </button>
+            <button class="btn btn-primary">
+                <i class="fas fa-cloud-upload-alt"></i> Publish
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="btn btn-outline" id="mobileDownloadBtn">
+            <i class="fas fa-download"></i> Export HTML
+        </button>
+        <button class="btn btn-primary">
+            <i class="fas fa-cloud-upload-alt"></i> Publish
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Template Selector -->
+        <div class="template-selector">
+            <h2 class="section-title"><i class="fas fa-layer-group"></i> Premium Templates</h2>
+            <div class="templates-grid" id="templatesGrid">
+                <!-- Templates will be generated by JS -->
+            </div>
+        </div>
+
+        <!-- Preview Area -->
+        <div class="preview-area">
+            <div class="preview-header">
+                <div class="preview-title">
+                    <i class="fas fa-eye"></i> Live Preview
+                </div>
+                <div class="preview-actions">
+                    <div class="preview-btn"><i class="fas fa-desktop"></i></div>
+                    <div class="preview-btn"><i class="fas fa-tablet-alt"></i></div>
+                    <div class="preview-btn"><i class="fas fa-mobile-alt"></i></div>
+                </div>
+            </div>
+            <div class="preview-frame">
+                <div class="premium-template" id="previewContent">
+                    <!-- Template content will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Customization Panel -->
+        <div class="customization-panel">
+            <h2 class="section-title"><i class="fas fa-sliders-h"></i> Customize Your Page</h2>
+            <div class="form-group">
+                <label for="brandName">Brand Name</label>
+                <input type="text" id="brandName" class="form-control" placeholder="Enter your brand name">
+            </div>
+            <div class="form-group">
+                <label for="tagline">Tagline</label>
+                <input type="text" id="tagline" class="form-control" placeholder="Your compelling tagline">
+            </div>
+            <div class="form-group">
+                <label for="ctaText">CTA Button Text</label>
+                <input type="text" id="ctaText" class="form-control" placeholder="Get Started">
+            </div>
+            <div class="form-group">
+                <label>Color Theme</label>
+                <div class="color-picker" id="colorPicker">
+                    <!-- Color options will be generated by JS -->
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="aboutText">About Section</label>
+                <textarea id="aboutText" class="form-control" placeholder="Tell your story..."></textarea>
+            </div>
+            <div class="cta-section">
+                <button class="btn btn-primary" id="applyChanges">
+                    <i class="fas fa-sync-alt"></i> Apply Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Template data with premium descriptions
+        const templates = [
+            { 
+                id: 1, 
+                name: "Tech Startup", 
+                theme: "tech", 
+                image: "https://placehold.co/300x400/2563eb/white?text=Tech+Startup",
+                type: "tech"
+            },
+            { 
+                id: 2, 
+                name: "E-commerce", 
+                theme: "ecommerce", 
+                image: "https://placehold.co/300x400/7c3aed/white?text=E-commerce",
+                type: "ecommerce"
+            },
+            { 
+                id: 3, 
+                name: "Consulting", 
+                theme: "consulting", 
+                image: "https://placehold.co/300x400/0d9488/white?text=Consulting",
+                type: "consulting"
+            },
+            { 
+                id: 4, 
+                name: "Fitness", 
+                theme: "fitness", 
+                image: "https://placehold.co/300x400/dc2626/white?text=Fitness",
+                type: "fitness"
+            },
+            { 
+                id: 5, 
+                name: "Restaurant", 
+                theme: "restaurant", 
+                image: "https://placehold.co/300x400/92400e/white?text=Restaurant",
+                type: "restaurant"
+            },
+            { 
+                id: 6, 
+                name: "Education", 
+                theme: "education", 
+                image: "https://placehold.co/300x400/7e22ce/white?text=Education",
+                type: "education"
+            },
+            { 
+                id: 7, 
+                name: "Healthcare", 
+                theme: "healthcare", 
+                image: "https://placehold.co/300x400/0891b2/white?text=Healthcare",
+                type: "healthcare"
+            },
+            { 
+                id: 8, 
+                name: "Real Estate", 
+                theme: "realestate", 
+                image: "https://placehold.co/300x400/059669/white?text=Real+Estate",
+                type: "realestate"
+            },
+            { 
+                id: 9, 
+                name: "Creative Agency", 
+                theme: "agency", 
+                image: "https://placehold.co/300x400/7c2d12/white?text=Creative+Agency",
+                type: "agency"
+            },
+            { 
+                id: 10, 
+                name: "Finance", 
+                theme: "finance", 
+                image: "https://placehold.co/300x400/b45309/white?text=Finance",
+                type: "finance"
+            }
+        ];
+
+        // Color themes
+        const colorThemes = [
+            { name: "Blue", class: "theme-blue", color: "#2563eb" },
+            { name: "Purple", class: "theme-purple", color: "#7c3aed" },
+            { name: "Teal", class: "theme-teal", color: "#0d9488" },
+            { name: "Red", class: "theme-red", color: "#dc2626" },
+            { name: "Amber", class: "theme-amber", color: "#92400e" },
+            { name: "Violet", class: "theme-violet", color: "#7e22ce" },
+            { name: "Sky", class: "theme-sky", color: "#0891b2" },
+            { name: "Emerald", class: "theme-emerald", color: "#059669" },
+            { name: "Brown", class: "theme-brown", color: "#7c2d12" },
+            { name: "Orange", class: "theme-orange", color: "#b45309" }
+        ];
+
+        // DOM Elements
+        const templatesGrid = document.getElementById('templatesGrid');
+        const previewContent = document.getElementById('previewContent');
+        const colorPicker = document.getElementById('colorPicker');
+        const applyChangesBtn = document.getElementById('applyChanges');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const mobileDownloadBtn = document.getElementById('mobileDownloadBtn');
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        // Current state
+        let currentTemplate = templates[0];
+        let currentTheme = colorThemes[0];
+
+        // Initialize the app
+        function init() {
+            renderTemplates();
+            renderColorPicker();
+            loadTemplate(currentTemplate);
+            setupEventListeners();
+            initScrollEffects();
+        }
+
+        // Render template cards
+        function renderTemplates() {
+            templatesGrid.innerHTML = '';
+            templates.forEach(template => {
+                const card = document.createElement('div');
+                card.className = `template-card ${template.id === currentTemplate.id ? 'active' : ''}`;
+                card.innerHTML = `
+                    <img src="${template.image}" alt="${template.name}">
+                    <div class="template-name">${template.name}</div>
+                `;
+                card.addEventListener('click', () => selectTemplate(template));
+                templatesGrid.appendChild(card);
+            });
+        }
+
+        // Render color picker
+        function renderColorPicker() {
+            colorPicker.innerHTML = '';
+            colorThemes.forEach(theme => {
+                const colorOption = document.createElement('div');
+                colorOption.className = `color-option ${theme.class === currentTheme.class ? 'active' : ''}`;
+                colorOption.style.backgroundColor = theme.color;
+                colorOption.innerHTML = `<span class="color-label">${theme.name}</span>`;
+                colorOption.addEventListener('click', () => selectTheme(theme));
+                colorPicker.appendChild(colorOption);
+            });
+        }
+
+        // Select a template
+        function selectTemplate(template) {
+            currentTemplate = template;
+            renderTemplates();
+            loadTemplate(template);
+        }
+
+        // Select a color theme
+        function selectTheme(theme) {
+            currentTheme = theme;
+            renderColorPicker();
+            updatePreview();
+        }
+
+        // Get current theme color
+        function getThemeColor() {
+            return currentTheme.color;
+        }
+
+        // Get contrasting color for text
+        function getThemeColorDark() {
+            const colors = {
+                '#2563eb': '#1e40af',
+                '#7c3aed': '#6d28d9',
+                '#0d9488': '#0f766e',
+                '#dc2626': '#991b1b',
+                '#92400e': '#7c2d12',
+                '#7e22ce': '#6b21a8',
+                '#0891b2': '#0e7490',
+                '#059669': '#047857',
+                '#7c2d12': '#5b2c12',
+                '#b45309': '#92400e'
+            };
+            return colors[currentTheme.color] || '#000000';
+        }
+
+        // Load template into preview
+        function loadTemplate(template) {
+            // Set default values based on template
+            document.getElementById('brandName').value = template.name + " Co.";
+            document.getElementById('tagline').value = getTemplateTagline(template.name);
+            document.getElementById('ctaText').value = "Get Started";
+            document.getElementById('aboutText').value = getTemplateAbout(template.name);
+            
+            updatePreview();
+        }
+
+        // Get template-specific tagline
+        function getTemplateTagline(templateName) {
+            const taglines = {
+                "Tech Startup": "Revolutionize your business with cutting-edge technology solutions",
+                "E-commerce": "Transform your online store into a conversion powerhouse",
+                "Consulting": "Strategic insights that drive measurable business growth",
+                "Fitness": "Achieve your fitness goals with personalized training programs",
+                "Restaurant": "Experience culinary excellence in every bite",
+                "Education": "Unlock potential through innovative learning experiences",
+                "Healthcare": "Compassionate care backed by medical expertise",
+                "Real Estate": "Find your dream home with our expert guidance",
+                "Creative Agency": "Award-winning creative solutions that captivate audiences",
+                "Finance": "Smart financial strategies for lasting wealth creation"
+            };
+            return taglines[templateName] || "Transform your business with our innovative solutions";
+        }
+
+        // Get template-specific about text
+        function getTemplateAbout(templateName) {
+            const aboutTexts = {
+                "Tech Startup": "Founded in 2015, we're a team of passionate engineers and designers building the future of technology. Our mission is to solve complex problems with elegant solutions that empower businesses to thrive in the digital age.",
+                "E-commerce": "With over a decade of experience in online retail, we help brands create seamless shopping experiences that convert visitors into loyal customers. Our data-driven approach ensures maximum ROI for every marketing dollar spent.",
+                "Consulting": "Our team of industry veterans brings deep expertise across multiple sectors. We partner with forward-thinking organizations to develop strategies that drive innovation, efficiency, and sustainable growth in competitive markets.",
+                "Fitness": "We believe fitness should be accessible, enjoyable, and effective. Our certified trainers create personalized programs that adapt to your lifestyle, helping you achieve results that last a lifetime.",
+                "Restaurant": "For over 25 years, we've been crafting memorable dining experiences using locally-sourced ingredients and time-honored techniques. Every dish tells a story of passion, quality, and culinary artistry.",
+                "Education": "We're reimagining education for the 21st century. Our platform combines engaging content with adaptive learning technology to help students master concepts at their own pace while developing critical thinking skills.",
+                "Healthcare": "Patient-centered care is at the heart of everything we do. Our multidisciplinary team provides comprehensive services focused on prevention, treatment, and long-term wellness for individuals and families.",
+                "Real Estate": "With intimate knowledge of local markets and a commitment to integrity, we guide clients through every step of the buying and selling process. Our network of trusted professionals ensures a smooth transaction from start to finish.",
+                "Creative Agency": "We blend strategy, creativity, and technology to build brands that stand out. From concept to execution, our integrated approach delivers consistent messaging across all touchpoints for maximum impact.",
+                "Finance": "Our fiduciary advisors provide personalized financial planning based on your unique goals and risk tolerance. We believe in transparency, education, and long-term relationships built on trust."
+            };
+            return aboutTexts[templateName] || "We are a passionate team dedicated to delivering exceptional results for our clients. With years of experience in the industry, we understand what it takes to succeed in today's competitive market.";
+        }
+
+        // Tech Startup Template
+        function renderTechTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor}15 0%, ${themeColor}08 100%); padding: 6rem 2rem; text-align: center; color: white;">
+                    <h1 style="font-size: 4.5rem; color: ${themeColor}; margin-bottom: 1rem; font-weight: 900;">🚀 ${brandName}</h1>
+                    <p style="font-size: 1.3rem; color: #666; margin-bottom: 2rem;">${tagline}</p>
+                    <button style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); color: white; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);">${ctaText}</button>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 4rem 2rem; background: white;">
+                    <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <h4 style="color: ${themeColor}; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 700;">⚡ Lightning Speed</h4>
+                        <p style="color: #666; line-height: 1.8;">Experience unmatched performance with our AI-optimized infrastructure processing millions of requests per second.</p>
+                    </div>
+                    <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <h4 style="color: ${themeColor}; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 700;">🔒 Bank-Grade Security</h4>
+                        <p style="color: #666; line-height: 1.8;">Military-grade encryption combined with multi-layer security protocols keeps your data fortress-protected 24/7.</p>
+                    </div>
+                    <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <h4 style="color: ${themeColor}; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 700;">🔗 Infinite Integrations</h4>
+                        <p style="color: #666; line-height: 1.8;">Connect seamlessly with 500+ applications through our comprehensive API and pre-built integrations.</p>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 5rem 2rem; text-align: center;">
+                    <h2 style="color: #111; font-size: 2.8rem; margin-bottom: 1rem; font-weight: 900;">Why Leading Companies Choose Us</h2>
+                    <p style="color: #666; font-size: 1.1rem; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">From startups to Fortune 500 companies, thousands of organizations trust us with their most critical operations.</p>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 3rem; max-width: 900px; margin: 0 auto;">
+                        <div style="text-align: left; padding: 2rem;">
+                            <h4 style="color: ${themeColor}; font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">📊 Real-Time Analytics</h4>
+                            <p style="color: #666; line-height: 1.8;">Advanced analytics dashboard providing actionable insights into every aspect of your business in real-time.</p>
+                        </div>
+                        <div style="text-align: left; padding: 2rem;">
+                            <h4 style="color: ${themeColor}; font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">🤖 AI-Powered Automation</h4>
+                            <p style="color: #666; line-height: 1.8;">Machine learning algorithms automate repetitive tasks, saving thousands of hours and reducing human error.</p>
+                        </div>
+                        <div style="text-align: left; padding: 2rem;">
+                            <h4 style="color: ${themeColor}; font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">🌍 Global Infrastructure</h4>
+                            <p style="color: #666; line-height: 1.8;">Data centers across six continents ensure lightning-fast access and compliance with regional regulations.</p>
+                        </div>
+                        <div style="text-align: left; padding: 2rem;">
+                            <h4 style="color: ${themeColor}; font-size: 1.5rem; margin-bottom: 1rem; font-weight: 700;">👥 24/7 Expert Support</h4>
+                            <p style="color: #666; line-height: 1.8;">Award-winning support team standing by to help you succeed at any hour, in any timezone.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); color: white; padding: 5rem 2rem; text-align: center;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 3rem; font-weight: 900;">Our Impact by Numbers</h2>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                        <div style="padding: 2rem;">
+                            <p style="font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">99.99%</p>
+                            <p style="opacity: 0.9;">Uptime SLA</p>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <p style="font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">500K+</p>
+                            <p style="opacity: 0.9;">Active Users</p>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <p style="font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">$2B+</p>
+                            <p style="opacity: 0.9;">Transactions Processed</p>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <p style="font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">150+</p>
+                            <p style="opacity: 0.9;">Countries Served</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="padding: 5rem 2rem; background: white;">
+                    <h2 style="color: #111; font-size: 2.5rem; text-align: center; margin-bottom: 3rem; font-weight: 900;">Customer Success Stories</h2>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+                        <div style="background: #f8f9fa; padding: 2.5rem; border-radius: 12px; border-top: 4px solid ${themeColor};">
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                                <span style="color: ${themeColor}; font-size: 1.2rem;">★★★★★</span>
+                            </div>
+                            <p style="color: #666; margin-bottom: 2rem; line-height: 1.8;">"This platform revolutionized our operations. We saw a 350% ROI within the first six months of implementation."</p>
+                            <p style="color: ${themeColor}; font-weight: 700;">Alex Chen</p>
+                            <p style="color: #999; font-size: 0.9rem;">CEO, TechVentures Inc.</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 2.5rem; border-radius: 12px; border-top: 4px solid ${themeColor};">
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                                <span style="color: ${themeColor}; font-size: 1.2rem;">★★★★★</span>
+                            </div>
+                            <p style="color: #666; margin-bottom: 2rem; line-height: 1.8;">"The best decision we made. The team is responsive, the product is reliable, and the results speak for themselves."</p>
+                            <p style="color: ${themeColor}; font-weight: 700;">Maria Garcia</p>
+                            <p style="color: #999; font-size: 0.9rem;">COO, Global Innovations Ltd.</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 2.5rem; border-radius: 12px; border-top: 4px solid ${themeColor};">
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                                <span style="color: ${themeColor}; font-size: 1.2rem;">★★★★★</span>
+                            </div>
+                            <p style="color: #666; margin-bottom: 2rem; line-height: 1.8;">"Unmatched technical excellence combined with exceptional customer support. We wouldn't trust anyone else."</p>
+                            <p style="color: ${themeColor}; font-weight: 700;">James Mitchell</p>
+                            <p style="color: #999; font-size: 0.9rem;">CTO, Digital Solutions Co.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 4rem 2rem; text-align: center;">
+                    <h3 style="color: #111; font-size: 2rem; margin-bottom: 2rem; font-weight: 900;">About ${brandName}</h3>
+                    <p style="color: #666; max-width: 800px; margin: 0 auto; font-size: 1.05rem; line-height: 1.9;">${aboutText}</p>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); color: white; padding: 4rem 2rem; text-align: center;">
+                    <h2 style="font-size: 2.2rem; margin-bottom: 1.5rem; font-weight: 900;">Ready to Get Started?</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.95;">Join thousands of successful companies already using our platform.</p>
+                    <input type="email" placeholder="Enter your email" style="padding: 1rem; border: none; border-radius: 8px; width: 300px; max-width: 100%; margin-right: 0.5rem; font-size: 1rem;">
+                    <button style="background: white; color: ${themeColor}; padding: 1rem 2.5rem; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer;">${ctaText}</button>
+                </div>
+            `;
+        }
+
+        // Initialize scroll effects
+        function initScrollEffects() {
+            // Add scroll animations to elements when they come into view
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Apply to feature cards, testimonials, etc.
+            document.querySelectorAll('.feature-card, .testimonial-card, .stat-item').forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // E-commerce Template
+        function renderEcommerceTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor}15 0%, ${themeColor}08 100%); padding: 6rem 2rem; text-align: center;">
+                    <h1 style="font-size: 4.5rem; color: ${themeColor}; margin-bottom: 1rem; font-weight: 900;">🛍️ ${brandName}</h1>
+                    <p style="font-size: 1.3rem; color: #666; margin-bottom: 2rem;">${tagline}</p>
+                    <button style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); color: white; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);">${ctaText}</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding: 4rem 2rem; background: white;">
+                    <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor}; text-align: center;">
+                        <h4 style="color: ${themeColor}; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 700;">🎁 Curated Selection</h4>
+                        <p style="color: #666; line-height: 1.8;">Handpicked products verified for quality, authenticity, and value.</p>
+                    </div>
+                    <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor}; text-align: center;">
+                        <h4 style="color: ${themeColor}; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 700;">🚚 Express Delivery</h4>
+                        <p style="color: #666; line-height: 1.8;">Same-day shipping available on most items with full tracking.</p>
+                    </div>
+                    <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor}; text-align: center;">
+                        <h4 style="color: ${themeColor}; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 700;">💰 Best Value</h4>
+                        <p style="color: #666; line-height: 1.8;">Price match guarantee with exclusive member discounts up to 40%.</p>
+                    </div>
+                    <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor}; text-align: center;">
+                        <h4 style="color: ${themeColor}; font-size: 1.3rem; margin-bottom: 1rem; font-weight: 700;">🛡️ Secure Checkout</h4>
+                        <p style="color: #666; line-height: 1.8;">Military-grade SSL encryption protects every transaction.</p>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 5rem 2rem; text-align: center;">
+                    <h2 style="color: #111; font-size: 2.8rem; margin-bottom: 1rem; font-weight: 900;">Featured Collections This Season</h2>
+                    <p style="color: #666; font-size: 1.1rem; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">Explore our latest arrivals and trending items selected by our expert curators.</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <div style="background: url('https://placehold.co/300x200/${themeColor.substring(1)}/white?text=Collection'); height: 200px; background-size: cover;"></div>
+                            <div style="padding: 1.5rem;">
+                                <h4 style="color: ${themeColor}; font-weight: 700; margin-bottom: 0.5rem;">Summer Collection</h4>
+                                <p style="color: #666; font-size: 0.9rem;">50+ items | Updated weekly</p>
+                            </div>
+                        </div>
+                        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <div style="background: url('https://placehold.co/300x200/${themeColor.substring(1)}/white?text=Bestsellers'); height: 200px; background-size: cover;"></div>
+                            <div style="padding: 1.5rem;">
+                                <h4 style="color: ${themeColor}; font-weight: 700; margin-bottom: 0.5rem;">Bestsellers</h4>
+                                <p style="color: #666; font-size: 0.9rem;">1000+ 5-star reviews</p>
+                            </div>
+                        </div>
+                        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <div style="background: url('https://placehold.co/300x200/${themeColor.substring(1)}/white?text=Flash+Sale'); height: 200px; background-size: cover;"></div>
+                            <div style="padding: 1.5rem;">
+                                <h4 style="color: ${themeColor}; font-weight: 700; margin-bottom: 0.5rem;">Flash Sale</h4>
+                                <p style="color: #666; font-size: 0.9rem;">Limited time offers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); color: white; padding: 4rem 2rem; text-align: center;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 2rem; font-weight: 900;">Why Shop With Us</h2>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                        <div><p style="font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">500K+</p><p style="opacity: 0.9;">Happy Shoppers</p></div>
+                        <div><p style="font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">98%</p><p style="opacity: 0.9;">Satisfaction Rate</p></div>
+                        <div><p style="font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">2M+</p><p style="opacity: 0.9;">Products Sold</p></div>
+                        <div><p style="font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">30 Days</p><p style="opacity: 0.9;">Easy Returns</p></div>
+                    </div>
+                </div>
+                <div style="padding: 4rem 2rem; background: white;">
+                    <h2 style="color: #111; font-size: 2.5rem; text-align: center; margin-bottom: 3rem; font-weight: 900;">Customer Reviews</h2>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; max-width: 900px; margin: 0 auto;">
+                        <div style="background: #f8f9fa; padding: 2.5rem; border-radius: 12px; border-top: 4px solid ${themeColor};">
+                            <p style="color: ${themeColor}; font-size: 1.1rem; margin-bottom: 1rem;">★★★★★</p>
+                            <p style="color: #666; margin-bottom: 1.5rem; line-height: 1.8;">"Absolutely incredible service and quality products. Arrived in 2 days!"</p>
+                            <p style="color: ${themeColor}; font-weight: 700;">Jessica P.</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 2.5rem; border-radius: 12px; border-top: 4px solid ${themeColor};">
+                            <p style="color: ${themeColor}; font-size: 1.1rem; margin-bottom: 1rem;">★★★★★</p>
+                            <p style="color: #666; margin-bottom: 1.5rem; line-height: 1.8;">"Best online shopping experience. Customer service is top notch!"</p>
+                            <p style="color: ${themeColor}; font-weight: 700;">Marcus T.</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 4rem 2rem; text-align: center;">
+                    <h3 style="color: #111; font-size: 2rem; margin-bottom: 2rem; font-weight: 900;">About ${brandName}</h3>
+                    <p style="color: #666; max-width: 800px; margin: 0 auto; font-size: 1.05rem; line-height: 1.9;">${aboutText}</p>
+                </div>
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); color: white; padding: 4rem 2rem; text-align: center;">
+                    <h2 style="font-size: 2.2rem; margin-bottom: 1.5rem; font-weight: 900;">Exclusive Offer - 20% Off First Purchase</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.95;">Subscribe to our newsletter and get instant access to exclusive deals.</p>
+                    <input type="email" placeholder="Enter your email" style="padding: 1rem; border: none; border-radius: 8px; width: 300px; max-width: 100%; margin-right: 0.5rem; font-size: 1rem;">
+                    <button style="background: white; color: ${themeColor}; padding: 1rem 2.5rem; border: none; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer;">${ctaText}</button>
+                </div>
+            `;
+        }
+
+        // Consulting Template
+        function renderConsultingTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor}20 0%, ${themeColor}10 100%); padding: 6rem 2rem; text-align: center;">
+                    <h1 style="font-size: 4.5rem; color: ${themeColor}; margin-bottom: 1rem; font-weight: 900;">📊 ${brandName}</h1>
+                    <p style="font-size: 1.3rem; color: #666; margin-bottom: 2rem;">${tagline}</p>
+                    <button style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); color: white; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">${ctaText}</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 3rem; padding: 5rem 2rem; background: white;">
+                    <div style="border-left: 4px solid ${themeColor}; padding-left: 2rem;">
+                        <h3 style="color: ${themeColor}; font-size: 1.8rem; margin-bottom: 1rem; font-weight: 900;">📋 Strategic Planning</h3>
+                        <p style="color: #666; line-height: 1.9; font-size: 1.05rem;">We develop comprehensive, actionable strategies tailored to your business goals, market position, and growth objectives. Our consultants analyze competitive landscapes to position you for maximum advantage.</p>
+                    </div>
+                    <div style="border-left: 4px solid ${themeColor}; padding-left: 2rem;">
+                        <h3 style="color: ${themeColor}; font-size: 1.8rem; margin-bottom: 1rem; font-weight: 900;">⚙️ Implementation</h3>
+                        <p style="color: #666; line-height: 1.9; font-size: 1.05rem;">Our team executes plans with precision, ensuring seamless integration with your existing operations. We provide milestone tracking and continuous optimization for measurable results.</p>
+                    </div>
+                    <div style="border-left: 4px solid ${themeColor}; padding-left: 2rem;">
+                        <h3 style="color: ${themeColor}; font-size: 1.8rem; margin-bottom: 1rem; font-weight: 900;">📊 Analysis & Reporting</h3>
+                        <p style="color: #666; line-height: 1.9; font-size: 1.05rem;">Detailed analytics dashboards and transparent reporting keep you informed every step. We provide actionable insights to drive continuous improvement and strategic decisions.</p>
+                    </div>
+                    <div style="border-left: 4px solid ${themeColor}; padding-left: 2rem;">
+                        <h3 style="color: ${themeColor}; font-size: 1.8rem; margin-bottom: 1rem; font-weight: 900;">🤝 Ongoing Support</h3>
+                        <p style="color: #666; line-height: 1.9; font-size: 1.05rem;">Continuous advisory services adapt to market changes while sustaining your competitive advantage. Our dedicated team remains invested in your long-term success and growth.</p>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 5rem 2rem; text-align: center;">
+                    <h2 style="color: #111; font-size: 2.8rem; margin-bottom: 2rem; font-weight: 900;">Our Proven Methodology</h2>
+                    <p style="color: #666; font-size: 1.1rem; margin-bottom: 3rem;">A data-driven approach combined with decades of industry expertise ensures sustainable competitive advantage.</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                        <div style="background: white; padding: 2rem; border-radius: 12px; border-top: 4px solid ${themeColor};">
+                            <p style="font-size: 2rem; font-weight: 900; color: ${themeColor}; margin-bottom: 0.5rem;">Phase 1</p>
+                            <p style="color: #666; font-weight: 700;">Discovery</p>
+                        </div>
+                        <div style="background: white; padding: 2rem; border-radius: 12px; border-top: 4px solid ${themeColor};">
+                            <p style="font-size: 2rem; font-weight: 900; color: ${themeColor}; margin-bottom: 0.5rem;">Phase 2</p>
+                            <p style="color: #666; font-weight: 700;">Strategy</p>
+                        </div>
+                        <div style="background: white; padding: 2rem; border-radius: 12px; border-top: 4px solid ${themeColor};">
+                            <p style="font-size: 2rem; font-weight: 900; color: ${themeColor}; margin-bottom: 0.5rem;">Phase 3</p>
+                            <p style="color: #666; font-weight: 700;">Execution</p>
+                        </div>
+                        <div style="background: white; padding: 2rem; border-radius: 12px; border-top: 4px solid ${themeColor};">
+                            <p style="font-size: 2rem; font-weight: 900; color: ${themeColor}; margin-bottom: 0.5rem;">Phase 4</p>
+                            <p style="color: #666; font-weight: 700;">Optimization</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: ${themeColor}; color: white; padding: 4rem 2rem; text-align: center;">
+                    <h3 style="font-size: 2rem; margin-bottom: 1.5rem;">Why Choose Our Consulting Firm?</h3>
+                    <p style="max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 1.05rem;">${aboutText}</p>
+                </div>
+            `;
+        }
+
+        // Fitness Template
+        function renderFitnessTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); padding: 6rem 2rem; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <h1 style="font-size: 4.5rem; margin-bottom: 1rem; font-weight: 900;">💪 ${brandName}</h1>
+                    <p style="font-size: 1.3rem; margin-bottom: 2.5rem; opacity: 0.95;">${tagline}</p>
+                    <button style="background: white; color: ${themeColor}; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">${ctaText}</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; padding: 4rem 2rem; background: #f8f9fa;">
+                    <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center; border-top: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏋️</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Strength Training</h4>
+                        <p style="color: #666; font-size: 0.95rem;">Build muscle, increase power and endurance</p>
+                    </div>
+                    <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center; border-top: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🤸</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Flexibility</h4>
+                        <p style="color: #666; font-size: 0.95rem;">Improve mobility and reduce injury risk</p>
+                    </div>
+                    <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center; border-top: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏃</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Cardiovascular</h4>
+                        <p style="color: #666; font-size: 0.95rem;">Boost stamina and heart health</p>
+                    </div>
+                    <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center; border-top: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚖️</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Weight Management</h4>
+                        <p style="color: #666; font-size: 0.95rem;">Achieve your ideal body composition</p>
+                    </div>
+                </div>
+                <div style="background: white; padding: 5rem 2rem;">
+                    <h2 style="color: #111; font-size: 2.8rem; text-align: center; margin-bottom: 1rem; font-weight: 900;">Personalized Training Programs</h2>
+                    <p style="color: #666; text-align: center; font-size: 1.1rem; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">Every program is tailored to your fitness level, goals, and lifestyle.</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                        <div style="background: #f8f9fa; padding: 2.5rem; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; font-size: 1.4rem; margin-bottom: 1rem; font-weight: 900;">Beginner</h4>
+                            <p style="color: #666; line-height: 1.9; font-size: 1rem;">Start your fitness journey with foundational exercises and personalized guidance. Build confidence and establish healthy habits.</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 2.5rem; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; font-size: 1.4rem; margin-bottom: 1rem; font-weight: 900;">Intermediate</h4>
+                            <p style="color: #666; line-height: 1.9; font-size: 1rem;">Challenge your body with advanced techniques. Increase intensity while maintaining proper form and preventing injuries.</p>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 2.5rem; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; font-size: 1.4rem; margin-bottom: 1rem; font-weight: 900;">Advanced</h4>
+                            <p style="color: #666; line-height: 1.9; font-size: 1rem;">Reach peak performance with elite training methods. Break through plateaus and achieve exceptional results.</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: ${themeColor}; color: white; padding: 4rem 2rem; text-align: center;">
+                    <h3 style="font-size: 2.3rem; margin-bottom: 2rem; font-weight: 900;">Transform Your Body, Change Your Life</h3>
+                    <p style="max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 1.05rem;">${aboutText}</p>
+                </div>
+            `;
+        }
+
+        // Restaurant Template
+        function renderRestaurantTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor}20 0%, ${themeColor}10 100%); padding: 6rem 2rem; text-align: center;">
+                    <h1 style="font-size: 4.5rem; color: ${themeColor}; margin-bottom: 1rem; font-weight: 900;">🍽️ ${brandName}</h1>
+                    <p style="font-size: 1.3rem; color: #666; margin-bottom: 2rem; font-style: italic;">${tagline}</p>
+                    <button style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); color: white; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">${ctaText}</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 4rem 2rem; background: white;">
+                    <div style="padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor}; text-align: center;">
+                        <h4 style="color: ${themeColor}; font-size: 1.4rem; margin-bottom: 1rem; font-weight: 900;">🍳 Chef Expertise</h4>
+                        <p style="color: #666; line-height: 1.9;">Award-winning chefs with 20+ years of culinary excellence create memorable dining experiences.</p>
+                    </div>
+                    <div style="padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor}; text-align: center;">
+                        <h4 style="color: ${themeColor}; font-size: 1.4rem; margin-bottom: 1rem; font-weight: 900;">🥘 Organic Ingredients</h4>
+                        <p style="color: #666; line-height: 1.9;">Locally-sourced, organic ingredients from trusted suppliers ensuring freshness and quality.</p>
+                    </div>
+                    <div style="padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor}; text-align: center;">
+                        <h4 style="color: ${themeColor}; font-size: 1.4rem; margin-bottom: 1rem; font-weight: 900;">✨ Ambiance</h4>
+                        <p style="color: #666; line-height: 1.9;">Elegant atmosphere perfect for celebrations, dates, and special occasions.</p>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 5rem 2rem;">
+                    <h2 style="color: #111; font-size: 2.8rem; text-align: center; margin-bottom: 1rem; font-weight: 900;">Our Signature Menu</h2>
+                    <p style="color: #666; text-align: center; font-size: 1.1rem; margin-bottom: 3rem;">Featuring cuisines from around the world with a modern twist.</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1000px; margin: 0 auto;">
+                        <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center; border-top: 4px solid ${themeColor};">
+                            <p style="font-size: 2rem; margin-bottom: 0.5rem;">🥩</p>
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Prime Steaks</h4>
+                            <p style="color: #666; font-size: 0.95rem;">Hand-cut, aged to perfection</p>
+                        </div>
+                        <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center; border-top: 4px solid ${themeColor};">
+                            <p style="font-size: 2rem; margin-bottom: 0.5rem;">🐟</p>
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Fresh Seafood</h4>
+                            <p style="color: #666; font-size: 0.95rem;">Daily catch from local waters</p>
+                        </div>
+                        <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center; border-top: 4px solid ${themeColor};">
+                            <p style="font-size: 2rem; margin-bottom: 0.5rem;">🍝</p>
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Pasta Dishes</h4>
+                            <p style="color: #666; font-size: 0.95rem;">Traditional Italian recipes reimagined</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: ${themeColor}; color: white; padding: 4rem 2rem; text-align: center;">
+                    <h3 style="font-size: 2.3rem; margin-bottom: 2rem; font-weight: 900;">Make a Reservation Today</h3>
+                    <p style="max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 1.05rem;">${aboutText}</p>
+                </div>
+            `;
+        }
+
+        // Education Template
+        function renderEducationTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); padding: 6rem 2rem; text-align: center; color: white;">
+                    <h1 style="font-size: 4.5rem; margin-bottom: 1rem; font-weight: 900;">📚 ${brandName}</h1>
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.95;">${tagline}</p>
+                    <button style="background: white; color: ${themeColor}; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">${ctaText}</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 4rem 2rem; background: #f8f9fa;">
+                    <div style="background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 4px solid ${themeColor};">
+                        <h3 style="color: ${themeColor}; font-size: 2.2rem; margin-bottom: 1rem; font-weight: 900;">500+</h3>
+                        <p style="color: #666; font-size: 1rem; line-height: 1.6;">Expert courses taught by industry professionals and subject matter experts</p>
+                    </div>
+                    <div style="background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 4px solid ${themeColor};">
+                        <h3 style="color: ${themeColor}; font-size: 2.2rem; margin-bottom: 1rem; font-weight: 900;">100K+</h3>
+                        <p style="color: #666; font-size: 1rem; line-height: 1.6;">Active learners in our global community from 150+ countries</p>
+                    </div>
+                    <div style="background: white; padding: 2.5rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 4px solid ${themeColor};">
+                        <h3 style="color: ${themeColor}; font-size: 2.2rem; margin-bottom: 1rem; font-weight: 900;">95%</h3>
+                        <p style="color: #666; font-size: 1rem; line-height: 1.6;">Student satisfaction rate with completion rates exceeding industry averages</p>
+                    </div>
+                </div>
+                <div style="background: white; padding: 5rem 2rem; text-align: center;">
+                    <h2 style="color: #111; font-size: 2.8rem; margin-bottom: 1rem; font-weight: 900;">Your Learning Path to Success</h2>
+                    <p style="color: #666; font-size: 1.1rem; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">A structured approach designed to help you master new skills at your own pace.</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; max-width: 900px; margin: 0 auto;">
+                        <div style="padding: 2rem; background: ${themeColor}15; border-radius: 8px; border-left: 4px solid ${themeColor};"><p style="color: ${themeColor}; font-weight: 900; font-size: 1.8rem; margin-bottom: 0.5rem;">1</p><p style="color: ${themeColor}; font-weight: 700;">Choose</p><p style="color: #666; font-size: 0.9rem;">Select from 500+ courses</p></div>
+                        <div style="padding: 2rem; background: ${themeColor}15; border-radius: 8px; border-left: 4px solid ${themeColor};"><p style="color: ${themeColor}; font-weight: 900; font-size: 1.8rem; margin-bottom: 0.5rem;">2</p><p style="color: ${themeColor}; font-weight: 700;">Learn</p><p style="color: #666; font-size: 0.9rem;">Study at your own pace</p></div>
+                        <div style="padding: 2rem; background: ${themeColor}15; border-radius: 8px; border-left: 4px solid ${themeColor};"><p style="color: ${themeColor}; font-weight: 900; font-size: 1.8rem; margin-bottom: 0.5rem;">3</p><p style="color: ${themeColor}; font-weight: 700;">Practice</p><p style="color: #666; font-size: 0.9rem;">Hands-on projects included</p></div>
+                        <div style="padding: 2rem; background: ${themeColor}15; border-radius: 8px; border-left: 4px solid ${themeColor};"><p style="color: ${themeColor}; font-weight: 900; font-size: 1.8rem; margin-bottom: 0.5rem;">4</p><p style="color: ${themeColor}; font-weight: 700;">Succeed</p><p style="color: #666; font-size: 0.9rem;">Get certified and advance</p></div>
+                    </div>
+                </div>
+                <div style="background: ${themeColor}; color: white; padding: 4rem 2rem; text-align: center;">
+                    <h3 style="font-size: 2.3rem; margin-bottom: 2rem; font-weight: 900;">Start Your Learning Journey Today</h3>
+                    <p style="max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 1.05rem;">${aboutText}</p>
+                </div>
+            `;
+        }
+
+        // Healthcare Template
+        function renderHealthcareTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); padding: 6rem 2rem; text-align: center; color: white;">
+                    <h1 style="font-size: 4.5rem; margin-bottom: 1rem; font-weight: 900;">🏥 ${brandName}</h1>
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.95;">${tagline}</p>
+                    <button style="background: white; color: ${themeColor}; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">${ctaText}</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding: 4rem 2rem; background: white;">
+                    <div style="text-align: center; padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍⚕️</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Expert Doctors</h4>
+                        <p style="color: #666;">Board-certified physicians with extensive experience</p>
+                    </div>
+                    <div style="text-align: center; padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏥</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Modern Facilities</h4>
+                        <p style="color: #666;">State-of-the-art medical equipment and technology</p>
+                    </div>
+                    <div style="text-align: center; padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🚑</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Emergency Care</h4>
+                        <p style="color: #666;">Available 24/7/365 for urgent medical needs</p>
+                    </div>
+                    <div style="text-align: center; padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">💊</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Pharmacy</h4>
+                        <p style="color: #666;">Comprehensive medication services and consultation</p>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 5rem 2rem;">
+                    <h2 style="color: #111; font-size: 2.8rem; text-align: center; margin-bottom: 1rem; font-weight: 900;">Comprehensive Healthcare Services</h2>
+                    <p style="color: #666; text-align: center; font-size: 1.1rem; margin-bottom: 3rem;">We offer a full range of medical services designed to keep you healthy.</p>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; max-width: 900px; margin: 0 auto;">
+                        <div style="padding: 2rem; background: white; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">General Practice</h4>
+                            <p style="color: #666; line-height: 1.8; font-size: 1rem;">Regular health check-ups, preventive care, and routine consultations with experienced general practitioners.</p>
+                        </div>
+                        <div style="padding: 2rem; background: white; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Specialists</h4>
+                            <p style="color: #666; line-height: 1.8; font-size: 1rem;">Expert consultation for complex medical conditions with specialists in various fields.</p>
+                        </div>
+                        <div style="padding: 2rem; background: white; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Preventive Care</h4>
+                            <p style="color: #666; line-height: 1.8; font-size: 1rem;">Wellness programs, health screenings, and vaccinations to maintain optimal health.</p>
+                        </div>
+                        <div style="padding: 2rem; background: white; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Advanced Surgery</h4>
+                            <p style="color: #666; line-height: 1.8; font-size: 1rem;">Minimally invasive and advanced surgical procedures performed by highly trained surgeons.</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: ${themeColor}; color: white; padding: 4rem 2rem; text-align: center;">
+                    <h3 style="font-size: 2.3rem; margin-bottom: 2rem; font-weight: 900;">Your Health Is Our Priority</h3>
+                    <p style="max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 1.05rem;">${aboutText}</p>
+                </div>
+            `;
+        }
+
+        // Real Estate Template
+        function renderRealEstateTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); padding: 6rem 2rem; text-align: center; color: white;">
+                    <h1 style="font-size: 4.5rem; margin-bottom: 1rem; font-weight: 900;">🏠 ${brandName}</h1>
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.95;">${tagline}</p>
+                    <button style="background: white; color: ${themeColor}; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">${ctaText}</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding: 4rem 2rem; background: white;">
+                    <div style="text-align: center; padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏘️</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Residential</h4>
+                        <p style="color: #666;">Homes for families seeking comfort</p>
+                    </div>
+                    <div style="text-align: center; padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏢</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Commercial</h4>
+                        <p style="color: #666;">Prime business locations available</p>
+                    </div>
+                    <div style="text-align: center; padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Investment</h4>
+                        <p style="color: #666;">High-return property opportunities</p>
+                    </div>
+                    <div style="text-align: center; padding: 2.5rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🔑</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.5rem;">Leasing</h4>
+                        <p style="color: #666;">Flexible rental options available</p>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 5rem 2rem;">
+                    <h2 style="color: #111; font-size: 2.8rem; text-align: center; margin-bottom: 1rem; font-weight: 900;">Featured Properties</h2>
+                    <p style="color: #666; text-align: center; font-size: 1.1rem; margin-bottom: 3rem;">Explore our premium collection of exceptional properties</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+                        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                            <div style="background: ${themeColor}; height: 200px; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🏘️</div>
+                            <div style="padding: 1.8rem;">
+                                <h4 style="color: #111; font-weight: 900; margin-bottom: 0.5rem; font-size: 1.2rem;">Luxury Apartment</h4>
+                                <p style="color: #666; margin-bottom: 1rem;">Modern downtown living with premium finishes</p>
+                                <p style="color: ${themeColor}; font-weight: 900; font-size: 1.3rem;">$450,000</p>
+                            </div>
+                        </div>
+                        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                            <div style="background: ${themeColor}; height: 200px; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🏡</div>
+                            <div style="padding: 1.8rem;">
+                                <h4 style="color: #111; font-weight: 900; margin-bottom: 0.5rem; font-size: 1.2rem;">Family Home</h4>
+                                <p style="color: #666; margin-bottom: 1rem;">Spacious suburban home with large backyard</p>
+                                <p style="color: ${themeColor}; font-weight: 900; font-size: 1.3rem;">$550,000</p>
+                            </div>
+                        </div>
+                        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                            <div style="background: ${themeColor}; height: 200px; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">🏗️</div>
+                            <div style="padding: 1.8rem;">
+                                <h4 style="color: #111; font-weight: 900; margin-bottom: 0.5rem; font-size: 1.2rem;">Development Plot</h4>
+                                <p style="color: #666; margin-bottom: 1rem;">Prime location ready for commercial development</p>
+                                <p style="color: ${themeColor}; font-weight: 900; font-size: 1.3rem;">$800,000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: ${themeColor}; color: white; padding: 5rem 2rem;">
+                    <h2 style="font-size: 2.8rem; text-align: center; margin-bottom: 3rem; font-weight: 900;">Why Choose Us</h2>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; max-width: 1000px; margin: 0 auto;">
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px;">
+                            <h4 style="margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Expert Agents</h4>
+                            <p style="line-height: 1.8; opacity: 0.95;">Our team has 15+ years of experience in residential, commercial, and investment real estate.</p>
+                        </div>
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px;">
+                            <h4 style="margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Market Knowledge</h4>
+                            <p style="line-height: 1.8; opacity: 0.95;">We provide comprehensive market analysis and insights for informed decision-making.</p>
+                        </div>
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px;">
+                            <h4 style="margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Fast Closing</h4>
+                            <p style="line-height: 1.8; opacity: 0.95;">Streamlined process ensures quick transactions without compromising on quality.</p>
+                        </div>
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px;">
+                            <h4 style="margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Client Support</h4>
+                            <p style="line-height: 1.8; opacity: 0.95;">Dedicated support team available throughout your entire buying or selling journey.</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: white; padding: 5rem 2rem; text-align: center;">
+                    <h3 style="color: #111; font-size: 2.3rem; margin-bottom: 2rem; font-weight: 900;">Start Your Property Journey Today</h3>
+                    <p style="color: #666; max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 1.05rem;">${aboutText}</p>
+                </div>
+            `;
+        }
+
+        // Creative Agency Template
+        function renderAgencyTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); padding: 7rem 2rem; text-align: center; color: white; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);"></div>
+                    <h1 style="font-size: 4.5rem; margin-bottom: 1rem; font-weight: 900; position: relative; z-index: 2; letter-spacing: -2px;">🎨 ${brandName}</h1>
+                    <p style="font-size: 1.4rem; margin-bottom: 2.5rem; position: relative; z-index: 2; opacity: 0.95;">${tagline}</p>
+                    <button style="background: white; color: ${themeColor}; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer; position: relative; z-index: 2;">${ctaText}</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 3rem; padding: 5rem 2rem; background: white;">
+                    <div style="background: linear-gradient(135deg, ${themeColor}dd 0%, ${getThemeColorDark()}dd 100%); padding: 3rem; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: 900;">🎬 Video Production</h3>
+                        <p style="line-height: 1.8; font-size: 1rem;">Cinematic videos that tell your brand story, captivate your audience, and drive engagement through compelling visual narratives.</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, ${themeColor}bb 0%, ${getThemeColorDark()}bb 100%); padding: 3rem; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: 900;">🎨 Design Services</h3>
+                        <p style="line-height: 1.8; font-size: 1rem;">Beautiful visual designs including logos, branding, UI/UX design that stand out and leave lasting impressions on your target audience.</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, ${themeColor}99 0%, ${getThemeColorDark()}99 100%); padding: 3rem; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: 900;">📱 Digital Marketing</h3>
+                        <p style="line-height: 1.8; font-size: 1rem;">Strategic campaigns across social media, SEO, and paid advertising that drive engagement, increase visibility, and boost your online presence.</p>
+                    </div>
+                    <div style="background: linear-gradient(135deg, ${themeColor}77 0%, ${getThemeColorDark()}77 100%); padding: 3rem; border-radius: 12px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <h3 style="font-size: 1.8rem; margin-bottom: 1rem; font-weight: 900;">💻 Web Development</h3>
+                        <p style="line-height: 1.8; font-size: 1rem;">Modern, responsive websites built with latest technologies that convert visitors into customers and provide exceptional user experiences.</p>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 5rem 2rem;">
+                    <h2 style="color: #111; font-size: 2.8rem; text-align: center; margin-bottom: 1rem; font-weight: 900;">Portfolio Highlights</h2>
+                    <p style="color: #666; text-align: center; font-size: 1.1rem; margin-bottom: 3rem;">Our work speaks for itself across industries</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+                        <div style="background: white; padding: 2rem; border-radius: 12px; border-left: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 1rem; font-size: 1.1rem;">Tech Startup Campaign</h4>
+                            <p style="color: #666; line-height: 1.8; margin-bottom: 1rem;">Award-winning campaign that increased brand awareness by 150% and generated significant market impact.</p>
+                            <p style="color: ${themeColor}; font-weight: 900;">View Case Study →</p>
+                        </div>
+                        <div style="background: white; padding: 2rem; border-radius: 12px; border-left: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 1rem; font-size: 1.1rem;">E-Commerce Redesign</h4>
+                            <p style="color: #666; line-height: 1.8; margin-bottom: 1rem;">Complete website redesign resulting in 200% increase in conversions and improved customer experience.</p>
+                            <p style="color: ${themeColor}; font-weight: 900;">View Case Study →</p>
+                        </div>
+                        <div style="background: white; padding: 2rem; border-radius: 12px; border-left: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 1rem; font-size: 1.1rem;">Brand Identity Project</h4>
+                            <p style="color: #666; line-height: 1.8; margin-bottom: 1rem;">Comprehensive branding overhaul for established company that revitalized market position and customer perception.</p>
+                            <p style="color: ${themeColor}; font-weight: 900;">View Case Study →</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: ${themeColor}; color: white; padding: 5rem 2rem;">
+                    <h2 style="font-size: 2.8rem; text-align: center; margin-bottom: 3rem; font-weight: 900;">Why Brands Choose Us</h2>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; max-width: 1000px; margin: 0 auto;">
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px;">
+                            <h4 style="margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Creative Excellence</h4>
+                            <p style="line-height: 1.8; opacity: 0.95;">Award-winning creative team with expertise in bringing bold visions to life across all mediums and platforms.</p>
+                        </div>
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px;">
+                            <h4 style="margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Data-Driven Strategy</h4>
+                            <p style="line-height: 1.8; opacity: 0.95;">Every campaign backed by research, analytics, and insights to ensure maximum impact and ROI for your brand.</p>
+                        </div>
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px;">
+                            <h4 style="margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Collaborative Process</h4>
+                            <p style="line-height: 1.8; opacity: 0.95;">We work closely with clients throughout the process, ensuring your vision is realized and expectations exceeded.</p>
+                        </div>
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px;">
+                            <h4 style="margin-bottom: 1rem; font-weight: 900; font-size: 1.3rem;">Industry Expertise</h4>
+                            <p style="line-height: 1.8; opacity: 0.95;">Deep experience across industries allows us to understand unique challenges and opportunities for your business.</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: white; padding: 5rem 2rem; text-align: center;">
+                    <h3 style="color: #111; font-size: 2.3rem; margin-bottom: 2rem; font-weight: 900;">Ready to Create Something Amazing?</h3>
+                    <p style="color: #666; max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 1.05rem;">${aboutText}</p>
+                </div>
+            `;
+        }
+
+        // Finance Template
+        function renderFinanceTemplate(brandName, tagline, ctaText, aboutText) {
+            const themeColor = getThemeColor();
+            return `
+                <div style="background: linear-gradient(135deg, ${themeColor} 0%, ${getThemeColorDark()} 100%); padding: 6rem 2rem; text-align: center; color: white;">
+                    <h1 style="font-size: 4.5rem; margin-bottom: 1rem; font-weight: 900;">💰 ${brandName}</h1>
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.95;">${tagline}</p>
+                    <button style="background: white; color: ${themeColor}; padding: 1.2rem 3.5rem; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 700; cursor: pointer;">${ctaText}</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 4rem 2rem; background: white;">
+                    <div style="background: ${themeColor}15; padding: 2.5rem; border-radius: 12px; border-left: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">📈</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.8rem; font-size: 1.3rem;">Investment Planning</h4>
+                        <p style="color: #666; line-height: 1.8;">Maximize returns with personalized investment strategies tailored to your financial goals and risk profile.</p>
+                    </div>
+                    <div style="background: ${themeColor}15; padding: 2.5rem; border-radius: 12px; border-left: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏦</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.8rem; font-size: 1.3rem;">Wealth Management</h4>
+                        <p style="color: #666; line-height: 1.8;">Comprehensive wealth management services for high-net-worth individuals and families seeking financial excellence.</p>
+                    </div>
+                    <div style="background: ${themeColor}15; padding: 2.5rem; border-radius: 12px; border-left: 4px solid ${themeColor}; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 2.5rem; margin-bottom: 1rem;">💳</div>
+                        <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 0.8rem; font-size: 1.3rem;">Retirement Planning</h4>
+                        <p style="color: #666; line-height: 1.8;">Secure your future with expert retirement planning, pension management, and long-term advisory services.</p>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 5rem 2rem;">
+                    <h2 style="color: #111; font-size: 2.8rem; text-align: center; margin-bottom: 1rem; font-weight: 900;">Proven Track Record</h2>
+                    <p style="color: #666; text-align: center; font-size: 1.1rem; margin-bottom: 3rem;">Delivering exceptional results for thousands of clients worldwide</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 1100px; margin: 0 auto;">
+                        <div style="background: white; padding: 2.5rem; text-align: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 4px solid ${themeColor};">
+                            <p style="color: ${themeColor}; font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">12.5%</p>
+                            <p style="color: #666; font-size: 0.95rem;">Average Annual Returns</p>
+                        </div>
+                        <div style="background: white; padding: 2.5rem; text-align: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 4px solid ${themeColor};">
+                            <p style="color: ${themeColor}; font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">$50B+</p>
+                            <p style="color: #666; font-size: 0.95rem;">Assets Under Management</p>
+                        </div>
+                        <div style="background: white; padding: 2.5rem; text-align: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 4px solid ${themeColor};">
+                            <p style="color: ${themeColor}; font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">25+</p>
+                            <p style="color: #666; font-size: 0.95rem;">Years of Industry Experience</p>
+                        </div>
+                        <div style="background: white; padding: 2.5rem; text-align: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 4px solid ${themeColor};">
+                            <p style="color: ${themeColor}; font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem;">10K+</p>
+                            <p style="color: #666; font-size: 0.95rem;">Satisfied Clients Worldwide</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: ${themeColor}; color: white; padding: 5rem 2rem;">
+                    <h2 style="font-size: 2.8rem; text-align: center; margin-bottom: 3rem; font-weight: 900;">Meet Our Financial Advisors</h2>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; max-width: 1100px; margin: 0 auto;">
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px; text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">👔</div>
+                            <h4 style="margin-bottom: 0.5rem; font-weight: 900; font-size: 1.2rem;">Senior Investment Manager</h4>
+                            <p style="opacity: 0.95; line-height: 1.6; font-size: 0.95rem;">15+ years managing portfolios across global markets with consistent performance.</p>
+                        </div>
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px; text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                            <h4 style="margin-bottom: 0.5rem; font-weight: 900; font-size: 1.2rem;">Wealth Strategist</h4>
+                            <p style="opacity: 0.95; line-height: 1.6; font-size: 0.95rem;">Expert in estate planning and tax optimization for high-net-worth individuals.</p>
+                        </div>
+                        <div style="padding: 2rem; background: rgba(255,255,255,0.15); border-radius: 12px; text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+                            <h4 style="margin-bottom: 0.5rem; font-weight: 900; font-size: 1.2rem;">Financial Consultant</h4>
+                            <p style="opacity: 0.95; line-height: 1.6; font-size: 0.95rem;">Specializing in retirement planning and long-term financial goal achievement.</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: white; padding: 5rem 2rem;">
+                    <h2 style="color: #111; font-size: 2.8rem; text-align: center; margin-bottom: 3rem; font-weight: 900;">Investment Strategies</h2>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; max-width: 1000px; margin: 0 auto;">
+                        <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 1rem; font-size: 1.2rem;">Growth Portfolio</h4>
+                            <p style="color: #666; line-height: 1.8;">Aggressive growth strategy for younger investors with higher risk tolerance and longer time horizons.</p>
+                        </div>
+                        <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 1rem; font-size: 1.2rem;">Balanced Portfolio</h4>
+                            <p style="color: #666; line-height: 1.8;">Moderate investment strategy balancing growth and stability for mid-career professionals.</p>
+                        </div>
+                        <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 1rem; font-size: 1.2rem;">Conservative Portfolio</h4>
+                            <p style="color: #666; line-height: 1.8;">Capital preservation strategy ideal for those approaching retirement or with lower risk tolerance.</p>
+                        </div>
+                        <div style="padding: 2rem; background: ${themeColor}15; border-radius: 12px; border-left: 4px solid ${themeColor};">
+                            <h4 style="color: ${themeColor}; font-weight: 900; margin-bottom: 1rem; font-size: 1.2rem;">Custom Strategy</h4>
+                            <p style="color: #666; line-height: 1.8;">Personalized investment approach tailored to your unique financial goals and circumstances.</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: ${themeColor}; color: white; padding: 5rem 2rem; text-align: center;">
+                    <h3 style="font-size: 2.3rem; margin-bottom: 2rem; font-weight: 900;">Your Financial Journey Starts Here</h3>
+                    <p style="max-width: 700px; margin: 0 auto; line-height: 1.8; font-size: 1.05rem;">${aboutText}</p>
+                </div>
+            `;
+        }
+
+        // Update preview with current settings
+        function updatePreview() {
+            const brandName = document.getElementById('brandName').value || "Your Brand";
+            const tagline = document.getElementById('tagline').value || "Your compelling tagline";
+            const ctaText = document.getElementById('ctaText').value || "Get Started";
+            const aboutText = document.getElementById('aboutText').value || "About your company...";
+            
+            previewContent.className = `premium-template`;
+            
+            // Render different templates based on selection
+            switch(currentTemplate.type) {
+                case 'tech':
+                    previewContent.innerHTML = renderTechTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                case 'ecommerce':
+                    previewContent.innerHTML = renderEcommerceTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                case 'consulting':
+                    previewContent.innerHTML = renderConsultingTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                case 'fitness':
+                    previewContent.innerHTML = renderFitnessTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                case 'restaurant':
+                    previewContent.innerHTML = renderRestaurantTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                case 'education':
+                    previewContent.innerHTML = renderEducationTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                case 'healthcare':
+                    previewContent.innerHTML = renderHealthcareTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                case 'realestate':
+                    previewContent.innerHTML = renderRealEstateTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                case 'agency':
+                    previewContent.innerHTML = renderAgencyTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                case 'finance':
+                    previewContent.innerHTML = renderFinanceTemplate(brandName, tagline, ctaText, aboutText);
+                    break;
+                default:
+                    previewContent.innerHTML = renderTechTemplate(brandName, tagline, ctaText, aboutText);
+            }
+            
+            // Reinitialize scroll effects after content update
+            setTimeout(initScrollEffects, 100);
+        }
+
+        // Apply changes button
+        function applyChanges() {
+            updatePreview();
+        }
+
+        // Download HTML
+        function downloadHTML() {
+            const content = previewContent.innerHTML;
+            const styleTag = document.querySelector('style');
+            const cssContent = styleTag ? styleTag.textContent : '';
+            
+            const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${document.getElementById('brandName').value || "Landing Page"}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        ${cssContent}
+    </style>
+</head>
+<body>
+    ${content}
+    <script>
+        // Scroll effects initialization
+        window.addEventListener('load', function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.feature-card, .testimonial-card, .stat-item').forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    <\/script>
+</body>
+</html>`;
+            
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'landing-page.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            applyChangesBtn.addEventListener('click', applyChanges);
+            downloadBtn.addEventListener('click', downloadHTML);
+            mobileDownloadBtn.addEventListener('click', downloadHTML);
+            
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!menuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.classList.remove('active');
+                }
+            });
+            
+            // Real-time updates
+            document.getElementById('brandName').addEventListener('input', updatePreview);
+            document.getElementById('tagline').addEventListener('input', updatePreview);
+            document.getElementById('ctaText').addEventListener('input', updatePreview);
+            document.getElementById('aboutText').addEventListener('input', updatePreview);
+            
+            // Window resize handling
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    mobileMenu.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaunchPad - Professional Landing Page Builder</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600;800&family=Oswald:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600;700&family=Roboto+Mono:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        secondary: 'var(--color-secondary)',
+                        surface: 'var(--color-surface)',
+                        text: 'var(--color-text)',
+                    },
+                    fontFamily: {
+                        sans: ['var(--font-main)', 'sans-serif'],
+                        serif: ['var(--font-heading)', 'serif'],
+                        mono: ['var(--font-mono)', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --color-primary: #4F46E5;
+            --color-secondary: #1E293B;
+            --color-surface: #FFFFFF;
+            --color-text: #0F172A;
+            --font-main: 'Inter';
+            --font-heading: 'Inter';
+            --font-mono: 'Roboto Mono';
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1e1e; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #444; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #666; 
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-mode-active body {
+            overflow: hidden; /* Prevent double scrollbars */
+        }
+
+        /* Animation utilities */
+        .float-anim { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Template Specific Utilities */
+        .clip-diagonal { clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); }
+        .clip-arrow { clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%); }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+    <!-- ================= APP HEADER ================= -->
+    <nav class="fixed top-0 w-full z-50 bg-gray-900/90 backdrop-blur-md border-b border-gray-800 h-16 flex items-center justify-between px-6">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white">L</div>
+            <span class="font-bold text-xl tracking-tight">LaunchPad<span class="text-indigo-500">Builder</span></span>
+        </div>
+        <div class="flex gap-4">
+            <button onclick="toggleView('dashboard')" id="btn-dashboard" class="text-sm font-medium text-gray-300 hover:text-white transition">Dashboard</button>
+            <button onclick="toggleView('preview')" id="btn-preview" class="hidden text-sm font-medium text-indigo-400 hover:text-indigo-300 transition">Editing Active</button>
+        </div>
+        <div>
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fa-brands fa-github text-xl"></i></a>
+        </div>
+    </nav>
+
+    <!-- ================= DASHBOARD (GRID) ================= -->
+    <main id="dashboard-view" class="pt-24 pb-12 px-6 max-w-7xl mx-auto w-full transition-opacity duration-300">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Choose Your Foundation</h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">Select a high-converting template below. Customize branding, content, and styles in the next step.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="template-grid">
+            <!-- Templates injected via JS -->
+        </div>
+    </main>
+
+    <!-- ================= EDITOR UI ================= -->
+    <div id="editor-view" class="fixed inset-0 pt-16 hidden flex z-40 bg-gray-900">
+        
+        <!-- Sidebar Controls -->
+        <aside class="w-80 bg-gray-900 border-r border-gray-800 flex flex-col h-full overflow-y-auto shrink-0 z-50 shadow-2xl">
+            <div class="p-6 border-b border-gray-800">
+                <h2 class="font-bold text-lg text-white mb-1">Customization</h2>
+                <p class="text-xs text-gray-500">Edit content to update preview instantly.</p>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <!-- Branding -->
+                <div class="space-y-3">
+                    <label class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Identity</label>
+                    <div>
+                        <span class="text-xs text-gray-400 mb-1 block">Brand Name</span>
+                        <input type="text" id="input-brand" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-sm text-white focus:border-indigo-500 outline-none transition" value="Acme Corp">
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 mb-1 block">Primary Color</span>
+                        <div class="flex gap-2 items-center">
+                            <input type="color" id="input-color" class="w-8 h-8 rounded cursor-pointer bg-transparent border-0" value="#4F46E5">
+                            <span id="color-hex" class="text-xs text-gray-400 uppercase">#4F46E5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Content -->
+                <div class="space-y-3">
+                    <label class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Hero Section</label>
+                    <div>
+                        <span class="text-xs text-gray-400 mb-1 block">Headline</span>
+                        <textarea id="input-headline" rows="2" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-sm text-white focus:border-indigo-500 outline-none transition">The Future of Digital Innovation</textarea>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 mb-1 block">Subheadline</span>
+                        <textarea id="input-subheadline" rows="3" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-sm text-white focus:border-indigo-500 outline-none transition">Build faster, scale better, and dominate your market with our cutting-edge solutions.</textarea>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 mb-1 block">CTA Button Text</span>
+                        <input type="text" id="input-cta" class="w-full bg-gray-800 border border-gray-700 rounded p-2 text-sm text-white focus:border-indigo-500 outline-none transition" value="Get Started Now">
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="pt-6 border-t border-gray-800">
+                    <button onclick="downloadCode()" class="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded flex items-center justify-center gap-2 transition shadow-lg shadow-green-900/20">
+                        <i class="fa-solid fa-code"></i> Export HTML
+                    </button>
+                    <button onclick="toggleView('dashboard')" class="w-full mt-3 py-2 bg-transparent hover:bg-gray-800 text-gray-400 hover:text-white font-medium rounded transition">
+                        Back to Templates
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Preview Area -->
+        <main class="flex-1 bg-black relative overflow-hidden flex flex-col">
+            <!-- Device Toggle Bar -->
+            <div class="h-10 bg-gray-800 border-b border-gray-700 flex items-center justify-center gap-4">
+                <button onclick="resizePreview('100%')" class="text-gray-400 hover:text-white" title="Desktop"><i class="fa-solid fa-desktop"></i></button>
+                <button onclick="resizePreview('768px')" class="text-gray-400 hover:text-white" title="Tablet"><i class="fa-solid fa-tablet-screen-button"></i></button>
+                <button onclick="resizePreview('375px')" class="text-gray-400 hover:text-white" title="Mobile"><i class="fa-solid fa-mobile-screen-button"></i></button>
+            </div>
+            
+            <!-- Iframe Container for Style Isolation -->
+            <div class="flex-1 overflow-auto p-4 bg-gray-900 flex justify-center">
+                <div id="preview-container" class="bg-white transition-all duration-300 shadow-2xl w-full h-full overflow-y-auto relative scroll-smooth">
+                    <!-- Template HTML Injected Here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // --- State Management ---
+        const state = {
+            brandName: "Acme Corp",
+            headline: "The Future of Digital Innovation",
+            subheadline: "Build faster, scale better, and dominate your market with our cutting-edge solutions.",
+            ctaText: "Get Started Now",
+            primaryColor: "#4F46E5",
+            currentTemplateId: null
+        };
+
+        // --- Template Database ---
+        const templates = [
+            {
+                id: 'saas-modern',
+                name: 'Nexus SaaS',
+                desc: 'Clean, modern SaaS layout with gradients and trusted badges.',
+                tags: ['SaaS', 'Tech', 'Clean'],
+                color: '#4F46E5',
+                image: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
+                render: () => generateSaaSTemplate()
+            },
+            {
+                id: 'agency-bold',
+                name: 'Bold Agency',
+                desc: 'High contrast, big typography for creative studios.',
+                tags: ['Agency', 'Creative', 'Portfolio'],
+                color: '#EF4444',
+                image: 'linear-gradient(135deg, #000 0%, #333 100%)',
+                render: () => generateAgencyTemplate()
+            },
+            {
+                id: 'eco-life',
+                name: 'Eco Life',
+                desc: 'Organic shapes, greens, and serif fonts for nature brands.',
+                tags: ['Nature', 'Health', 'Non-profit'],
+                color: '#059669',
+                image: 'linear-gradient(135deg, #064e3b 0%, #065f46 100%)',
+                render: () => generateEcoTemplate()
+            },
+            {
+                id: 'luxury-estate',
+                name: 'Velvet Luxury',
+                desc: 'Elegant Serif fonts, gold accents, dark mode.',
+                tags: ['Real Estate', 'Luxury', 'Fashion'],
+                color: '#D4AF37', // Gold
+                image: 'linear-gradient(135deg, #1c1917 0%, #292524 100%)',
+                render: () => generateLuxuryTemplate()
+            },
+            {
+                id: 'app-mobile',
+                name: 'App Pulse',
+                desc: 'Centered mobile mockups, soft gradients, rounded UI.',
+                tags: ['Mobile App', 'Software', 'Startup'],
+                color: '#8B5CF6',
+                image: 'linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%)',
+                render: () => generateAppTemplate()
+            },
+            {
+                id: 'crypto-dark',
+                name: 'Quantam Web3',
+                desc: 'Neon glows, grid backgrounds, futuristic monospaced fonts.',
+                tags: ['Crypto', 'Web3', 'Gaming'],
+                color: '#06B6D4',
+                image: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+                render: () => generateCryptoTemplate()
+            },
+            {
+                id: 'minimal-studio',
+                name: 'Zenith Studio',
+                desc: 'Minimalist, black and white, heavy whitespace.',
+                tags: ['Minimal', 'Photography', 'Art'],
+                color: '#111827',
+                image: 'linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)',
+                render: () => generateMinimalTemplate()
+            },
+            {
+                id: 'medical-trust',
+                name: 'Care Medical',
+                desc: 'Trustworthy blues, clean layout, professional.',
+                tags: ['Medical', 'Health', 'Corporate'],
+                color: '#0284C7',
+                image: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
+                render: () => generateMedicalTemplate()
+            },
+             {
+                id: 'event-spark',
+                name: 'Spark Event',
+                desc: 'High energy, countdown timers, vibrant diagonal sections.',
+                tags: ['Event', 'Webinar', 'Music'],
+                color: '#F59E0B',
+                image: 'linear-gradient(135deg, #78350f 0%, #92400e 100%)',
+                render: () => generateEventTemplate()
+            },
+            {
+                id: 'consult-pro',
+                name: 'Prime Consult',
+                desc: 'Authoritative, serif headers, clean grid structure.',
+                tags: ['Consulting', 'Finance', 'Law'],
+                color: '#1e3a8a',
+                image: 'linear-gradient(135deg, #172554 0%, #1e3a8a 100%)',
+                render: () => generateConsultTemplate()
+            }
+        ];
+
+        // --- Initialization ---
+        window.onload = function() {
+            AOS.init();
+            renderDashboard();
+            setupListeners();
+        };
+
+        function setupListeners() {
+            const inputs = ['brand', 'headline', 'subheadline', 'cta', 'color'];
+            inputs.forEach(id => {
+                document.getElementById(`input-${id}`).addEventListener('input', (e) => {
+                    const key = id === 'brand' ? 'brandName' : id === 'cta' ? 'ctaText' : id === 'color' ? 'primaryColor' : id;
+                    state[key] = e.target.value;
+                    if(id === 'color') document.getElementById('color-hex').innerText = e.target.value;
+                    updatePreviewContent();
+                });
+            });
+        }
+
+        // --- Dashboard Logic ---
+        function renderDashboard() {
+            const grid = document.getElementById('template-grid');
+            grid.innerHTML = templates.map(t => `
+                <div class="group relative bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300 cursor-pointer" onclick="loadTemplate('${t.id}')">
+                    <div class="h-48 w-full relative overflow-hidden" style="background: ${t.image}">
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black/50 backdrop-blur-sm">
+                            <span class="px-6 py-2 bg-white text-black font-bold rounded-full transform translate-y-4 group-hover:translate-y-0 transition duration-300">Customize</span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 flex gap-2">
+                             ${t.tags.map(tag => `<span class="text-[10px] uppercase font-bold tracking-wider px-2 py-1 bg-black/40 text-white rounded backdrop-blur-md">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-xl font-bold text-white">${t.name}</h3>
+                            <div class="w-4 h-4 rounded-full" style="background:${t.color}"></div>
+                        </div>
+                        <p class="text-gray-400 text-sm">${t.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleView(view) {
+            const dash = document.getElementById('dashboard-view');
+            const edit = document.getElementById('editor-view');
+            const btnDash = document.getElementById('btn-dashboard');
+            const btnPrev = document.getElementById('btn-preview');
+
+            if (view === 'dashboard') {
+                dash.classList.remove('hidden');
+                edit.classList.add('hidden');
+                document.body.classList.remove('preview-mode-active');
+                btnDash.classList.add('text-white');
+                btnPrev.classList.add('hidden');
+            } else {
+                dash.classList.add('hidden');
+                edit.classList.remove('hidden');
+                document.body.classList.add('preview-mode-active');
+                btnDash.classList.remove('text-white');
+                btnPrev.classList.remove('hidden');
+            }
+        }
+
+        // --- Editor Logic ---
+        function loadTemplate(id) {
+            state.currentTemplateId = id;
+            const t = templates.find(temp => temp.id === id);
+            
+            // Set initial color in state/input
+            state.primaryColor = t.color;
+            document.getElementById('input-color').value = t.color;
+            document.getElementById('color-hex').innerText = t.color;
+
+            // Render
+            const container = document.getElementById('preview-container');
+            container.innerHTML = t.render();
+            
+            // Re-initialize AOS inside the container (requires re-init logic usually, but here we just rely on CSS for now or re-trigger)
+            // For simplicity in single file, we update DOM then update vars
+            updatePreviewContent();
+            toggleView('preview');
+        }
+
+        function updatePreviewContent() {
+            const container = document.getElementById('preview-container');
+            
+            // Text Updates
+            const bindings = {
+                'data-bind-brand': state.brandName,
+                'data-bind-headline': state.headline,
+                'data-bind-subheadline': state.subheadline,
+                'data-bind-cta': state.ctaText
+            };
+
+            for (const [attr, value] of Object.entries(bindings)) {
+                container.querySelectorAll(`[${attr}]`).forEach(el => el.innerText = value);
+            }
+
+            // CSS Variable Updates (for color)
+            container.style.setProperty('--color-primary', state.primaryColor);
+        }
+
+        function resizePreview(width) {
+            const container = document.getElementById('preview-container');
+            container.style.maxWidth = width;
+            container.style.width = width;
+        }
+
+        function downloadCode() {
+            const htmlContent = document.getElementById('preview-container').innerHTML;
+            const fullPage = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${state.brandName} - Landing Page</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root { --color-primary: ${state.primaryColor}; }
+        /* Include the specific styles for the template here */
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-900 bg-white">
+    ${htmlContent}
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"><\/script>
+    <script>AOS.init();<\/script>
+</body>
+</html>`;
+            
+            // In a real app we'd trigger a download. Here we'll copy to clipboard.
+            navigator.clipboard.writeText(fullPage).then(() => {
+                const btn = document.querySelector('button[onclick="downloadCode()"]');
+                const oldText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied to Clipboard!';
+                btn.classList.replace('bg-green-600', 'bg-indigo-600');
+                setTimeout(() => {
+                    btn.innerHTML = oldText;
+                    btn.classList.replace('bg-indigo-600', 'bg-green-600');
+                }, 2000);
+            });
+        }
+
+        // --- TEMPLATE GENERATORS (The Core Content) ---
+        
+        // 1. SaaS Modern
+        function generateSaaSTemplate() {
+            return `
+            <div class="font-sans text-gray-900" style="font-family: 'Inter', sans-serif;">
+                <!-- Nav -->
+                <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+                    <div class="flex items-center justify-between px-8 py-4 max-w-7xl mx-auto">
+                        <div class="text-2xl font-bold tracking-tighter" data-bind-brand>${state.brandName}</div>
+                        <div class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
+                            <a href="#" class="hover:text-[var(--color-primary)]">Features</a>
+                            <a href="#" class="hover:text-[var(--color-primary)]">Pricing</a>
+                            <a href="#" class="hover:text-[var(--color-primary)]">About</a>
+                        </div>
+                        <button class="px-5 py-2 rounded-lg text-white font-medium hover:opacity-90 transition shadow-lg shadow-indigo-500/20" style="background-color: var(--color-primary);">Get Started</button>
+                    </div>
+                </nav>
+
+                <!-- Hero -->
+                <header class="pt-20 pb-32 px-6 text-center max-w-6xl mx-auto">
+                    <span class="inline-block py-1 px-3 rounded-full bg-indigo-50 text-[var(--color-primary)] text-xs font-bold uppercase tracking-wide mb-6 border border-indigo-100">v2.0 Now Available</span>
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 leading-tight mb-6" data-bind-headline>${state.headline}</h1>
+                    <p class="text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed" data-bind-subheadline>${state.subheadline}</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button class="px-8 py-4 rounded-lg text-white font-bold text-lg hover:translate-y-[-2px] transition shadow-xl shadow-indigo-500/30" style="background-color: var(--color-primary);" data-bind-cta>${state.ctaText}</button>
+                        <button class="px-8 py-4 rounded-lg bg-white border border-gray-200 text-gray-900 font-bold text-lg hover:bg-gray-50 transition">View Demo</button>
+                    </div>
+                </header>
+
+                <!-- Dashboard Preview -->
+                <div class="relative max-w-6xl mx-auto -mt-24 px-4 mb-24">
+                    <div class="bg-gray-900 rounded-2xl shadow-2xl overflow-hidden border border-gray-800 p-2 transform rotate-x-12 perspective-1000">
+                         <div class="bg-gray-800 rounded-t-lg h-8 mb-0 flex items-center px-4 gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                         </div>
+                         <div class="bg-slate-800 p-8 h-[500px] flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 grid grid-cols-3 gap-4 p-8 opacity-20">
+                                <div class="col-span-2 bg-white rounded-lg h-32"></div>
+                                <div class="bg-white rounded-lg h-32"></div>
+                                <div class="bg-white rounded-lg h-64"></div>
+                                <div class="col-span-2 bg-white rounded-lg h-64"></div>
+                            </div>
+                            <div class="text-center z-10">
+                                <i class="fa-solid fa-chart-pie text-7xl text-indigo-500 mb-4 animate-bounce"></i>
+                                <p class="text-white font-mono text-lg">Powerful Analytics Engine</p>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+                
+                <!-- Logos -->
+                <section class="py-12 border-y border-gray-100 bg-gray-50/50">
+                    <div class="max-w-7xl mx-auto px-6 text-center">
+                        <p class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-8">Trusted by 10,000+ companies</p>
+                        <div class="flex flex-wrap justify-center gap-12 opacity-40 grayscale">
+                             <div class="text-2xl font-black text-gray-800 flex items-center gap-2"><i class="fa-brands fa-google"></i> Google</div>
+                             <div class="text-2xl font-black text-gray-800 flex items-center gap-2"><i class="fa-brands fa-aws"></i> Amazon</div>
+                             <div class="text-2xl font-black text-gray-800 flex items-center gap-2"><i class="fa-brands fa-spotify"></i> Spotify</div>
+                             <div class="text-2xl font-black text-gray-800 flex items-center gap-2"><i class="fa-brands fa-stripe"></i> Stripe</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Features -->
+                <section class="py-24 max-w-7xl mx-auto px-6">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold mb-4">Everything you need to scale</h2>
+                        <p class="text-gray-500 max-w-2xl mx-auto">Our platform provides a comprehensive suite of tools designed to help you grow your business effortlessly.</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-12">
+                        <div class="p-8 rounded-2xl bg-white border border-gray-100 shadow-lg hover:shadow-xl transition">
+                            <div class="w-12 h-12 rounded-lg bg-indigo-100 text-[var(--color-primary)] flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-bolt"></i></div>
+                            <h3 class="text-xl font-bold mb-3">Lightning Fast</h3>
+                            <p class="text-gray-500 leading-relaxed">Optimized for speed and performance, ensuring your workflow never misses a beat.</p>
+                        </div>
+                        <div class="p-8 rounded-2xl bg-white border border-gray-100 shadow-lg hover:shadow-xl transition">
+                            <div class="w-12 h-12 rounded-lg bg-indigo-100 text-[var(--color-primary)] flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-shield-halved"></i></div>
+                            <h3 class="text-xl font-bold mb-3">Bank-Grade Security</h3>
+                            <p class="text-gray-500 leading-relaxed">Your data is encrypted and protected with enterprise-level security protocols.</p>
+                        </div>
+                        <div class="p-8 rounded-2xl bg-white border border-gray-100 shadow-lg hover:shadow-xl transition">
+                            <div class="w-12 h-12 rounded-lg bg-indigo-100 text-[var(--color-primary)] flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-users"></i></div>
+                            <h3 class="text-xl font-bold mb-3">Team Collaboration</h3>
+                            <p class="text-gray-500 leading-relaxed">Built-in tools to help your team stay aligned, no matter where they are working from.</p>
+                        </div>
+                         <div class="p-8 rounded-2xl bg-white border border-gray-100 shadow-lg hover:shadow-xl transition">
+                            <div class="w-12 h-12 rounded-lg bg-indigo-100 text-[var(--color-primary)] flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            <h3 class="text-xl font-bold mb-3">AI Automation</h3>
+                            <p class="text-gray-500 leading-relaxed">Automate repetitive tasks with our advanced AI engine.</p>
+                        </div>
+                        <div class="p-8 rounded-2xl bg-white border border-gray-100 shadow-lg hover:shadow-xl transition">
+                            <div class="w-12 h-12 rounded-lg bg-indigo-100 text-[var(--color-primary)] flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-chart-column"></i></div>
+                            <h3 class="text-xl font-bold mb-3">Real-time Analytics</h3>
+                            <p class="text-gray-500 leading-relaxed">Get deep insights into your performance with live dashboards.</p>
+                        </div>
+                        <div class="p-8 rounded-2xl bg-white border border-gray-100 shadow-lg hover:shadow-xl transition">
+                            <div class="w-12 h-12 rounded-lg bg-indigo-100 text-[var(--color-primary)] flex items-center justify-center text-xl mb-6"><i class="fa-solid fa-code"></i></div>
+                            <h3 class="text-xl font-bold mb-3">Developer API</h3>
+                            <p class="text-gray-500 leading-relaxed">Robust API documentation to integrate with your existing stack.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pricing -->
+                <section class="py-24 bg-slate-900 text-white">
+                    <div class="max-w-7xl mx-auto px-6">
+                        <div class="text-center mb-16">
+                            <h2 class="text-3xl font-bold mb-4">Simple, Transparent Pricing</h2>
+                            <p class="text-gray-400">Start for free, scale as you grow.</p>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-8 items-center">
+                            <!-- Basic -->
+                            <div class="p-8 rounded-2xl border border-gray-700 bg-gray-800">
+                                <h3 class="text-lg font-medium text-gray-400 mb-4">Starter</h3>
+                                <div class="text-4xl font-bold mb-6">$0 <span class="text-sm font-normal text-gray-500">/mo</span></div>
+                                <ul class="space-y-4 mb-8 text-sm text-gray-300">
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> 1 User</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> Basic Analytics</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> 5 Projects</li>
+                                </ul>
+                                <button class="w-full py-3 rounded-lg border border-gray-600 hover:bg-gray-700 transition font-bold">Start Free</button>
+                            </div>
+                            <!-- Pro -->
+                            <div class="p-8 rounded-2xl border-2 border-[var(--color-primary)] bg-gray-800 relative transform scale-105 shadow-2xl">
+                                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--color-primary)] text-white px-4 py-1 rounded-full text-xs font-bold uppercase">Most Popular</div>
+                                <h3 class="text-lg font-medium text-gray-400 mb-4">Pro</h3>
+                                <div class="text-4xl font-bold mb-6">$49 <span class="text-sm font-normal text-gray-500">/mo</span></div>
+                                <ul class="space-y-4 mb-8 text-sm text-gray-300">
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> 5 Users</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> Advanced Analytics</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> Unlimited Projects</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> Priority Support</li>
+                                </ul>
+                                <button class="w-full py-3 rounded-lg bg-[var(--color-primary)] hover:opacity-90 transition font-bold">Get Pro</button>
+                            </div>
+                            <!-- Enterprise -->
+                            <div class="p-8 rounded-2xl border border-gray-700 bg-gray-800">
+                                <h3 class="text-lg font-medium text-gray-400 mb-4">Enterprise</h3>
+                                <div class="text-4xl font-bold mb-6">$99 <span class="text-sm font-normal text-gray-500">/mo</span></div>
+                                <ul class="space-y-4 mb-8 text-sm text-gray-300">
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> Unlimited Users</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> Custom Reporting</li>
+                                    <li class="flex gap-3"><i class="fa-solid fa-check text-green-500"></i> Dedicated Manager</li>
+                                </ul>
+                                <button class="w-full py-3 rounded-lg border border-gray-600 hover:bg-gray-700 transition font-bold">Contact Sales</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <footer class="bg-gray-50 pt-16 pb-8 border-t border-gray-200 text-gray-600 text-sm">
+                    <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+                        <div class="col-span-2">
+                            <div class="text-2xl font-bold text-gray-900 mb-4" data-bind-brand>${state.brandName}</div>
+                            <p class="max-w-xs mb-6">Making the world more productive, one task at a time.</p>
+                            <div class="flex gap-4 text-xl">
+                                <i class="fa-brands fa-twitter hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                <i class="fa-brands fa-github hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                <i class="fa-brands fa-linkedin hover:text-[var(--color-primary)] cursor-pointer"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-900 mb-4">Product</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Features</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Integrations</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Pricing</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Changelog</a></li>
+                            </ul>
+                        </div>
+                         <div>
+                            <h4 class="font-bold text-gray-900 mb-4">Company</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">About Us</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Careers</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Blog</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Contact</a></li>
+                            </ul>
+                        </div>
+                         <div>
+                            <h4 class="font-bold text-gray-900 mb-4">Legal</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Privacy</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Terms</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Security</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="max-w-7xl mx-auto px-6 text-center pt-8 border-t border-gray-200">
+                        &copy; 2024 ${state.brandName}. All rights reserved.
+                    </div>
+                </footer>
+            </div>
+            `;
+        }
+
+        // 2. Agency Bold
+        function generateAgencyTemplate() {
+            return `
+            <div class="bg-black text-white font-sans" style="font-family: 'Oswald', sans-serif;">
+                <nav class="flex items-center justify-between px-8 py-6 border-b border-gray-800 sticky top-0 bg-black/90 z-50 backdrop-blur-md">
+                    <div class="text-3xl font-bold uppercase tracking-widest" data-bind-brand>${state.brandName}</div>
+                    <button class="w-12 h-12 flex items-center justify-center border border-white rounded-full hover:bg-white hover:text-black transition">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </nav>
+
+                <header class="min-h-screen flex flex-col justify-center px-6 md:px-12 relative overflow-hidden border-b border-gray-800">
+                    <div class="absolute right-0 top-20 w-96 h-96 bg-[var(--color-primary)] rounded-full blur-[150px] opacity-20"></div>
+                    
+                    <h1 class="text-6xl md:text-9xl font-bold uppercase leading-[0.9] mb-8 relative z-10" data-bind-headline>${state.headline}</h1>
+                    <div class="w-24 h-2 bg-[var(--color-primary)] mb-8"></div>
+                    <p class="text-xl text-gray-400 max-w-lg font-light tracking-wide mb-10 font-[Inter]" data-bind-subheadline>${state.subheadline}</p>
+                    
+                    <div>
+                        <button class="px-10 py-4 border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-bold text-xl uppercase tracking-widest hover:bg-[var(--color-primary)] hover:text-white transition duration-300" data-bind-cta>${state.ctaText}</button>
+                    </div>
+                </header>
+
+                <div class="border-b border-gray-800 py-6 overflow-hidden bg-[var(--color-primary)]">
+                    <div class="whitespace-nowrap animate-marquee flex gap-10">
+                        <span class="text-4xl font-bold uppercase text-black">Strategy • Design • Development • Growth •</span>
+                        <span class="text-4xl font-bold uppercase text-black">Strategy • Design • Development • Growth •</span>
+                        <span class="text-4xl font-bold uppercase text-black">Strategy • Design • Development • Growth •</span>
+                         <span class="text-4xl font-bold uppercase text-black">Strategy • Design • Development • Growth •</span>
+                    </div>
+                </div>
+
+                <section class="py-24 px-6 md:px-12">
+                    <h2 class="text-5xl uppercase font-bold mb-16 border-l-4 border-[var(--color-primary)] pl-6">Selected Works</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-gray-900 aspect-square flex items-end p-8 group cursor-pointer overflow-hidden relative border border-gray-800 hover:border-[var(--color-primary)] transition-all">
+                            <div class="absolute inset-0 bg-gray-800 transition-transform duration-500 group-hover:scale-110 opacity-50"></div>
+                            <div class="relative z-10">
+                                <h3 class="text-4xl font-bold mb-2">Nike Campaign</h3>
+                                <p class="text-[var(--color-primary)] font-[Inter] uppercase tracking-widest">Art Direction</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900 aspect-square flex items-end p-8 group cursor-pointer overflow-hidden relative border border-gray-800 hover:border-[var(--color-primary)] transition-all mt-0 md:mt-24">
+                             <div class="absolute inset-0 bg-gray-800 transition-transform duration-500 group-hover:scale-110 opacity-50"></div>
+                            <div class="relative z-10">
+                                <h3 class="text-4xl font-bold mb-2">Tesla UI</h3>
+                                <p class="text-[var(--color-primary)] font-[Inter] uppercase tracking-widest">Digital Product</p>
+                            </div>
+                        </div>
+                         <div class="bg-gray-900 aspect-square flex items-end p-8 group cursor-pointer overflow-hidden relative border border-gray-800 hover:border-[var(--color-primary)] transition-all">
+                             <div class="absolute inset-0 bg-gray-800 transition-transform duration-500 group-hover:scale-110 opacity-50"></div>
+                            <div class="relative z-10">
+                                <h3 class="text-4xl font-bold mb-2">Spotify Wrapped</h3>
+                                <p class="text-[var(--color-primary)] font-[Inter] uppercase tracking-widest">Web Experience</p>
+                            </div>
+                        </div>
+                         <div class="bg-gray-900 aspect-square flex items-end p-8 group cursor-pointer overflow-hidden relative border border-gray-800 hover:border-[var(--color-primary)] transition-all mt-0 md:mt-24">
+                             <div class="absolute inset-0 bg-gray-800 transition-transform duration-500 group-hover:scale-110 opacity-50"></div>
+                            <div class="relative z-10">
+                                <h3 class="text-4xl font-bold mb-2">Vogue Paris</h3>
+                                <p class="text-[var(--color-primary)] font-[Inter] uppercase tracking-widest">Editorial Layout</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="py-24 px-6 md:px-12 bg-zinc-900 border-y border-gray-800">
+                    <div class="max-w-4xl">
+                        <h2 class="text-5xl uppercase font-bold mb-8">What We Do</h2>
+                        <div class="space-y-8 font-[Inter]">
+                            <div class="group border-b border-gray-700 pb-8 cursor-pointer">
+                                <div class="flex justify-between items-center text-2xl text-gray-400 group-hover:text-white transition">
+                                    <span>01. Digital Strategy</span>
+                                    <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition"></i>
+                                </div>
+                            </div>
+                             <div class="group border-b border-gray-700 pb-8 cursor-pointer">
+                                <div class="flex justify-between items-center text-2xl text-gray-400 group-hover:text-white transition">
+                                    <span>02. Branding & Identity</span>
+                                    <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition"></i>
+                                </div>
+                            </div>
+                             <div class="group border-b border-gray-700 pb-8 cursor-pointer">
+                                <div class="flex justify-between items-center text-2xl text-gray-400 group-hover:text-white transition">
+                                    <span>03. Web Development</span>
+                                    <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition"></i>
+                                </div>
+                            </div>
+                             <div class="group border-b border-gray-700 pb-8 cursor-pointer">
+                                <div class="flex justify-between items-center text-2xl text-gray-400 group-hover:text-white transition">
+                                    <span>04. Content Creation</span>
+                                    <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-32 px-6 md:px-12 text-center bg-[var(--color-primary)] text-black">
+                    <h2 class="text-6xl md:text-8xl font-bold uppercase mb-8">Let's Talk</h2>
+                    <p class="text-2xl font-[Inter] mb-12 max-w-2xl mx-auto font-medium">Have a project in mind? We would love to hear from you.</p>
+                    <a href="mailto:hello@acmecorp.com" class="text-4xl font-bold border-b-4 border-black hover:text-white hover:border-white transition pb-2">hello@${state.brandName.toLowerCase().replace(/\s/g, '')}.com</a>
+                </section>
+                
+                <footer class="py-12 px-6 md:px-12 border-t border-gray-800 flex flex-col md:flex-row justify-between items-end">
+                    <div>
+                        <div class="text-2xl font-bold uppercase tracking-widest mb-4" data-bind-brand>${state.brandName}</div>
+                        <p class="text-gray-500 font-[Inter] text-sm">&copy; 2024. All rights reserved.</p>
+                    </div>
+                    <div class="flex gap-6 mt-6 md:mt-0 font-[Inter] uppercase text-sm tracking-wider">
+                        <a href="#" class="hover:text-[var(--color-primary)]">Instagram</a>
+                        <a href="#" class="hover:text-[var(--color-primary)]">LinkedIn</a>
+                        <a href="#" class="hover:text-[var(--color-primary)]">Twitter</a>
+                    </div>
+                </footer>
+            </div>
+            `;
+        }
+
+        // 3. Eco Life
+        function generateEcoTemplate() {
+            return `
+            <div class="bg-[#fcfbf7] text-green-900 font-sans" style="font-family: 'Space Grotesk', sans-serif;">
+                <nav class="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto sticky top-0 bg-[#fcfbf7]/90 backdrop-blur-sm z-50">
+                    <div class="text-2xl font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-leaf text-[var(--color-primary)]"></i>
+                        <span data-bind-brand>${state.brandName}</span>
+                    </div>
+                    <div class="hidden md:flex gap-8 text-sm font-medium opacity-80">
+                        <a href="#" class="hover:underline">Shop</a>
+                        <a href="#" class="hover:underline">Story</a>
+                        <a href="#" class="hover:underline">Impact</a>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <i class="fa-solid fa-magnifying-glass cursor-pointer"></i>
+                        <i class="fa-solid fa-bag-shopping cursor-pointer"></i>
+                        <button class="px-6 py-2 rounded-full border border-green-900 hover:bg-green-900 hover:text-white transition hidden md:block">Login</button>
+                    </div>
+                </nav>
+
+                <header class="py-20 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center min-h-[80vh]">
+                    <div>
+                        <div class="inline-block px-4 py-1 bg-green-100 text-[var(--color-primary)] rounded-full text-sm font-bold mb-6 flex items-center gap-2 w-fit">
+                            <i class="fa-solid fa-check-circle"></i> 100% Organic & Sustainable
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6" data-bind-headline>${state.headline}</h1>
+                        <p class="text-xl text-green-800/70 mb-8 leading-relaxed" data-bind-subheadline>${state.subheadline}</p>
+                        <div class="flex gap-4">
+                            <button class="px-8 py-4 rounded-full text-white font-bold hover:shadow-lg hover:shadow-green-900/20 transition transform hover:-translate-y-1" style="background-color: var(--color-primary);" data-bind-cta>${state.ctaText}</button>
+                            <button class="w-12 h-12 rounded-full border border-green-900 flex items-center justify-center hover:bg-green-100 transition"><i class="fa-solid fa-play"></i></button>
+                        </div>
+                         <div class="mt-12 flex items-center gap-4 text-sm font-bold opacity-60">
+                            <span class="flex items-center gap-1"><i class="fa-solid fa-star text-yellow-500"></i> 4.9/5 Rating</span>
+                            <span class="w-1 h-1 bg-current rounded-full"></span>
+                            <span>25k+ Happy Customers</span>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-[var(--color-primary)] rounded-[3rem] rotate-6 opacity-20"></div>
+                        <div class="relative bg-gray-200 rounded-[3rem] h-[600px] w-full flex items-center justify-center overflow-hidden shadow-2xl">
+                             <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')] bg-cover bg-center"></div>
+                        </div>
+                        <!-- Floating card -->
+                        <div class="absolute bottom-10 -left-6 bg-white p-6 rounded-2xl shadow-xl max-w-xs animate-bounce">
+                             <div class="flex items-center gap-3 mb-2">
+                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-[var(--color-primary)]">
+                                    <i class="fa-solid fa-tree"></i>
+                                </div>
+                                <div class="font-bold">Tree Planted</div>
+                             </div>
+                             <p class="text-xs opacity-70">Every purchase plants one tree in the Amazon rainforest.</p>
+                        </div>
+                    </div>
+                </header>
+
+                <section class="py-24 bg-[var(--color-primary)] text-white rounded-t-[3rem] mx-2 md:mx-6 shadow-inner relative overflow-hidden">
+                    <div class="absolute top-0 right-0 opacity-10 text-9xl transform translate-x-1/2 -translate-y-1/2"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="max-w-6xl mx-auto px-6">
+                        <div class="text-center mb-16">
+                             <h2 class="text-4xl font-bold mb-4">Why Choose Earth First?</h2>
+                             <p class="opacity-80 max-w-2xl mx-auto">We believe in products that are good for you and good for the planet.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                            <div class="p-8 bg-white/10 rounded-3xl backdrop-blur-sm hover:bg-white/20 transition cursor-pointer">
+                                <div class="w-16 h-16 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-6 text-2xl">
+                                    <i class="fa-solid fa-recycle"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3">Recycled Materials</h3>
+                                <p class="opacity-80 leading-relaxed">We use 100% post-consumer recycled plastics and biodegradable packaging.</p>
+                            </div>
+                            <div class="p-8 bg-white/10 rounded-3xl backdrop-blur-sm hover:bg-white/20 transition cursor-pointer">
+                                <div class="w-16 h-16 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-6 text-2xl">
+                                    <i class="fa-solid fa-hand-holding-heart"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3">Fair Trade</h3>
+                                <p class="opacity-80 leading-relaxed">Supporting local farmers with fair wages and safe working conditions.</p>
+                            </div>
+                            <div class="p-8 bg-white/10 rounded-3xl backdrop-blur-sm hover:bg-white/20 transition cursor-pointer">
+                                <div class="w-16 h-16 mx-auto bg-white/20 rounded-full flex items-center justify-center mb-6 text-2xl">
+                                    <i class="fa-solid fa-tree"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3">Carbon Neutral</h3>
+                                <p class="opacity-80 leading-relaxed">We offset our entire carbon footprint, from manufacturing to shipping.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="py-24 px-6 max-w-7xl mx-auto">
+                    <div class="flex justify-between items-end mb-12">
+                        <h2 class="text-4xl font-bold">New Arrivals</h2>
+                        <a href="#" class="font-bold underline decoration-2 decoration-[var(--color-primary)] hover:opacity-70">View All</a>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Product Card 1 -->
+                        <div class="group cursor-pointer">
+                            <div class="bg-gray-200 rounded-2xl h-80 mb-4 overflow-hidden relative">
+                                <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Product">
+                                <div class="absolute bottom-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-[var(--color-primary)] hover:text-white transition"><i class="fa-solid fa-plus"></i></div>
+                            </div>
+                            <h3 class="font-bold text-lg">Organic Cotton Tee</h3>
+                            <p class="opacity-60">$35.00</p>
+                        </div>
+                         <!-- Product Card 2 -->
+                        <div class="group cursor-pointer">
+                            <div class="bg-gray-200 rounded-2xl h-80 mb-4 overflow-hidden relative">
+                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Product">
+                                 <div class="absolute top-4 left-4 bg-red-400 text-white text-xs px-2 py-1 rounded font-bold">Sale</div>
+                                <div class="absolute bottom-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-[var(--color-primary)] hover:text-white transition"><i class="fa-solid fa-plus"></i></div>
+                            </div>
+                            <h3 class="font-bold text-lg">Recycled Sneaker</h3>
+                            <p class="opacity-60"><span class="line-through mr-2">$120.00</span> $95.00</p>
+                        </div>
+                         <!-- Product Card 3 -->
+                        <div class="group cursor-pointer">
+                            <div class="bg-gray-200 rounded-2xl h-80 mb-4 overflow-hidden relative">
+                                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Product">
+                                <div class="absolute bottom-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-[var(--color-primary)] hover:text-white transition"><i class="fa-solid fa-plus"></i></div>
+                            </div>
+                            <h3 class="font-bold text-lg">Bamboo Water Bottle</h3>
+                            <p class="opacity-60">$28.00</p>
+                        </div>
+                         <!-- Product Card 4 -->
+                        <div class="group cursor-pointer">
+                            <div class="bg-gray-200 rounded-2xl h-80 mb-4 overflow-hidden relative">
+                                <img src="https://images.unsplash.com/photo-1610419993556-9d22442436e2?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Product">
+                                <div class="absolute bottom-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-[var(--color-primary)] hover:text-white transition"><i class="fa-solid fa-plus"></i></div>
+                            </div>
+                            <h3 class="font-bold text-lg">Hemp Backpack</h3>
+                            <p class="opacity-60">$85.00</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="py-20 bg-green-50">
+                    <div class="max-w-4xl mx-auto px-6 text-center">
+                        <i class="fa-regular fa-paper-plane text-4xl text-[var(--color-primary)] mb-6"></i>
+                        <h2 class="text-3xl font-bold mb-4">Join the Movement</h2>
+                        <p class="mb-8 opacity-70">Sign up for our newsletter to get sustainable living tips and 10% off your first order.</p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <input type="email" placeholder="Enter your email" class="px-6 py-3 rounded-full border border-gray-300 focus:outline-none focus:border-[var(--color-primary)] w-full sm:w-96">
+                            <button class="px-8 py-3 rounded-full text-white font-bold hover:shadow-lg transition" style="background-color: var(--color-primary);">Subscribe</button>
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="bg-green-900 text-green-100 py-16">
+                    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+                        <div>
+                            <div class="text-2xl font-bold flex items-center gap-2 mb-6 text-white">
+                                <i class="fa-solid fa-leaf"></i>
+                                <span data-bind-brand>${state.brandName}</span>
+                            </div>
+                            <p class="opacity-70 leading-relaxed">Dedicated to creating a sustainable future through eco-friendly products and conscious living.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white mb-4">Shop</h4>
+                            <ul class="space-y-2 opacity-70">
+                                <li><a href="#">All Products</a></li>
+                                <li><a href="#">New Arrivals</a></li>
+                                <li><a href="#">Accessories</a></li>
+                                <li><a href="#">Sale</a></li>
+                            </ul>
+                        </div>
+                         <div>
+                            <h4 class="font-bold text-white mb-4">About</h4>
+                            <ul class="space-y-2 opacity-70">
+                                <li><a href="#">Our Story</a></li>
+                                <li><a href="#">Sustainability</a></li>
+                                <li><a href="#">Blog</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </div>
+                         <div>
+                            <h4 class="font-bold text-white mb-4">Contact</h4>
+                            <ul class="space-y-2 opacity-70">
+                                <li>support@ecolife.com</li>
+                                <li>+1 (555) 000-0000</li>
+                                <li class="pt-4 flex gap-4 text-xl">
+                                    <i class="fa-brands fa-instagram hover:text-white cursor-pointer"></i>
+                                    <i class="fa-brands fa-facebook hover:text-white cursor-pointer"></i>
+                                    <i class="fa-brands fa-pinterest hover:text-white cursor-pointer"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            `;
+        }
+
+        // 4. Velvet Luxury
+        function generateLuxuryTemplate() {
+            return `
+            <div class="bg-[#0a0a0a] text-gray-200 font-serif" style="font-family: 'Playfair Display', serif;">
+                <div class="fixed top-0 left-0 w-full h-1 bg-[var(--color-primary)] z-50"></div>
+                
+                <nav class="flex items-center justify-between px-10 py-8 sticky top-0 bg-[#0a0a0a]/90 backdrop-blur-md z-40 border-b border-white/5">
+                    <div class="text-2xl italic tracking-widest text-[var(--color-primary)]" data-bind-brand>${state.brandName}</div>
+                    <div class="hidden md:flex gap-10 text-xs uppercase tracking-[0.2em] text-gray-400 font-sans">
+                        <a href="#" class="hover:text-white transition">Collection</a>
+                        <a href="#" class="hover:text-white transition">Maison</a>
+                        <a href="#" class="hover:text-white transition">Atelier</a>
+                        <a href="#" class="hover:text-white transition">Contact</a>
+                    </div>
+                    <i class="fa-solid fa-bag-shopping text-gray-400 hover:text-white cursor-pointer"></i>
+                </nav>
+
+                <header class="py-32 px-6 text-center max-w-5xl mx-auto min-h-screen flex flex-col justify-center">
+                    <p class="text-[var(--color-primary)] text-sm uppercase tracking-[0.4em] mb-8 font-sans animate-fade-in-up">Est. 2024 • Paris</p>
+                    <h1 class="text-6xl md:text-9xl italic mb-10 leading-none text-white font-light" data-bind-headline>${state.headline}</h1>
+                    <div class="w-[1px] h-32 bg-gradient-to-b from-[var(--color-primary)] to-transparent mx-auto mb-10"></div>
+                    <p class="text-xl text-gray-400 mb-16 font-sans font-light max-w-lg mx-auto leading-loose" data-bind-subheadline>${state.subheadline}</p>
+                    <button class="px-12 py-5 border border-[var(--color-primary)] text-[var(--color-primary)] text-xs uppercase tracking-[0.3em] hover:bg-[var(--color-primary)] hover:text-black transition duration-700 ease-out" data-bind-cta>${state.ctaText}</button>
+                </header>
+
+                <div class="grid md:grid-cols-2 h-[80vh] border-t border-gray-900">
+                    <div class="bg-gray-800 relative overflow-hidden group">
+                         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center transition duration-1000 transform group-hover:scale-110"></div>
+                         <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition duration-700 flex items-center justify-center">
+                            <span class="relative z-10 text-4xl italic text-white tracking-wider border-b border-transparent group-hover:border-white transition-all pb-2">The Architecture</span>
+                         </div>
+                    </div>
+                    <div class="bg-gray-700 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center transition duration-1000 transform group-hover:scale-110"></div>
+                        <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition duration-700 flex items-center justify-center">
+                            <span class="relative z-10 text-4xl italic text-white tracking-wider border-b border-transparent group-hover:border-white transition-all pb-2">The Interior</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <section class="py-32 px-10 bg-[#0f0f0f]">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <h2 class="text-4xl italic text-[var(--color-primary)] mb-8">The Philosophy</h2>
+                        <p class="font-sans text-gray-400 leading-loose text-lg font-light">
+                            "True luxury is not just about aesthetics; it is about the feeling of timelessness. We curate spaces and objects that transcend trends, rooting themselves in the eternal beauty of proportion, material, and light. Every detail is a deliberate choice, every texture a whisper of elegance."
+                        </p>
+                        <div class="mt-12 text-sm uppercase tracking-[0.2em] text-white font-sans">Jean-Pierre, Lead Designer</div>
+                    </div>
+                </section>
+                
+                <section class="py-32 px-6">
+                    <div class="max-w-7xl mx-auto">
+                        <div class="flex justify-between items-end mb-16 border-b border-gray-800 pb-6">
+                            <h2 class="text-5xl italic text-white">Latest Collection</h2>
+                            <span class="text-sm font-sans uppercase tracking-[0.2em] text-gray-500">Fall / Winter 2024</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                            <div class="group cursor-pointer">
+                                <div class="aspect-[3/4] bg-gray-900 mb-6 overflow-hidden relative">
+                                    <img src="https://images.unsplash.com/photo-1550928431-ee0ec6db30d3?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500">
+                                </div>
+                                <h3 class="text-xl italic text-white mb-2">Noir Chair</h3>
+                                <p class="text-xs font-sans uppercase tracking-[0.1em] text-[var(--color-primary)]">Limited Edition</p>
+                            </div>
+                             <div class="group cursor-pointer md:-mt-12">
+                                <div class="aspect-[3/4] bg-gray-900 mb-6 overflow-hidden relative">
+                                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500">
+                                </div>
+                                <h3 class="text-xl italic text-white mb-2">Marble Vanity</h3>
+                                <p class="text-xs font-sans uppercase tracking-[0.1em] text-[var(--color-primary)]">Bespoke</p>
+                            </div>
+                             <div class="group cursor-pointer">
+                                <div class="aspect-[3/4] bg-gray-900 mb-6 overflow-hidden relative">
+                                    <img src="https://images.unsplash.com/photo-1540932296774-3ed6d53f0564?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition duration-500">
+                                </div>
+                                <h3 class="text-xl italic text-white mb-2">Gold Pendant</h3>
+                                <p class="text-xs font-sans uppercase tracking-[0.1em] text-[var(--color-primary)]">Lighting</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-32 px-6 border-t border-gray-900 bg-[#080808]">
+                    <div class="max-w-2xl mx-auto text-center border border-gray-800 p-12">
+                        <h2 class="text-3xl italic mb-4 text-white">Private Access</h2>
+                        <p class="font-sans text-gray-400 mb-8 text-sm leading-relaxed">Join our exclusive list for early access to new collections and private viewing events.</p>
+                        <form class="flex border-b border-gray-600 pb-2">
+                            <input type="email" placeholder="Your Email Address" class="bg-transparent w-full outline-none text-white font-sans text-sm placeholder-gray-600">
+                            <button class="text-[var(--color-primary)] text-xs uppercase tracking-[0.2em] hover:text-white transition">Request</button>
+                        </form>
+                    </div>
+                </section>
+
+                <footer class="py-16 px-10 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center text-gray-500 font-sans text-xs tracking-widest uppercase">
+                    <div>&copy; ${state.brandName} Maison</div>
+                    <div class="flex gap-8 my-6 md:my-0">
+                        <a href="#" class="hover:text-[var(--color-primary)]">Instagram</a>
+                        <a href="#" class="hover:text-[var(--color-primary)]">Pinterest</a>
+                    </div>
+                    <div>Paris • London • New York</div>
+                </footer>
+            </div>
+            `;
+        }
+
+        // 5. App Pulse
+        function generateAppTemplate() {
+            return `
+            <div class="bg-white font-sans text-gray-800" style="font-family: 'Poppins', sans-serif;">
+                <div class="bg-gray-50 relative overflow-hidden">
+                    <!-- Background blobs -->
+                    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-[var(--color-primary)] rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob"></div>
+                    <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-10 animate-blob animation-delay-2000"></div>
+
+                    <nav class="relative z-10 flex justify-between items-center px-6 py-6 max-w-7xl mx-auto">
+                        <div class="text-2xl font-bold text-[var(--color-primary)] tracking-tight" data-bind-brand>${state.brandName}</div>
+                        <div class="hidden md:flex gap-8 text-sm font-semibold text-gray-500">
+                            <a href="#" class="hover:text-[var(--color-primary)]">Features</a>
+                            <a href="#" class="hover:text-[var(--color-primary)]">Reviews</a>
+                            <a href="#" class="hover:text-[var(--color-primary)]">Support</a>
+                        </div>
+                        <button class="px-6 py-2 bg-white shadow-md rounded-full text-sm font-semibold hover:shadow-lg transition text-[var(--color-primary)]">Download App</button>
+                    </nav>
+
+                    <header class="relative z-10 max-w-7xl mx-auto px-6 pt-10 pb-24 grid lg:grid-cols-2 gap-16 items-center">
+                        <div class="text-center lg:text-left">
+                            <div class="inline-block px-4 py-1.5 bg-orange-100 text-orange-600 rounded-full text-xs font-bold uppercase tracking-wide mb-6">#1 Productivity App of 2024</div>
+                            <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6 text-gray-900" data-bind-headline>${state.headline}</h1>
+                            <p class="text-lg text-gray-500 mb-8 leading-relaxed" data-bind-subheadline>${state.subheadline}</p>
+                            
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                                <button class="flex items-center gap-3 px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition shadow-xl hover:-translate-y-1 transform duration-300" data-bind-cta>
+                                    <i class="fa-brands fa-apple text-2xl"></i>
+                                    <div class="text-left">
+                                        <div class="text-[10px] uppercase opacity-70">Download on the</div>
+                                        <div class="text-sm font-bold leading-none">App Store</div>
+                                    </div>
+                                </button>
+                                <button class="flex items-center gap-3 px-6 py-3 bg-[var(--color-primary)] text-white rounded-xl hover:opacity-90 transition shadow-xl shadow-indigo-200 hover:-translate-y-1 transform duration-300">
+                                    <i class="fa-brands fa-google-play text-xl"></i>
+                                    <div class="text-left">
+                                        <div class="text-[10px] uppercase opacity-70">Get it on</div>
+                                        <div class="text-sm font-bold leading-none">Google Play</div>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <div class="mt-12 flex items-center justify-center lg:justify-start gap-4">
+                                <div class="flex -space-x-4">
+                                    <img src="https://randomuser.me/api/portraits/women/1.jpg" class="w-10 h-10 rounded-full border-2 border-white">
+                                    <img src="https://randomuser.me/api/portraits/men/2.jpg" class="w-10 h-10 rounded-full border-2 border-white">
+                                    <img src="https://randomuser.me/api/portraits/women/3.jpg" class="w-10 h-10 rounded-full border-2 border-white">
+                                    <div class="w-10 h-10 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-xs font-bold text-gray-500">+2k</div>
+                                </div>
+                                <div class="text-left">
+                                    <div class="flex text-yellow-400 text-xs">
+                                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <p class="text-xs text-gray-500 font-semibold">50k+ active users</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative flex justify-center perspective-1000">
+                            <div class="w-72 h-[580px] bg-gray-900 rounded-[3rem] border-8 border-gray-900 shadow-2xl relative overflow-hidden transform rotate-y-12 hover:rotate-y-0 transition duration-700 ease-out">
+                                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-gray-900 rounded-b-2xl z-20"></div>
+                                <div class="w-full h-full bg-white flex flex-col relative z-10">
+                                    <!-- App UI Mockup -->
+                                    <div class="h-40 bg-[var(--color-primary)] rounded-b-3xl p-6 flex flex-col justify-end text-white">
+                                        <div class="text-xs opacity-80 mb-1">Total Balance</div>
+                                        <div class="text-3xl font-bold">$12,450.00</div>
+                                    </div>
+                                    <div class="p-6 space-y-4">
+                                        <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-500"><i class="fa-solid fa-burger"></i></div>
+                                                <div>
+                                                    <div class="font-bold text-sm">Food & Dining</div>
+                                                    <div class="text-xs text-gray-400">Today, 12:30 PM</div>
+                                                </div>
+                                            </div>
+                                            <div class="font-bold text-red-500 text-sm">-$45.00</div>
+                                        </div>
+                                         <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-500"><i class="fa-solid fa-sack-dollar"></i></div>
+                                                <div>
+                                                    <div class="font-bold text-sm">Salary</div>
+                                                    <div class="text-xs text-gray-400">Yesterday, 9:00 AM</div>
+                                                </div>
+                                            </div>
+                                            <div class="font-bold text-green-500 text-sm">+$3,200.00</div>
+                                        </div>
+                                         <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
+                                            <div class="flex gap-3 items-center">
+                                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-500"><i class="fa-solid fa-car"></i></div>
+                                                <div>
+                                                    <div class="font-bold text-sm">Transport</div>
+                                                    <div class="text-xs text-gray-400">Mon, 8:15 AM</div>
+                                                </div>
+                                            </div>
+                                            <div class="font-bold text-red-500 text-sm">-$12.50</div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-auto m-4 p-4 bg-[var(--color-primary)]/10 rounded-2xl text-[var(--color-primary)] text-center font-bold text-sm cursor-pointer">
+                                        View Analytics
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Floating Card -->
+                            <div class="absolute top-1/3 -left-12 bg-white p-4 rounded-2xl shadow-xl animate-bounce delay-700">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl"><i class="fa-solid fa-check"></i></div>
+                                    <div>
+                                        <p class="text-xs text-gray-400 font-bold uppercase">Savings Goal</p>
+                                        <p class="font-bold text-gray-900">Target Reached!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                </div>
+                
+                <!-- Features ZigZag -->
+                <section class="py-24 max-w-7xl mx-auto px-6 space-y-24">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="order-2 md:order-1">
+                             <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6"><i class="fa-solid fa-chart-simple"></i></div>
+                             <h2 class="text-4xl font-bold mb-4">Smart Analytics</h2>
+                             <p class="text-gray-500 text-lg leading-relaxed mb-6">Gain clear insights into your spending habits. Our AI categorizes transactions automatically so you know exactly where your money goes.</p>
+                             <ul class="space-y-3">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-[var(--color-primary)]"></i> Visual Graphs & Charts</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-[var(--color-primary)]"></i> Monthly Reports</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-[var(--color-primary)]"></i> Export to PDF/CSV</li>
+                             </ul>
+                        </div>
+                        <div class="bg-gray-100 rounded-[3rem] p-12 order-1 md:order-2">
+                             <img src="https://cdn.dribbble.com/users/4859/screenshots/14601449/media/3110255909265f24294d1f211325a76c.png?resize=800x600&vertical=center" class="w-full rounded-2xl shadow-lg transform rotate-2 hover:rotate-0 transition duration-500" alt="Analytics UI">
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="bg-gray-100 rounded-[3rem] p-12">
+                             <img src="https://cdn.dribbble.com/users/418188/screenshots/15926618/media/64b5a34e004b2b719488346cb493c8d3.png?resize=800x600&vertical=center" class="w-full rounded-2xl shadow-lg transform -rotate-2 hover:rotate-0 transition duration-500" alt="Security UI">
+                        </div>
+                        <div>
+                             <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6"><i class="fa-solid fa-fingerprint"></i></div>
+                             <h2 class="text-4xl font-bold mb-4">Bank-Level Security</h2>
+                             <p class="text-gray-500 text-lg leading-relaxed mb-6">Your data is encrypted with 256-bit AES encryption. We support FaceID and TouchID for quick and secure access.</p>
+                             <ul class="space-y-3">
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-[var(--color-primary)]"></i> Biometric Login</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-[var(--color-primary)]"></i> Instant Fraud Alerts</li>
+                                <li class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-[var(--color-primary)]"></i> Data Privacy Guarantee</li>
+                             </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Testimonials -->
+                <section class="py-24 bg-gray-900 text-white rounded-t-[3rem] mt-12">
+                     <div class="max-w-7xl mx-auto px-6">
+                        <div class="text-center mb-16">
+                            <h2 class="text-4xl font-bold mb-4">Loved by millions</h2>
+                            <p class="text-gray-400">Don't just take our word for it.</p>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <div class="bg-gray-800 p-8 rounded-2xl">
+                                <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                                <p class="mb-6 text-gray-300 leading-relaxed">"This app completely changed how I manage my finances. I saved over $500 in my first month just by tracking subscriptions."</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gray-600 rounded-full"></div>
+                                    <div class="font-bold text-sm">Sarah Jenkins</div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 p-8 rounded-2xl">
+                                <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                                <p class="mb-6 text-gray-300 leading-relaxed">"The interface is so intuitive and beautiful. It makes checking my bank balance actually enjoyable."</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gray-600 rounded-full"></div>
+                                    <div class="font-bold text-sm">Mike Chen</div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-800 p-8 rounded-2xl">
+                                <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                                <p class="mb-6 text-gray-300 leading-relaxed">"Support team is incredible. They helped me sync my legacy bank account in minutes."</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gray-600 rounded-full"></div>
+                                    <div class="font-bold text-sm">Jessica Lee</div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </section>
+
+                <footer class="bg-gray-900 text-gray-400 py-12 px-6 border-t border-gray-800">
+                    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+                        <div class="mb-6 md:mb-0">
+                            <div class="text-2xl font-bold text-white mb-2" data-bind-brand>${state.brandName}</div>
+                            <p class="text-sm">Simplify your life today.</p>
+                        </div>
+                        <div class="flex gap-8 text-sm">
+                            <a href="#" class="hover:text-white">Privacy Policy</a>
+                            <a href="#" class="hover:text-white">Terms of Service</a>
+                            <a href="#" class="hover:text-white">Cookie Settings</a>
+                        </div>
+                        <div class="flex gap-4 mt-6 md:mt-0 text-xl">
+                            <i class="fa-brands fa-twitter hover:text-[var(--color-primary)] cursor-pointer"></i>
+                            <i class="fa-brands fa-facebook hover:text-[var(--color-primary)] cursor-pointer"></i>
+                            <i class="fa-brands fa-instagram hover:text-[var(--color-primary)] cursor-pointer"></i>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            `;
+        }
+
+        // 6. Quantum Web3
+        function generateCryptoTemplate() {
+            return `
+            <div class="bg-[#0b0c15] text-white font-mono" style="font-family: 'Roboto Mono', monospace; background-image: radial-gradient(#1f2937 1px, transparent 1px); background-size: 40px 40px;">
+                <nav class="flex items-center justify-between px-8 py-6 border-b border-gray-800 backdrop-blur-md sticky top-0 z-50">
+                    <div class="text-xl font-bold tracking-tighter text-[var(--color-primary)] flex items-center gap-2">
+                        <i class="fa-solid fa-cube"></i> <span data-bind-brand>&lt;${state.brandName} /&gt;</span>
+                    </div>
+                    <div class="hidden md:flex gap-8 text-xs font-bold text-gray-400 uppercase tracking-wider">
+                        <a href="#" class="hover:text-[var(--color-primary)]">Ecosystem</a>
+                        <a href="#" class="hover:text-[var(--color-primary)]">Roadmap</a>
+                        <a href="#" class="hover:text-[var(--color-primary)]">Whitepaper</a>
+                    </div>
+                    <button class="px-6 py-2 border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-black transition shadow-[0_0_15px_rgba(6,182,212,0.3)]">Connect Wallet</button>
+                </nav>
+
+                <header class="py-32 px-6 text-center relative overflow-hidden">
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--color-primary)] rounded-full filter blur-[120px] opacity-10 animate-pulse"></div>
+                    
+                    <div class="inline-block border border-gray-700 bg-gray-900/50 backdrop-blur px-4 py-2 rounded mb-8 text-xs text-[var(--color-primary)]">
+                        <i class="fa-solid fa-circle text-[10px] mr-2 animate-ping"></i> Mainnet Live
+                    </div>
+
+                    <h1 class="text-5xl md:text-7xl font-bold mb-8 relative z-10 glitch-effect" data-bind-headline>${state.headline}</h1>
+                    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto relative z-10" data-bind-subheadline>${state.subheadline}</p>
+                    
+                    <div class="relative z-10 flex flex-col md:flex-row gap-6 justify-center items-center">
+                        <button class="px-8 py-4 bg-[var(--color-primary)] text-black font-bold text-lg hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition clip-diagonal" data-bind-cta>${state.ctaText}</button>
+                        <a href="#" class="text-gray-400 hover:text-white border-b border-gray-600 hover:border-[var(--color-primary)] pb-1 transition">Read Documentation ></a>
+                    </div>
+
+                    <div class="mt-20 flex justify-center gap-12 text-gray-500 font-bold uppercase tracking-widest text-sm">
+                        <span>Binance</span>
+                        <span>Coinbase</span>
+                        <span>Kraken</span>
+                        <span>Metamask</span>
+                    </div>
+                </header>
+
+                <!-- Stats Grid -->
+                <section class="border-y border-gray-800 bg-[#0f111a]">
+                    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-800">
+                        <div class="p-8 text-center">
+                            <div class="text-3xl font-bold text-[var(--color-primary)] mb-1">$450M+</div>
+                            <div class="text-xs text-gray-500 uppercase">TVL Locked</div>
+                        </div>
+                        <div class="p-8 text-center">
+                            <div class="text-3xl font-bold text-[var(--color-primary)] mb-1">100k+</div>
+                            <div class="text-xs text-gray-500 uppercase">Active Wallets</div>
+                        </div>
+                         <div class="p-8 text-center">
+                            <div class="text-3xl font-bold text-[var(--color-primary)] mb-1">~0.001s</div>
+                            <div class="text-xs text-gray-500 uppercase">Finality</div>
+                        </div>
+                         <div class="p-8 text-center">
+                            <div class="text-3xl font-bold text-[var(--color-primary)] mb-1">$0.0001</div>
+                            <div class="text-xs text-gray-500 uppercase">Avg Gas Fee</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="max-w-7xl mx-auto px-6 py-24">
+                    <h2 class="text-3xl font-bold mb-12 border-l-4 border-[var(--color-primary)] pl-4">Core Architecture</h2>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="bg-[#111] border border-gray-800 p-8 hover:border-[var(--color-primary)] transition duration-300 group">
+                            <div class="w-12 h-12 bg-gray-900 border border-gray-700 flex items-center justify-center mb-6 group-hover:bg-[var(--color-primary)] group-hover:text-black transition">
+                                <i class="fa-solid fa-shield-halved text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Decentralized</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Built on a trustless network of validators ensuring no single point of failure and total censorship resistance.</p>
+                        </div>
+                        <div class="bg-[#111] border border-gray-800 p-8 hover:border-[var(--color-primary)] transition duration-300 group">
+                             <div class="w-12 h-12 bg-gray-900 border border-gray-700 flex items-center justify-center mb-6 group-hover:bg-[var(--color-primary)] group-hover:text-black transition">
+                                <i class="fa-solid fa-bolt text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Lightning Fast</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Proprietary sharding technology allows for parallel transaction processing, achieving 100k TPS.</p>
+                        </div>
+                        <div class="bg-[#111] border border-gray-800 p-8 hover:border-[var(--color-primary)] transition duration-300 group">
+                             <div class="w-12 h-12 bg-gray-900 border border-gray-700 flex items-center justify-center mb-6 group-hover:bg-[var(--color-primary)] group-hover:text-black transition">
+                                <i class="fa-solid fa-lock text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Audited Security</h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">Smart contracts verified by Certik and Trail of Bits. Continuous bug bounty programs active.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Roadmap -->
+                <section class="py-24 px-6 border-t border-gray-800 bg-[#0f111a]">
+                    <div class="max-w-5xl mx-auto">
+                        <h2 class="text-3xl font-bold mb-16 text-center">Project Roadmap</h2>
+                        <div class="space-y-12 relative border-l border-gray-800 ml-6 md:ml-0 md:pl-0">
+                            <!-- Item 1 -->
+                            <div class="md:flex items-center">
+                                <div class="hidden md:block w-1/2 pr-12 text-right">
+                                    <h3 class="text-xl font-bold text-[var(--color-primary)]">Phase 1: Genesis</h3>
+                                    <p class="text-gray-400 text-sm mt-2">Token generation event, community building, and initial listing on DEXs.</p>
+                                </div>
+                                <div class="absolute left-6 md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[var(--color-primary)] rounded-full shadow-[0_0_10px_var(--color-primary)]"></div>
+                                <div class="md:hidden pl-12">
+                                     <h3 class="text-xl font-bold text-[var(--color-primary)]">Phase 1: Genesis</h3>
+                                     <p class="text-gray-400 text-sm mt-2">Token generation event.</p>
+                                </div>
+                            </div>
+                             <!-- Item 2 -->
+                            <div class="md:flex items-center">
+                                <div class="hidden md:block w-1/2 pr-12 text-right"></div>
+                                <div class="absolute left-6 md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gray-600 rounded-full border border-gray-900"></div>
+                                <div class="pl-12 md:w-1/2 md:pl-12">
+                                     <h3 class="text-xl font-bold text-white">Phase 2: Expansion</h3>
+                                     <p class="text-gray-400 text-sm mt-2">Launch of staking platform, NFT marketplace beta, and CEX listings.</p>
+                                </div>
+                            </div>
+                             <!-- Item 3 -->
+                            <div class="md:flex items-center">
+                                <div class="hidden md:block w-1/2 pr-12 text-right">
+                                    <h3 class="text-xl font-bold text-white">Phase 3: Governance</h3>
+                                    <p class="text-gray-400 text-sm mt-2">DAO implementation, cross-chain bridges, and mainnet upgrades.</p>
+                                </div>
+                                <div class="absolute left-6 md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gray-600 rounded-full border border-gray-900"></div>
+                                <div class="md:hidden pl-12">
+                                     <h3 class="text-xl font-bold text-white">Phase 3: Governance</h3>
+                                     <p class="text-gray-400 text-sm mt-2">DAO implementation.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Tokenomics -->
+                <section class="py-24 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-6">Tokenomics</h2>
+                        <p class="text-gray-400 mb-8">A sustainable model designed for long-term growth and community rewards.</p>
+                        <ul class="space-y-4">
+                            <li class="flex justify-between border-b border-gray-800 pb-2">
+                                <span>Total Supply</span>
+                                <span class="font-bold text-[var(--color-primary)]">1,000,000,000</span>
+                            </li>
+                             <li class="flex justify-between border-b border-gray-800 pb-2">
+                                <span>Public Sale</span>
+                                <span class="font-bold">20%</span>
+                            </li>
+                             <li class="flex justify-between border-b border-gray-800 pb-2">
+                                <span>Staking Rewards</span>
+                                <span class="font-bold">30%</span>
+                            </li>
+                             <li class="flex justify-between border-b border-gray-800 pb-2">
+                                <span>Team (Vested)</span>
+                                <span class="font-bold">15%</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-2xl flex items-center justify-center aspect-square relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-48 h-48 rounded-full border-8 border-[var(--color-primary)] border-t-transparent animate-spin"></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold">1B</div>
+                            <div class="text-xs uppercase">Tokens</div>
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="py-12 px-8 border-t border-gray-800 text-center text-gray-500 text-xs">
+                    <p class="mb-4">&copy; 2024 ${state.brandName} Foundation. Open Source.</p>
+                    <div class="flex justify-center gap-6 text-lg">
+                        <i class="fa-brands fa-discord hover:text-white cursor-pointer"></i>
+                        <i class="fa-brands fa-twitter hover:text-white cursor-pointer"></i>
+                        <i class="fa-brands fa-telegram hover:text-white cursor-pointer"></i>
+                        <i class="fa-brands fa-github hover:text-white cursor-pointer"></i>
+                    </div>
+                </footer>
+            </div>
+            `;
+        }
+
+        // 7. Minimal Studio
+        function generateMinimalTemplate() {
+            return `
+            <div class="bg-white text-black font-sans" style="font-family: 'Inter', sans-serif;">
+                <nav class="flex items-center justify-between px-10 py-10 sticky top-0 bg-white/90 backdrop-blur z-50">
+                    <div class="font-bold tracking-tight text-lg uppercase" data-bind-brand>${state.brandName}</div>
+                    <div class="hidden md:flex gap-12 text-sm uppercase tracking-widest font-medium">
+                        <a href="#" class="hover:line-through decoration-1">Work</a>
+                        <a href="#" class="hover:line-through decoration-1">Studio</a>
+                        <a href="#" class="hover:line-through decoration-1">News</a>
+                    </div>
+                    <div class="w-8 h-8 flex flex-col justify-center items-end gap-1.5 cursor-pointer group">
+                        <div class="w-8 h-0.5 bg-black group-hover:w-6 transition-all"></div>
+                        <div class="w-4 h-0.5 bg-black group-hover:w-8 transition-all"></div>
+                    </div>
+                </nav>
+
+                <header class="px-10 pt-32 pb-40 max-w-[1600px] mx-auto">
+                    <h1 class="text-6xl md:text-[10rem] font-light tracking-tighter leading-[0.85] mb-24" data-bind-headline>${state.headline}</h1>
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+                        <div class="md:col-span-4 md:col-start-9">
+                            <p class="text-xl leading-relaxed mb-12 font-light" data-bind-subheadline>${state.subheadline}</p>
+                            <button class="text-lg border-b border-black pb-1 hover:text-[var(--color-primary)] transition flex items-center gap-4 group" data-bind-cta>
+                                ${state.ctaText} 
+                                <span class="group-hover:translate-x-2 transition">&rarr;</span>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <section class="px-4 mb-32">
+                    <div class="h-[90vh] bg-gray-100 w-full relative overflow-hidden group">
+                         <img src="https://images.unsplash.com/photo-1486718448742-163732cd1544?auto=format&fit=crop&w=1600&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-1000 scale-105 group-hover:scale-100" alt="Minimal Image">
+                         <div class="absolute bottom-10 left-10 md:bottom-20 md:left-20 text-white mix-blend-difference">
+                            <p class="text-xs uppercase tracking-widest mb-2">Architecture / 2024</p>
+                            <h2 class="text-4xl md:text-6xl font-light">The Concrete House</h2>
+                         </div>
+                    </div>
+                </section>
+                
+                <section class="px-10 py-24 max-w-[1600px] mx-auto">
+                    <div class="flex justify-between items-end mb-24 border-b border-black pb-4">
+                        <h2 class="text-4xl font-light">Selected Projects</h2>
+                        <span class="text-sm">(05)</span>
+                    </div>
+                    
+                    <div class="space-y-32">
+                        <!-- Project 1 -->
+                        <div class="grid md:grid-cols-12 gap-8 group cursor-pointer">
+                            <div class="md:col-span-5 md:col-start-2">
+                                <div class="overflow-hidden aspect-[4/5]">
+                                    <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 group-hover:scale-105">
+                                </div>
+                            </div>
+                            <div class="md:col-span-4 flex flex-col justify-center">
+                                <h3 class="text-3xl font-light mb-4">Aesop Shibuya</h3>
+                                <p class="text-gray-500 mb-8 max-w-sm">Retail interior design focused on sensory experience and natural materials.</p>
+                                <ul class="text-sm uppercase tracking-widest space-y-2">
+                                    <li>Tokyo, Japan</li>
+                                    <li>Retail Design</li>
+                                    <li>2023</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                         <!-- Project 2 -->
+                        <div class="grid md:grid-cols-12 gap-8 group cursor-pointer">
+                            <div class="md:col-span-4 md:col-start-2 flex flex-col justify-center order-2 md:order-1">
+                                <h3 class="text-3xl font-light mb-4">Kinfolk Gallery</h3>
+                                <p class="text-gray-500 mb-8 max-w-sm">A multi-purpose art space designed to foster community and creativity.</p>
+                                <ul class="text-sm uppercase tracking-widest space-y-2">
+                                    <li>Copenhagen, DK</li>
+                                    <li>Cultural</li>
+                                    <li>2022</li>
+                                </ul>
+                            </div>
+                            <div class="md:col-span-5 md:order-2">
+                                <div class="overflow-hidden aspect-[4/5]">
+                                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 group-hover:scale-105">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-32 bg-black text-white px-10">
+                    <div class="max-w-[1600px] mx-auto grid md:grid-cols-2 gap-20">
+                        <div>
+                            <h2 class="text-5xl font-light leading-tight mb-12">We create spaces that are meaningful, timeless, and human-centric.</h2>
+                        </div>
+                        <div class="space-y-12 text-gray-400 font-light text-lg">
+                            <p>Our approach is rooted in reduction. We strip away the unnecessary to reveal the essential. Every line, every texture, every shadow is considered.</p>
+                            <p>We work closely with our clients to understand their needs, translating them into physical forms that inspire and endure.</p>
+                            <div class="pt-8">
+                                <a href="#" class="text-white border-b border-white pb-1 hover:opacity-50 transition">Read our Manifest</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="py-20 px-10 border-t border-gray-100 flex flex-col justify-between min-h-[50vh]">
+                    <div class="text-[10vw] font-bold leading-none tracking-tighter opacity-10 select-none pointer-events-none text-center">STUDIO</div>
+                    <div class="grid md:grid-cols-4 gap-10 text-sm uppercase tracking-widest mt-auto">
+                        <div>
+                            <h4 class="font-bold mb-4">Contact</h4>
+                            <p>hello@${state.brandName.toLowerCase().replace(/\s/g, '')}.com</p>
+                            <p>+1 212 555 0199</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-4">Address</h4>
+                            <p>123 Bowery St</p>
+                            <p>New York, NY 10002</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-4">Social</h4>
+                            <p><a href="#" class="hover:underline">Instagram</a></p>
+                            <p><a href="#" class="hover:underline">LinkedIn</a></p>
+                        </div>
+                         <div>
+                            <p class="text-gray-400">&copy; 2024 ${state.brandName}</p>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            `;
+        }
+
+        // 8. Care Medical
+        function generateMedicalTemplate() {
+            return `
+            <div class="bg-slate-50 text-slate-800 font-sans" style="font-family: 'Inter', sans-serif;">
+                <div class="bg-[var(--color-primary)] text-white text-xs py-2 text-center font-medium">Emergency Service Available 24/7 - Call 555-0123</div>
+                <nav class="bg-white shadow-sm sticky top-0 z-50">
+                    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                        <div class="text-2xl font-bold text-[var(--color-primary)] flex items-center gap-2">
+                            <i class="fa-solid fa-heart-pulse"></i> <span data-bind-brand>${state.brandName}</span>
+                        </div>
+                        <div class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+                             <a href="#" class="hover:text-[var(--color-primary)]">Departments</a>
+                             <a href="#" class="hover:text-[var(--color-primary)]">Doctors</a>
+                             <a href="#" class="hover:text-[var(--color-primary)]">Patients</a>
+                             <a href="#" class="hover:text-[var(--color-primary)]">Contact</a>
+                        </div>
+                        <button class="px-5 py-2.5 rounded-md bg-[var(--color-primary)] text-white font-medium hover:bg-blue-700 transition shadow-lg shadow-blue-500/20">Book Appointment</button>
+                    </div>
+                </nav>
+
+                <header class="py-24 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <div class="inline-block bg-blue-50 text-blue-600 px-3 py-1 rounded text-xs font-bold uppercase mb-6 tracking-wide">World Class Healthcare</div>
+                        <h1 class="text-4xl md:text-6xl font-bold text-slate-900 leading-tight mb-6" data-bind-headline>${state.headline}</h1>
+                        <p class="text-lg text-slate-600 mb-8 leading-relaxed" data-bind-subheadline>${state.subheadline}</p>
+                        <div class="flex gap-4">
+                            <button class="px-8 py-3 rounded-md bg-[var(--color-primary)] text-white font-semibold shadow-lg shadow-blue-500/30 transition hover:-translate-y-1" data-bind-cta>${state.ctaText}</button>
+                            <button class="px-8 py-3 rounded-md border border-slate-300 bg-white text-slate-700 font-semibold hover:bg-slate-50 transition">Learn More</button>
+                        </div>
+                        <div class="mt-12 flex gap-12 border-t border-slate-200 pt-8">
+                            <div>
+                                <h4 class="text-3xl font-bold text-[var(--color-primary)]">15+</h4>
+                                <p class="text-sm text-slate-500">Years Exp.</p>
+                            </div>
+                             <div>
+                                <h4 class="text-3xl font-bold text-[var(--color-primary)]">2k+</h4>
+                                <p class="text-sm text-slate-500">Recovered</p>
+                            </div>
+                             <div>
+                                <h4 class="text-3xl font-bold text-[var(--color-primary)]">100%</h4>
+                                <p class="text-sm text-slate-500">Satisfaction</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="bg-white p-3 rounded-2xl shadow-2xl relative z-10">
+                             <img src="https://images.unsplash.com/photo-1579684385136-137af7546145?auto=format&fit=crop&w=800&q=80" class="w-full h-[500px] object-cover rounded-xl" alt="Doctor">
+                        </div>
+                        <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-lg shadow-xl max-w-xs z-20 border-l-4 border-[var(--color-primary)]">
+                             <div class="flex gap-1 text-yellow-400 mb-2">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                             </div>
+                             <p class="text-sm font-medium text-slate-700 italic">"The best care I've ever received. Highly professional staff."</p>
+                             <p class="text-xs text-slate-400 mt-2 font-bold uppercase">- Jane Doe</p>
+                        </div>
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
+                    </div>
+                </header>
+
+                <!-- Services -->
+                <section class="py-24 bg-white">
+                    <div class="max-w-7xl mx-auto px-6">
+                        <div class="text-center max-w-2xl mx-auto mb-16">
+                            <h2 class="text-3xl font-bold text-slate-900 mb-4">Our Medical Departments</h2>
+                            <p class="text-slate-500">Comprehensive care provided by certified specialists using the latest technology.</p>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <div class="p-8 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition hover:border-[var(--color-primary)] group">
+                                <div class="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center text-[var(--color-primary)] text-2xl mb-6 group-hover:bg-[var(--color-primary)] group-hover:text-white transition">
+                                    <i class="fa-solid fa-user-doctor"></i>
+                                </div>
+                                <h3 class="text-xl font-bold mb-3 text-slate-900">General Practice</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed">Regular check-ups and treatment for common illnesses to keep you healthy.</p>
+                                <a href="#" class="inline-block mt-4 text-[var(--color-primary)] font-semibold text-sm hover:underline">Read More</a>
+                            </div>
+                            <div class="p-8 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition hover:border-[var(--color-primary)] group">
+                                <div class="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center text-[var(--color-primary)] text-2xl mb-6 group-hover:bg-[var(--color-primary)] group-hover:text-white transition">
+                                    <i class="fa-solid fa-tooth"></i>
+                                </div>
+                                <h3 class="text-xl font-bold mb-3 text-slate-900">Dental Care</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed">Complete oral health services including cleaning, surgery, and cosmetics.</p>
+                                <a href="#" class="inline-block mt-4 text-[var(--color-primary)] font-semibold text-sm hover:underline">Read More</a>
+                            </div>
+                            <div class="p-8 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition hover:border-[var(--color-primary)] group">
+                                <div class="w-14 h-14 bg-blue-50 rounded-full flex items-center justify-center text-[var(--color-primary)] text-2xl mb-6 group-hover:bg-[var(--color-primary)] group-hover:text-white transition">
+                                    <i class="fa-solid fa-heart-pulse"></i>
+                                </div>
+                                <h3 class="text-xl font-bold mb-3 text-slate-900">Cardiology</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed">Advanced heart care from diagnostics to surgical interventions.</p>
+                                <a href="#" class="inline-block mt-4 text-[var(--color-primary)] font-semibold text-sm hover:underline">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Meet Doctors -->
+                <section class="py-24 bg-slate-50">
+                     <div class="max-w-7xl mx-auto px-6">
+                        <div class="flex justify-between items-end mb-12">
+                             <h2 class="text-3xl font-bold text-slate-900">Meet Our Specialists</h2>
+                             <button class="text-[var(--color-primary)] font-bold hover:underline">View All Doctors</button>
+                        </div>
+                        <div class="grid md:grid-cols-4 gap-8">
+                            <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-full h-64 object-cover">
+                                <div class="p-6 text-center">
+                                    <h3 class="font-bold text-lg text-slate-900">Dr. John Smith</h3>
+                                    <p class="text-[var(--color-primary)] text-sm mb-4">Cardiologist</p>
+                                    <div class="flex justify-center gap-4 text-slate-400">
+                                        <i class="fa-brands fa-linkedin hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                        <i class="fa-brands fa-twitter hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-64 object-cover">
+                                <div class="p-6 text-center">
+                                    <h3 class="font-bold text-lg text-slate-900">Dr. Emily White</h3>
+                                    <p class="text-[var(--color-primary)] text-sm mb-4">Pediatrician</p>
+                                    <div class="flex justify-center gap-4 text-slate-400">
+                                        <i class="fa-brands fa-linkedin hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                        <i class="fa-brands fa-twitter hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition">
+                                <img src="https://randomuser.me/api/portraits/men/86.jpg" class="w-full h-64 object-cover">
+                                <div class="p-6 text-center">
+                                    <h3 class="font-bold text-lg text-slate-900">Dr. Michael Brown</h3>
+                                    <p class="text-[var(--color-primary)] text-sm mb-4">Neurologist</p>
+                                    <div class="flex justify-center gap-4 text-slate-400">
+                                        <i class="fa-brands fa-linkedin hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                        <i class="fa-brands fa-twitter hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" class="w-full h-64 object-cover">
+                                <div class="p-6 text-center">
+                                    <h3 class="font-bold text-lg text-slate-900">Dr. Sarah Davis</h3>
+                                    <p class="text-[var(--color-primary)] text-sm mb-4">Dermatologist</p>
+                                    <div class="flex justify-center gap-4 text-slate-400">
+                                        <i class="fa-brands fa-linkedin hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                        <i class="fa-brands fa-twitter hover:text-[var(--color-primary)] cursor-pointer"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </section>
+                
+                <!-- Appointment CTA -->
+                <section class="py-24 bg-[var(--color-primary)] text-white">
+                    <div class="max-w-4xl mx-auto px-6 text-center">
+                        <h2 class="text-3xl font-bold mb-6">Need a Doctor for Check-up?</h2>
+                        <p class="mb-10 text-blue-100 text-lg">Just make an appointment & you're done!</p>
+                        <form class="bg-white p-8 rounded-2xl shadow-2xl grid md:grid-cols-3 gap-4 text-left">
+                            <div>
+                                <label class="block text-slate-700 text-xs font-bold mb-2">Name</label>
+                                <input type="text" placeholder="Your Name" class="w-full p-3 rounded-lg bg-slate-100 border-none text-slate-800">
+                            </div>
+                             <div>
+                                <label class="block text-slate-700 text-xs font-bold mb-2">Department</label>
+                                <select class="w-full p-3 rounded-lg bg-slate-100 border-none text-slate-800">
+                                    <option>General Health</option>
+                                    <option>Cardiology</option>
+                                    <option>Dental</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end">
+                                <button type="button" class="w-full p-3 rounded-lg bg-slate-900 text-white font-bold hover:bg-slate-800 transition">Get Appointment</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <footer class="bg-slate-900 text-slate-400 py-16">
+                    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+                        <div>
+                             <div class="text-2xl font-bold text-white flex items-center gap-2 mb-6">
+                                <i class="fa-solid fa-heart-pulse text-[var(--color-primary)]"></i> <span data-bind-brand>${state.brandName}</span>
+                            </div>
+                            <p class="text-sm leading-relaxed mb-6">Providing high-quality healthcare services for over 20 years. Your health is our priority.</p>
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-[var(--color-primary)] hover:text-white transition cursor-pointer"><i class="fa-brands fa-facebook-f"></i></div>
+                                <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-[var(--color-primary)] hover:text-white transition cursor-pointer"><i class="fa-brands fa-twitter"></i></div>
+                                <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-[var(--color-primary)] hover:text-white transition cursor-pointer"><i class="fa-brands fa-linkedin-in"></i></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-6">Quick Links</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">About Us</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Our Services</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Meet the Doctors</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Latest News</a></li>
+                                <li><a href="#" class="hover:text-[var(--color-primary)]">Contact</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                             <h4 class="text-white font-bold mb-6">Contact Info</h4>
+                             <ul class="space-y-4 text-sm">
+                                <li class="flex gap-3"><i class="fa-solid fa-location-dot text-[var(--color-primary)]"></i> 123 Health Avenue, Medical City, NY</li>
+                                <li class="flex gap-3"><i class="fa-solid fa-phone text-[var(--color-primary)]"></i> +1 (555) 123-4567</li>
+                                <li class="flex gap-3"><i class="fa-solid fa-envelope text-[var(--color-primary)]"></i> info@${state.brandName.toLowerCase().replace(/\s/g, '')}.com</li>
+                             </ul>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            `;
+        }
+
+        // 9. Spark Event
+        function generateEventTemplate() {
+            return `
+             <div class="bg-[#0f0f0f] text-white font-sans overflow-x-hidden" style="font-family: 'Space Grotesk', sans-serif;">
+                <nav class="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto sticky top-0 bg-[#0f0f0f]/90 backdrop-blur z-50 border-b border-gray-800">
+                    <div class="text-2xl font-bold uppercase tracking-widest text-[var(--color-primary)]" data-bind-brand>${state.brandName}</div>
+                    <div class="text-sm font-bold border border-gray-700 px-4 py-2 rounded-full hidden md:block">DEC 12-14, 2024 • NYC</div>
+                    <button class="bg-white text-black font-bold px-6 py-2 uppercase hover:bg-[var(--color-primary)] transition">Get Tickets</button>
+                </nav>
+
+                <header class="py-32 px-6 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] animate-pulse"></div>
+                    <div class="absolute top-20 left-10 w-32 h-32 border-4 border-[var(--color-primary)] rounded-full opacity-20 float-anim"></div>
+                    <div class="absolute bottom-20 right-10 w-48 h-48 border-4 border-white rounded-full opacity-10 float-anim" style="animation-delay: 1s;"></div>
+                    
+                    <div class="relative z-10 max-w-5xl mx-auto">
+                        <span class="inline-block border border-[var(--color-primary)] text-[var(--color-primary)] px-6 py-2 rounded-full text-sm font-bold uppercase mb-8 hover:bg-[var(--color-primary)] hover:text-black transition cursor-default">Early Bird Tickets Live</span>
+                        <h1 class="text-6xl md:text-9xl font-black uppercase italic leading-[0.85] mb-8 transform -rotate-1 mix-blend-screen" data-bind-headline>${state.headline}</h1>
+                        <p class="text-2xl text-gray-300 mb-12 max-w-2xl mx-auto font-light leading-relaxed" data-bind-subheadline>${state.subheadline}</p>
+                        
+                        <div class="flex flex-col md:flex-row gap-6 justify-center">
+                            <button class="px-10 py-5 bg-[var(--color-primary)] text-black font-black text-2xl uppercase italic transform hover:scale-105 transition shadow-[8px_8px_0px_white] hover:shadow-[12px_12px_0px_white] hover:-translate-y-1" data-bind-cta>${state.ctaText}</button>
+                            <button class="px-10 py-5 border-2 border-white text-white font-bold text-xl uppercase italic hover:bg-white hover:text-black transition">Full Schedule</button>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="bg-[var(--color-primary)] text-black py-20 -skew-y-2 origin-top-left transform scale-105 border-y-8 border-black">
+                    <div class="max-w-7xl mx-auto px-10 grid grid-cols-2 md:grid-cols-4 gap-12 text-center skew-y-2">
+                         <div class="space-y-2">
+                            <p class="text-6xl font-black">50+</p>
+                            <p class="uppercase font-bold tracking-widest text-sm">Speakers</p>
+                         </div>
+                         <div class="space-y-2">
+                            <p class="text-6xl font-black">3</p>
+                            <p class="uppercase font-bold tracking-widest text-sm">Days</p>
+                         </div>
+                         <div class="space-y-2">
+                            <p class="text-6xl font-black">10</p>
+                            <p class="uppercase font-bold tracking-widest text-sm">Workshops</p>
+                         </div>
+                         <div class="space-y-2">
+                            <p class="text-6xl font-black">2k</p>
+                            <p class="uppercase font-bold tracking-widest text-sm">Attendees</p>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Speakers -->
+                <section class="py-32 px-6 max-w-7xl mx-auto">
+                    <h2 class="text-5xl font-black uppercase italic mb-16 text-center text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Keynote Speakers</h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="group relative">
+                            <div class="h-96 bg-gray-800 grayscale group-hover:grayscale-0 transition duration-500 overflow-hidden relative">
+                                <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+                            </div>
+                            <div class="absolute bottom-6 left-6">
+                                <h3 class="text-2xl font-bold uppercase italic text-[var(--color-primary)]">Elena Ross</h3>
+                                <p class="text-sm font-bold">CEO, TechStart</p>
+                            </div>
+                        </div>
+                         <div class="group relative mt-12 md:mt-0">
+                            <div class="h-96 bg-gray-800 grayscale group-hover:grayscale-0 transition duration-500 overflow-hidden relative">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+                            </div>
+                            <div class="absolute bottom-6 left-6">
+                                <h3 class="text-2xl font-bold uppercase italic text-[var(--color-primary)]">David Chen</h3>
+                                <p class="text-sm font-bold">Product Lead, Google</p>
+                            </div>
+                        </div>
+                         <div class="group relative">
+                            <div class="h-96 bg-gray-800 grayscale group-hover:grayscale-0 transition duration-500 overflow-hidden relative">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+                            </div>
+                            <div class="absolute bottom-6 left-6">
+                                <h3 class="text-2xl font-bold uppercase italic text-[var(--color-primary)]">Sarah Jones</h3>
+                                <p class="text-sm font-bold">Designer, Apple</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Schedule -->
+                <section class="py-24 bg-gray-900 border-t border-gray-800">
+                    <div class="max-w-4xl mx-auto px-6">
+                        <h2 class="text-4xl font-black uppercase italic mb-12 text-center">Day 01 Schedule</h2>
+                        <div class="space-y-6">
+                            <div class="flex flex-col md:flex-row gap-6 p-6 border border-gray-700 hover:border-[var(--color-primary)] hover:bg-gray-800 transition cursor-pointer group">
+                                <div class="md:w-32 font-mono text-[var(--color-primary)] text-xl font-bold">09:00 AM</div>
+                                <div>
+                                    <h3 class="text-2xl font-bold mb-2 group-hover:text-[var(--color-primary)] transition">Registration & Breakfast</h3>
+                                    <p class="text-gray-400">Main Hall Lobby</p>
+                                </div>
+                            </div>
+                             <div class="flex flex-col md:flex-row gap-6 p-6 border border-gray-700 hover:border-[var(--color-primary)] hover:bg-gray-800 transition cursor-pointer group">
+                                <div class="md:w-32 font-mono text-[var(--color-primary)] text-xl font-bold">10:00 AM</div>
+                                <div>
+                                    <h3 class="text-2xl font-bold mb-2 group-hover:text-[var(--color-primary)] transition">Opening Keynote: The Future of AI</h3>
+                                    <p class="text-gray-400">Main Stage • Elena Ross</p>
+                                </div>
+                            </div>
+                             <div class="flex flex-col md:flex-row gap-6 p-6 border border-gray-700 hover:border-[var(--color-primary)] hover:bg-gray-800 transition cursor-pointer group">
+                                <div class="md:w-32 font-mono text-[var(--color-primary)] text-xl font-bold">11:30 AM</div>
+                                <div>
+                                    <h3 class="text-2xl font-bold mb-2 group-hover:text-[var(--color-primary)] transition">Panel: Design Systems at Scale</h3>
+                                    <p class="text-gray-400">Room B • Sarah Jones & Panel</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pricing -->
+                <section class="py-32 px-6 text-center">
+                    <h2 class="text-5xl font-black uppercase italic mb-16">Grab Your Pass</h2>
+                    <div class="max-w-5xl mx-auto grid md:grid-cols-3 gap-8">
+                        <div class="border border-gray-700 p-8 flex flex-col items-center hover:bg-gray-900 transition">
+                            <h3 class="text-xl font-bold uppercase mb-4">Student</h3>
+                            <div class="text-5xl font-black mb-8">$99</div>
+                            <ul class="text-sm text-gray-400 space-y-4 mb-8">
+                                <li>Access to all talks</li>
+                                <li>Networking App</li>
+                                <li>Digital Swag</li>
+                            </ul>
+                            <button class="mt-auto px-8 py-3 border border-white font-bold uppercase hover:bg-white hover:text-black transition">Buy Now</button>
+                        </div>
+                         <div class="border-2 border-[var(--color-primary)] p-8 flex flex-col items-center bg-gray-900 relative transform scale-110 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                            <div class="absolute top-0 -translate-y-1/2 bg-[var(--color-primary)] text-black px-4 py-1 text-xs font-bold uppercase">Best Value</div>
+                            <h3 class="text-xl font-bold uppercase mb-4 text-[var(--color-primary)]">General</h3>
+                            <div class="text-5xl font-black mb-8">$299</div>
+                            <ul class="text-sm text-gray-400 space-y-4 mb-8">
+                                <li>Access to all talks</li>
+                                <li>Workshops</li>
+                                <li>Afterparty Access</li>
+                                <li>Physical Swag Bag</li>
+                            </ul>
+                            <button class="mt-auto px-8 py-3 bg-[var(--color-primary)] text-black font-bold uppercase hover:opacity-90 transition w-full">Buy Now</button>
+                        </div>
+                         <div class="border border-gray-700 p-8 flex flex-col items-center hover:bg-gray-900 transition">
+                            <h3 class="text-xl font-bold uppercase mb-4">VIP</h3>
+                            <div class="text-5xl font-black mb-8">$599</div>
+                            <ul class="text-sm text-gray-400 space-y-4 mb-8">
+                                <li>All General Access</li>
+                                <li>VIP Lounge Access</li>
+                                <li>Speaker Dinner</li>
+                                <li>Reserved Seating</li>
+                            </ul>
+                            <button class="mt-auto px-8 py-3 border border-white font-bold uppercase hover:bg-white hover:text-black transition">Buy Now</button>
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="bg-black py-16 px-6 border-t border-gray-800 text-center">
+                    <div class="text-3xl font-bold uppercase tracking-widest text-[var(--color-primary)] mb-8" data-bind-brand>${state.brandName}</div>
+                    <div class="flex justify-center gap-8 mb-8 text-sm font-bold uppercase">
+                        <a href="#" class="hover:text-[var(--color-primary)]">Code of Conduct</a>
+                        <a href="#" class="hover:text-[var(--color-primary)]">Venue</a>
+                        <a href="#" class="hover:text-[var(--color-primary)]">Contact</a>
+                    </div>
+                    <p class="text-gray-600 text-xs uppercase tracking-widest">&copy; 2024 Event Organizer Inc.</p>
+                </footer>
+            </div>
+            `;
+        }
+
+        // 10. Prime Consult
+        function generateConsultTemplate() {
+            return `
+            <div class="bg-white text-slate-900 font-sans" style="font-family: 'Inter', sans-serif;">
+                <nav class="border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur z-50">
+                    <div class="flex items-center justify-between px-8 py-5 max-w-7xl mx-auto">
+                        <div class="text-xl font-bold font-serif text-[var(--color-primary)]" data-bind-brand>${state.brandName}</div>
+                        <ul class="hidden md:flex gap-10 text-sm font-medium text-slate-600">
+                            <li><a href="#" class="hover:text-[var(--color-primary)]">Expertise</a></li>
+                            <li><a href="#" class="hover:text-[var(--color-primary)]">Industries</a></li>
+                            <li><a href="#" class="hover:text-[var(--color-primary)]">Case Studies</a></li>
+                            <li><a href="#" class="hover:text-[var(--color-primary)]">Insights</a></li>
+                        </ul>
+                        <button class="text-[var(--color-primary)] font-bold text-sm border border-[var(--color-primary)] px-6 py-2 rounded hover:bg-[var(--color-primary)] hover:text-white transition">Contact Us</button>
+                    </div>
+                </nav>
+
+                <header class="py-32 px-6 max-w-5xl mx-auto text-center">
+                    <p class="text-slate-500 font-medium uppercase tracking-widest text-xs mb-8">Global Strategic Advisory</p>
+                    <h1 class="text-5xl md:text-7xl font-serif font-bold text-[var(--color-primary)] mb-8 leading-tight" data-bind-headline>${state.headline}</h1>
+                    <div class="w-24 h-1 bg-yellow-500 mx-auto mb-10"></div>
+                    <p class="text-2xl text-slate-600 mb-12 leading-relaxed font-light max-w-3xl mx-auto" data-bind-subheadline>${state.subheadline}</p>
+                    <div class="flex justify-center gap-6">
+                        <button class="px-10 py-4 bg-[var(--color-primary)] text-white font-medium rounded hover:bg-opacity-90 transition shadow-lg" data-bind-cta>${state.ctaText}</button>
+                        <button class="px-10 py-4 border border-slate-300 text-slate-700 font-medium rounded hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition">Explore Services</button>
+                    </div>
+                </header>
+
+                <!-- Expertise Grid -->
+                <section class="bg-slate-50 py-24 px-6 border-y border-slate-200">
+                    <div class="max-w-7xl mx-auto">
+                         <div class="text-center mb-16">
+                            <h2 class="text-3xl font-serif font-bold text-slate-800 mb-4">Areas of Expertise</h2>
+                            <p class="text-slate-500 max-w-2xl mx-auto">We deliver actionable insights and measurable results across a wide range of business disciplines.</p>
+                         </div>
+                         <div class="grid md:grid-cols-3 gap-8">
+                            <div class="bg-white p-10 shadow-sm hover:shadow-xl transition duration-300 border-t-4 border-[var(--color-primary)]">
+                                <i class="fa-solid fa-chess text-4xl text-[var(--color-primary)] mb-6"></i>
+                                <h3 class="text-xl font-bold text-slate-900 mb-4">Strategic Planning</h3>
+                                <p class="text-slate-500 leading-relaxed mb-6">Navigating complex markets with data-driven strategies that ensure long-term competitive advantage.</p>
+                                <a href="#" class="text-[var(--color-primary)] font-bold text-sm hover:underline">Learn more &rarr;</a>
+                            </div>
+                            <div class="bg-white p-10 shadow-sm hover:shadow-xl transition duration-300 border-t-4 border-yellow-500">
+                                <i class="fa-solid fa-chart-line text-4xl text-yellow-500 mb-6"></i>
+                                <h3 class="text-xl font-bold text-slate-900 mb-4">Financial Advisory</h3>
+                                <p class="text-slate-500 leading-relaxed mb-6">Optimizing capital structure, M&A due diligence, and investment opportunities for maximum ROI.</p>
+                                <a href="#" class="text-yellow-600 font-bold text-sm hover:underline">Learn more &rarr;</a>
+                            </div>
+                            <div class="bg-white p-10 shadow-sm hover:shadow-xl transition duration-300 border-t-4 border-slate-800">
+                                <i class="fa-solid fa-scale-balanced text-4xl text-slate-800 mb-6"></i>
+                                <h3 class="text-xl font-bold text-slate-900 mb-4">Risk Management</h3>
+                                <p class="text-slate-500 leading-relaxed mb-6">Identifying, analyzing, and mitigating operational, regulatory, and financial risks.</p>
+                                <a href="#" class="text-slate-800 font-bold text-sm hover:underline">Learn more &rarr;</a>
+                            </div>
+                             <div class="bg-white p-10 shadow-sm hover:shadow-xl transition duration-300 border-t-4 border-green-600">
+                                <i class="fa-solid fa-seedling text-4xl text-green-600 mb-6"></i>
+                                <h3 class="text-xl font-bold text-slate-900 mb-4">Sustainability</h3>
+                                <p class="text-slate-500 leading-relaxed mb-6">Helping organizations transition to sustainable business models and meet ESG goals.</p>
+                                <a href="#" class="text-green-700 font-bold text-sm hover:underline">Learn more &rarr;</a>
+                            </div>
+                             <div class="bg-white p-10 shadow-sm hover:shadow-xl transition duration-300 border-t-4 border-purple-600">
+                                <i class="fa-solid fa-laptop-code text-4xl text-purple-600 mb-6"></i>
+                                <h3 class="text-xl font-bold text-slate-900 mb-4">Digital Transformation</h3>
+                                <p class="text-slate-500 leading-relaxed mb-6">Leveraging technology to modernize operations and enhance customer experiences.</p>
+                                <a href="#" class="text-purple-700 font-bold text-sm hover:underline">Learn more &rarr;</a>
+                            </div>
+                             <div class="bg-white p-10 shadow-sm hover:shadow-xl transition duration-300 border-t-4 border-red-500">
+                                <i class="fa-solid fa-people-group text-4xl text-red-500 mb-6"></i>
+                                <h3 class="text-xl font-bold text-slate-900 mb-4">Human Capital</h3>
+                                <p class="text-slate-500 leading-relaxed mb-6">Talent acquisition, leadership development, and organizational restructuring.</p>
+                                <a href="#" class="text-red-700 font-bold text-sm hover:underline">Learn more &rarr;</a>
+                            </div>
+                         </div>
+                    </div>
+                </section>
+                
+                <!-- Why Us -->
+                <section class="py-24 px-6 max-w-7xl mx-auto">
+                    <div class="grid md:grid-cols-2 gap-16 items-center">
+                        <div class="relative">
+                            <div class="absolute top-4 -left-4 w-full h-full border-2 border-[var(--color-primary)] z-0"></div>
+                            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80" class="w-full relative z-10 shadow-lg">
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-serif font-bold text-slate-800 mb-6">Why Partner With Us?</h2>
+                            <div class="space-y-8">
+                                <div class="flex gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-[var(--color-primary)] text-xl font-bold">1</div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-2">Proven Track Record</h4>
+                                        <p class="text-slate-500 leading-relaxed">We have successfully guided over 500 Fortune 500 companies through critical transitions.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-[var(--color-primary)] text-xl font-bold">2</div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-2">Global Perspective</h4>
+                                        <p class="text-slate-500 leading-relaxed">With offices in 20 countries, we bring diverse insights and local market knowledge.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="flex-shrink-0 w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-[var(--color-primary)] text-xl font-bold">3</div>
+                                    <div>
+                                        <h4 class="font-bold text-lg mb-2">Client-Centric Approach</h4>
+                                        <p class="text-slate-500 leading-relaxed">Your success is our only metric. We work as an extension of your team.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Testimonials -->
+                <section class="py-24 bg-[var(--color-primary)] text-white">
+                    <div class="max-w-4xl mx-auto px-6 text-center">
+                        <i class="fa-solid fa-quote-left text-6xl opacity-20 mb-8"></i>
+                        <h2 class="text-3xl md:text-5xl font-serif font-bold leading-tight mb-8">"Their strategic guidance was instrumental in our expansion into Asian markets. A truly invaluable partner."</h2>
+                        <div class="flex items-center justify-center gap-4">
+                            <img src="https://randomuser.me/api/portraits/men/44.jpg" class="w-16 h-16 rounded-full border-2 border-white">
+                            <div class="text-left">
+                                <div class="font-bold text-lg">Robert Sterling</div>
+                                <div class="opacity-70 text-sm">CEO, Sterling Logistics</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="bg-slate-900 text-slate-300 py-16">
+                    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-slate-800 pb-12 mb-12">
+                        <div class="col-span-1 md:col-span-2">
+                             <div class="text-2xl font-bold font-serif text-white mb-6" data-bind-brand>${state.brandName}</div>
+                             <p class="max-w-sm leading-relaxed text-slate-400">Delivering excellence in consulting through integrity, innovation, and insight.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-6">Services</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li><a href="#" class="hover:text-white transition">Strategy</a></li>
+                                <li><a href="#" class="hover:text-white transition">Finance</a></li>
+                                <li><a href="#" class="hover:text-white transition">Operations</a></li>
+                                <li><a href="#" class="hover:text-white transition">Technology</a></li>
+                            </ul>
+                        </div>
+                         <div>
+                            <h4 class="text-white font-bold mb-6">Company</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li><a href="#" class="hover:text-white transition">About Us</a></li>
+                                <li><a href="#" class="hover:text-white transition">Careers</a></li>
+                                <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                                <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-xs text-slate-500">
+                        <p>&copy; 2024 ${state.brandName} Group. All rights reserved.</p>
+                        <div class="flex gap-6 mt-4 md:mt-0 text-lg">
+                            <i class="fa-brands fa-linkedin hover:text-white transition cursor-pointer"></i>
+                            <i class="fa-brands fa-twitter hover:text-white transition cursor-pointer"></i>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            `;
+        }
+
+    </script>
+</body>
+</html>
