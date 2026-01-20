@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Pets - Anti-Gravity Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', 'Product Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            background: #0a0a0a;
+        }
+
+        /* Canvas container - fixed behind content */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        /* Scrollable content wrapper */
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Section base styles */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 40px;
+            position: relative;
+            background: transparent;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Logo */
+        .logo {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            color: #ffffff;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 28px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo .logo-text {
+            color: #202124;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            animation: fadeInUp 1s ease 0.3s backwards;
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            text-shadow: 
+                0 0 80px rgba(255, 255, 255, 0.8),
+                0 0 40px rgba(255, 255, 255, 0.6),
+                0 4px 30px rgba(0, 0, 0, 1),
+                0 0 10px rgba(255, 255, 255, 1);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #e8e8e8;
+            margin-bottom: 3rem;
+            font-weight: 400;
+            text-shadow: 
+                0 0 40px rgba(255, 255, 255, 0.6),
+                0 2px 20px rgba(0, 0, 0, 1),
+                0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        /* CTA Buttons */
+        .cta-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .cta-primary {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .cta-primary:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.4);
+        }
+
+        .cta-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* Features Section */
+        .features-section {
+            background: transparent;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+            text-shadow: 
+                0 0 80px rgba(255, 255, 255, 0.8),
+                0 0 40px rgba(255, 255, 255, 0.6),
+                0 4px 30px rgba(0, 0, 0, 1),
+                0 0 10px rgba(255, 255, 255, 1);
+        }
+
+        .section-description {
+            font-size: 1.25rem;
+            color: #d8d8d8;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+            text-shadow: 
+                0 0 40px rgba(255, 255, 255, 0.6),
+                0 2px 20px rgba(0, 0, 0, 1),
+                0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+
+        .feature-desc {
+            font-size: 1rem;
+            color: #5f6368;
+            line-height: 1.6;
+        }
+
+        /* Pets Gallery Section */
+        .pets-section {
+            background: transparent;
+        }
+
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .pet-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 1);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .pet-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(255, 255, 255, 0.3);
+        }
+
+        .pet-card-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, rgba(200, 200, 255, 0.4), rgba(255, 200, 255, 0.4));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .pet-card-content {
+            padding: 32px;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .pet-name {
+            font-size: 1.75rem;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+
+        .pet-breed {
+            font-size: 1rem;
+            color: #5f6368;
+            margin-bottom: 20px;
+        }
+
+        .pet-price {
+            font-size: 2rem;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 24px;
+        }
+
+        .adopt-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: white;
+            background: #202124;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .adopt-btn:hover {
+            background: #303134;
+            transform: scale(1.05);
+        }
+
+        /* Process Section */
+        .process-section {
+            background: transparent;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 30px;
+            background: transparent;
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #8b7ff5 0%, #a885f5 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 32px rgba(139, 127, 245, 0.6);
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 12px;
+            text-shadow: 
+                0 0 40px rgba(255, 255, 255, 0.6),
+                0 2px 20px rgba(0, 0, 0, 1),
+                0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .step-desc {
+            font-size: 1rem;
+            color: #c8c8c8;
+            line-height: 1.6;
+            text-shadow: 
+                0 0 30px rgba(255, 255, 255, 0.5),
+                0 2px 15px rgba(0, 0, 0, 1),
+                0 0 8px rgba(255, 255, 255, 0.6);
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            background: transparent;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 1);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            color: #5f6368;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #8b7ff5 0%, #a885f5 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .author-role {
+            font-size: 0.9rem;
+            color: #5f6368;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: transparent;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 50px;
+            margin-top: 60px;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #a885f5 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 20px rgba(168, 133, 245, 0.8)) drop-shadow(0 0 40px rgba(168, 133, 245, 0.6));
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #d0d0d0;
+            text-shadow: 
+                0 0 30px rgba(255, 255, 255, 0.6),
+                0 2px 15px rgba(0, 0, 0, 1),
+                0 0 8px rgba(255, 255, 255, 0.8);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: transparent;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 60px auto 0;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 1);
+            padding: 30px 40px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 15px;
+        }
+
+        .faq-answer {
+            font-size: 1rem;
+            color: #5f6368;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: transparent;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 400;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            text-shadow: 
+                0 0 80px rgba(255, 255, 255, 0.8),
+                0 0 40px rgba(255, 255, 255, 0.6),
+                0 4px 30px rgba(0, 0, 0, 1),
+                0 0 10px rgba(255, 255, 255, 1);
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            color: #d8d8d8;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+            text-shadow: 
+                0 0 40px rgba(255, 255, 255, 0.6),
+                0 2px 20px rgba(0, 0, 0, 1),
+                0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(20, 20, 25, 0.95);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 80px 40px 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .footer-section p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        #loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .section-description {
+                font-size: 1.1rem;
+            }
+
+            .logo {
+                top: 20px;
+                left: 20px;
+                font-size: 1rem;
+                padding: 12px 20px;
+            }
+
+            .section {
+                padding: 80px 20px;
+            }
+
+            .features-grid,
+            .pets-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 3rem;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading screen -->
+    <div id="loading">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Three.js Canvas (Fixed Background) -->
+    <div id="canvas-container"></div>
+
+    <!-- Logo (Fixed) -->
+    <div class="logo">
+        <span class="logo-icon">🐾</span>
+        <span class="logo-text">Premium Pets</span>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="page-wrapper">
+        
+        <!-- Hero Section -->
+        <section class="section hero-section">
+            <div class="section-content">
+                <h1 class="hero-title">Experience liftoff with the next-generation pet adoption</h1>
+                <p class="hero-subtitle">Bringing joy, one paw at a time</p>
+                <div class="cta-container">
+                    <button class="cta-button cta-primary">🐶 Browse Pets</button>
+                    <button class="cta-button cta-secondary">Explore use cases</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section features-section">
+            <div class="section-content">
+                <div class="section-header">
+                    <h2 class="section-title">Why choose us</h2>
+                    <p class="section-description">Experience the next generation of pet adoption with comprehensive health guarantees and lifetime support</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">🏥</span>
+                        <h3 class="feature-title">Health Certified</h3>
+                        <p class="feature-desc">Complete vaccinations and health certificates for every pet with regular vet checkups</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">💝</span>
+                        <h3 class="feature-title">Ethical Breeding</h3>
+                        <p class="feature-desc">Partnered exclusively with certified, humane breeders who follow strict ethical standards</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🎓</span>
+                        <h3 class="feature-title">Training Included</h3>
+                        <p class="feature-desc">Free professional training sessions and behavioral support for the first 6 months</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🚚</span>
+                        <h3 class="feature-title">Safe Delivery</h3>
+                        <p class="feature-desc">Climate-controlled transport with real-time tracking to your doorstep</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">💰</span>
+                        <h3 class="feature-title">Flexible Pricing</h3>
+                        <p class="feature-desc">Competitive rates with interest-free payment plans available for all families</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">❤️</span>
+                        <h3 class="feature-title">Lifetime Care</h3>
+                        <p class="feature-desc">24/7 veterinary consultation and comprehensive care guidance for life</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pets Gallery Section -->
+        <section class="section pets-section">
+            <div class="section-content">
+                <div class="section-header">
+                    <h2 class="section-title">Meet your new friend</h2>
+                    <p class="section-description">Browse our curated selection of healthy, happy pets waiting for their forever homes</p>
+                </div>
+                <div class="pets-grid">
+                    <div class="pet-card">
+                        <div class="pet-card-image">🐕</div>
+                        <div class="pet-card-content">
+                            <h3 class="pet-name">Max</h3>
+                            <p class="pet-breed">Golden Retriever</p>
+                            <div class="pet-price">$1,299</div>
+                            <button class="adopt-btn">Adopt Max</button>
+                        </div>
+                    </div>
+                    <div class="pet-card">
+                        <div class="pet-card-image">🐈</div>
+                        <div class="pet-card-content">
+                            <h3 class="pet-name">Luna</h3>
+                            <p class="pet-breed">Persian Cat</p>
+                            <div class="pet-price">$899</div>
+                            <button class="adopt-btn">Adopt Luna</button>
+                        </div>
+                    </div>
+                    <div class="pet-card">
+                        <div class="pet-card-image">🐩</div>
+                        <div class="pet-card-content">
+                            <h3 class="pet-name">Bella</h3>
+                            <p class="pet-breed">Toy Poodle</p>
+                            <div class="pet-price">$1,499</div>
+                            <button class="adopt-btn">Adopt Bella</button>
+                        </div>
+                    </div>
+                    <div class="pet-card">
+                        <div class="pet-card-image">🐇</div>
+                        <div class="pet-card-content">
+                            <h3 class="pet-name">Snowball</h3>
+                            <p class="pet-breed">Holland Lop</p>
+                            <div class="pet-price">$199</div>
+                            <button class="adopt-btn">Adopt Snowball</button>
+                        </div>
+                    </div>
+                    <div class="pet-card">
+                        <div class="pet-card-image">🦜</div>
+                        <div class="pet-card-content">
+                            <h3 class="pet-name">Rio</h3>
+                            <p class="pet-breed">Macaw Parrot</p>
+                            <div class="pet-price">$2,499</div>
+                            <button class="adopt-btn">Adopt Rio</button>
+                        </div>
+                    </div>
+                    <div class="pet-card">
+                        <div class="pet-card-image">🐺</div>
+                        <div class="pet-card-content">
+                            <h3 class="pet-name">Alaska</h3>
+                            <p class="pet-breed">Siberian Husky</p>
+                            <div class="pet-price">$1,799</div>
+                            <button class="adopt-btn">Adopt Alaska</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section class="section process-section">
+            <div class="section-content">
+                <div class="section-header">
+                    <h2 class="section-title">How it works</h2>
+                    <p class="section-description">Our seamless adoption process makes finding your perfect companion simple and stress-free</p>
+                </div>
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Browse & Select</h3>
+                        <p class="step-desc">Explore our curated collection of pets and find your perfect match based on lifestyle and preferences</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Video Call</h3>
+                        <p class="step-desc">Schedule a virtual meet-and-greet to interact with your chosen pet and ask questions</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Complete Profile</h3>
+                        <p class="step-desc">Fill out a simple adoption form so we can ensure the best match for both you and the pet</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Safe Delivery</h3>
+                        <p class="step-desc">Your new friend arrives safely with all documents, supplies, and ongoing support</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="section stats-section">
+            <div class="section-content">
+                <div class="section-header">
+                    <h2 class="section-title">Trusted by thousands</h2>
+                    <p class="section-description">Join our growing community of happy pet parents</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">10K+</div>
+                        <div class="stat-label">Happy Families</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">15K+</div>
+                        <div class="stat-label">Pets Adopted</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Support Available</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="section testimonials-section">
+            <div class="section-content">
+                <div class="section-header">
+                    <h2 class="section-title">What families say</h2>
+                    <p class="section-description">Real stories from our amazing community of pet parents</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Max has brought so much joy to our family! The entire process was incredibly smooth, and the support team was available every step of the way. Highly recommend!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">👩</div>
+                            <div class="author-info">
+                                <div class="author-name">Sarah Johnson</div>
+                                <div class="author-role">Dog Parent</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Luna is the perfect addition to our home. She arrived healthy, playful, and absolutely adorable. The health certification and training support have been invaluable."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">👨</div>
+                            <div class="author-info">
+                                <div class="author-name">Michael Chen</div>
+                                <div class="author-role">Cat Parent</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Best decision we ever made! Bella came well-trained and with all necessary documentation. The flexible payment plan made it accessible for our family. Five stars!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">👩</div>
+                            <div class="author-info">
+                                <div class="author-name">Emily Rodriguez</div>
+                                <div class="author-role">Poodle Parent</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section faq-section">
+            <div class="section-content">
+                <div class="section-header">
+                    <h2 class="section-title">Frequently asked questions</h2>
+                    <p class="section-description">Everything you need to know about adopting your new companion</p>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h3 class="faq-question">What's included with every adoption?</h3>
+                        <p class="faq-answer">Every adoption includes complete health certificates, vaccinations, microchipping, starter supplies kit, 6 months of free training, and lifetime 24/7 veterinary consultation support.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3 class="faq-question">How does the delivery process work?</h3>
+                        <p class="faq-answer">We use climate-controlled, pet-safe transport with real-time GPS tracking. Your pet arrives with a professional handler who ensures comfort throughout the journey. Delivery typically takes 3-5 business days.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3 class="faq-question">What if my pet needs medical attention?</h3>
+                        <p class="faq-answer">All pets come with a 30-day health guarantee. Our 24/7 veterinary hotline is available for any concerns, and we partner with local vets nationwide for in-person care when needed.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3 class="faq-question">Do you offer payment plans?</h3>
+                        <p class="faq-answer">Yes! We offer flexible, interest-free payment plans for 3, 6, or 12 months with approved credit. Our goal is to make pet adoption accessible for all loving families.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3 class="faq-question">Can I return a pet if it doesn't work out?</h3>
+                        <p class="faq-answer">While we encourage commitment, we understand circumstances change. We offer a 14-day adjustment period where you can return your pet for a full refund if the match isn't right.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="section cta-section">
+            <div class="section-content">
+                <div class="cta-content">
+                    <h2 class="cta-title">Ready to meet your new best friend?</h2>
+                    <p class="cta-text">Join thousands of happy families who've found their perfect companion through our trusted adoption platform</p>
+                    <div class="cta-container">
+                        <button class="cta-button cta-primary">Get Started Today</button>
+                        <button class="cta-button cta-secondary">Schedule a Call</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-grid">
+                    <div class="footer-section">
+                        <h3>Premium Pets</h3>
+                        <p>Bringing joy to families through ethical, transparent, and compassionate pet adoption services.</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Adopt</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Browse Dogs</a></li>
+                            <li><a href="#">Browse Cats</a></li>
+                            <li><a href="#">Browse Birds</a></li>
+                            <li><a href="#">Browse Small Pets</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Resources</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Pet Care Guide</a></li>
+                            <li><a href="#">Training Tips</a></li>
+                            <li><a href="#">Health Resources</a></li>
+                            <li><a href="#">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Company</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>© 2026 Premium Pets. All rights reserved. Made with ❤️ for pet lovers everywhere.</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Three.js -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 15;
+
+        const renderer = new THREE.WebGLRenderer({ 
+            antialias: true, 
+            alpha: true,
+            powerPreference: "high-performance"
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const pointLight1 = new THREE.PointLight(0xffffff, 1);
+        pointLight1.position.set(10, 10, 10);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0xff80ff, 0.5);
+        pointLight2.position.set(-10, -10, 5);
+        scene.add(pointLight2);
+
+        const composer = new EffectComposer(renderer);
+        const renderPass = new RenderPass(scene, camera);
+        composer.addPass(renderPass);
+
+        const bloomPass = new UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            0.4, 0.8, 0.85
+        );
+        composer.addPass(bloomPass);
+
+        const mouse = new THREE.Vector2();
+        const mouseWorld = new THREE.Vector3();
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            mouseWorld.set(mouse.x * 15, mouse.y * 8, 5);
+        });
+
+        window.addEventListener('touchmove', (event) => {
+            const touch = event.touches[0];
+            mouse.x = (touch.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(touch.clientY / window.innerHeight) * 2 + 1;
+            mouseWorld.set(mouse.x * 15, mouse.y * 8, 5);
+        });
+
+        class FloatingShape {
+            constructor(index) {
+                this.index = index;
+                
+                const geometries = [
+                    new THREE.IcosahedronGeometry(0.4 + Math.random() * 0.6, 1),
+                    new THREE.SphereGeometry(0.4 + Math.random() * 0.6, 16, 16),
+                    new THREE.TorusGeometry(0.4, 0.15, 8, 16),
+                    new THREE.OctahedronGeometry(0.5 + Math.random() * 0.4),
+                    new THREE.TetrahedronGeometry(0.6 + Math.random() * 0.5),
+                ];
+                
+                const geometry = geometries[Math.floor(Math.random() * geometries.length)];
+                
+                const hue = 200 + (index * 5) % 160;
+                const saturation = 60 + Math.random() * 20;
+                const lightness = 55 + Math.random() * 20;
+                
+                const material = new THREE.MeshStandardMaterial({
+                    color: new THREE.Color(`hsl(${hue}, ${saturation}%, ${lightness}%)`),
+                    transparent: true,
+                    opacity: 0.6 + Math.random() * 0.3,
+                    roughness: 0.4,
+                    metalness: 0.1,
+                    emissive: new THREE.Color(`hsl(${hue}, ${saturation}%, ${lightness}%)`),
+                    emissiveIntensity: 0.2
+                });
+                
+                this.mesh = new THREE.Mesh(geometry, material);
+                this.mesh.position.set(
+                    (Math.random() - 0.5) * 25,
+                    (Math.random() - 0.5) * 15,
+                    (Math.random() - 0.5) * 10
+                );
+                
+                this.velocity = new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.01
+                );
+                
+                this.rotationSpeed = new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.01,
+                    (Math.random() - 0.5) * 0.01,
+                    (Math.random() - 0.5) * 0.01
+                );
+                
+                this.pulseSpeed = 0.5 + Math.random() * 1.5;
+                this.pulseOffset = Math.random() * Math.PI * 2;
+                this.baseScale = 1;
+                
+                scene.add(this.mesh);
+            }
+            
+            update(time) {
+                this.mesh.position.x += this.velocity.x;
+                this.mesh.position.y += this.velocity.y;
+                this.mesh.position.z += this.velocity.z;
+                
+                this.mesh.position.y += Math.sin(time * 0.3 + this.index) * 0.001;
+                this.mesh.position.x += Math.cos(time * 0.2 + this.index) * 0.001;
+                
+                this.mesh.rotation.x += this.rotationSpeed.x;
+                this.mesh.rotation.y += this.rotationSpeed.y;
+                this.mesh.rotation.z += this.rotationSpeed.z;
+                
+                const pulse = 1 + Math.sin(time * this.pulseSpeed + this.pulseOffset) * 0.08;
+                this.mesh.scale.setScalar(this.baseScale * pulse);
+                
+                const direction = new THREE.Vector3();
+                direction.subVectors(this.mesh.position, mouseWorld);
+                const distance = direction.length();
+                
+                if (distance < 6) {
+                    direction.normalize();
+                    const force = (6 - distance) * 0.08;
+                    this.mesh.position.add(direction.multiplyScalar(force));
+                }
+                
+                const maxDist = 20;
+                if (Math.abs(this.mesh.position.x) > maxDist) {
+                    this.mesh.position.x = -Math.sign(this.mesh.position.x) * maxDist;
+                }
+                if (Math.abs(this.mesh.position.y) > maxDist) {
+                    this.mesh.position.y = -Math.sign(this.mesh.position.y) * maxDist;
+                }
+                if (Math.abs(this.mesh.position.z) > 15) {
+                    this.mesh.position.z = -Math.sign(this.mesh.position.z) * 10;
+                }
+                
+                const material = this.mesh.material;
+                material.emissiveIntensity = 0.2 + Math.sin(time + this.index) * 0.1;
+            }
+        }
+
+        const shapes = [];
+        const shapeCount = window.innerWidth < 768 ? 40 : 80;
+
+        for (let i = 0; i < shapeCount; i++) {
+            shapes.push(new FloatingShape(i));
+        }
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+            shapes.forEach(shape => shape.update(time));
+            composer.render();
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                animate();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
