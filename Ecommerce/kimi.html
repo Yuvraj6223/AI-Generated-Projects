@@ -809,16 +809,38 @@
 
                 <!-- Skeleton Loader -->
                 <div id="skeletonLoader" class="product-grid" aria-hidden="true">
-                    ${Array(4).fill(0).map(() => `
-                        <div class="bg-white border-2 border-gray-200">
-                            <div class="aspect-[4/5] skeleton bg-gray-200"></div>
-                            <div class="p-3 md:p-6 space-y-3">
-                                <div class="h-4 md:h-6 skeleton bg-gray-200 w-3/4 rounded"></div>
-                                <div class="h-3 md:h-4 skeleton bg-gray-200 w-1/4 rounded"></div>
-                                <div class="h-8 md:h-12 skeleton bg-gray-200 w-full rounded mt-4"></div>
-                            </div>
+                    <div class="bg-white border-2 border-gray-200">
+                        <div class="aspect-[4/5] skeleton bg-gray-200"></div>
+                        <div class="p-3 md:p-6 space-y-3">
+                            <div class="h-4 md:h-6 skeleton bg-gray-200 w-3/4 rounded"></div>
+                            <div class="h-3 md:h-4 skeleton bg-gray-200 w-1/4 rounded"></div>
+                            <div class="h-8 md:h-12 skeleton bg-gray-200 w-full rounded mt-4"></div>
                         </div>
-                    `).join('')}
+                    </div>
+                    <div class="bg-white border-2 border-gray-200">
+                        <div class="aspect-[4/5] skeleton bg-gray-200"></div>
+                        <div class="p-3 md:p-6 space-y-3">
+                            <div class="h-4 md:h-6 skeleton bg-gray-200 w-3/4 rounded"></div>
+                            <div class="h-3 md:h-4 skeleton bg-gray-200 w-1/4 rounded"></div>
+                            <div class="h-8 md:h-12 skeleton bg-gray-200 w-full rounded mt-4"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-200">
+                        <div class="aspect-[4/5] skeleton bg-gray-200"></div>
+                        <div class="p-3 md:p-6 space-y-3">
+                            <div class="h-4 md:h-6 skeleton bg-gray-200 w-3/4 rounded"></div>
+                            <div class="h-3 md:h-4 skeleton bg-gray-200 w-1/4 rounded"></div>
+                            <div class="h-8 md:h-12 skeleton bg-gray-200 w-full rounded mt-4"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white border-2 border-gray-200">
+                        <div class="aspect-[4/5] skeleton bg-gray-200"></div>
+                        <div class="p-3 md:p-6 space-y-3">
+                            <div class="h-4 md:h-6 skeleton bg-gray-200 w-3/4 rounded"></div>
+                            <div class="h-3 md:h-4 skeleton bg-gray-200 w-1/4 rounded"></div>
+                            <div class="h-8 md:h-12 skeleton bg-gray-200 w-full rounded mt-4"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Product Grid -->
@@ -1053,6 +1075,7 @@
 
         const renderProducts = () => {
             const grid = document.getElementById('productGrid');
+            const skeleton = document.getElementById('skeletonLoader');
             let filtered = products;
             
             if (state.currentFilter === 'search') {
@@ -1075,6 +1098,7 @@
             }
             
             grid.classList.remove('hidden');
+            if (skeleton) skeleton.classList.add('hidden');
             noResults.classList.add('hidden');
             productCount.textContent = `Showing ${filtered.length} item${filtered.length !== 1 ? 's' : ''}`;
             
@@ -1094,7 +1118,7 @@
                                 loading="lazy"
                                 class="img-zoom w-full h-full object-cover"
                                 onload="this.classList.add('loaded')"
-                                onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'500\'%3E%3Crect width=\'400\' height=\'500\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23999\' font-size=\'16\'%3EImage unavailable%3C/text%3E%3C/svg%3E'">
+                                onerror="this.onerror=null; this.classList.add('loaded'); this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'500\'%3E%3Crect width=\'400\' height=\'500\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23999\' font-size=\'16\'%3EImage unavailable%3C/text%3E%3C/svg%3E'">
                             
                             ${product.badge ? `
                                 <div class="absolute top-2 left-2 md:top-4 md:left-4 px-2 py-0.5 md:px-3 md:py-1 bg-[#ccff00] border-2 border-black font-bold text-[10px] md:text-xs transform -rotate-2 shadow-sm">
