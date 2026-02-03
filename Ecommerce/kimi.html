@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="UK Store - Next-gen streetwear meets cybernetic aesthetics. Limited drops for the brave. Shop digital fashion.">
+    <meta name="theme-color" content="#ccff00">
+    
+    <title>UK Store | Future Commerce</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --acid-green: #ccff00;
+            --electric-purple: #7000ff;
+            --hot-pink: #ff006e;
+            --dark: #0a0a0a;
+            --focus-outline: 3px solid var(--acid-green);
+            --transition-bounce: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        * { box-sizing: border-box; }
+        
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            width: 100%;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+            background: #fafafa;
+            color: #000;
+            line-height: 1.5;
+            overflow-x: hidden;
+            width: 100%;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        h1, h2, h3, .brand-font {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+        }
+        
+        /* Prevent horizontal overflow on mobile */
+        .prevent-overflow {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        
+        /* Mobile-first responsive typography */
+        .hero-title {
+            font-size: clamp(2.5rem, 12vw, 6rem);
+            line-height: 0.9;
+            word-break: break-word;
+            hyphens: auto;
+        }
+        
+        @media (min-width: 768px) {
+            .hero-title {
+                font-size: clamp(4rem, 10vw, 9rem);
+                line-height: 1;
+            }
+        }
+        
+        /* Mobile-optimized glitch effect */
+        .glitch {
+            position: relative;
+            display: inline-block;
+        }
+        
+        @media (prefers-reduced-motion: no-preference) {
+            .glitch {
+                animation: glitch-skew 4s infinite linear alternate-reverse;
+            }
+        }
+        
+        /* Marquee mobile optimization */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-size: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .marquee-content {
+                font-size: 3.75rem;
+            }
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        /* Mobile filter scroll */
+        .filter-scroll {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 0.5rem;
+            flex-wrap: nowrap;
+        }
+        
+        .filter-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .filter-scroll {
+                flex-wrap: wrap;
+                overflow-x: visible;
+            }
+        }
+        
+        /* Filter tag mobile sizing */
+        .filter-tag {
+            flex-shrink: 0;
+            white-space: nowrap;
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            border: 2px solid currentColor;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s var(--transition-bounce);
+            touch-action: manipulation;
+        }
+        
+        @media (min-width: 768px) {
+            .filter-tag {
+                padding: 0.5rem 1.5rem;
+                font-size: 0.875rem;
+            }
+        }
+        
+        .filter-tag:hover, .filter-tag.active {
+            background-color: var(--acid-green);
+            color: black;
+            border-color: black;
+            box-shadow: 4px 4px 0px 0px #000;
+            transform: translate(-2px, -2px);
+        }
+        
+        /* Product card optimizations */
+        .product-card {
+            position: relative;
+            background: white;
+            border: 2px solid black;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            will-change: transform;
+            touch-action: manipulation;
+        }
+        
+        @media (hover: hover) {
+            .product-card:hover {
+                box-shadow: 8px 8px 0px 0px #000;
+            }
+        }
+        
+        /* Image container mobile ratio */
+        .img-zoom-container {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            background: #f0f0f0;
+        }
+        
+        .img-zoom-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+        
+        .img-zoom-container img.loaded {
+            opacity: 1;
+        }
+        
+        @media (hover: hover) {
+            .img-zoom-container:hover img {
+                transform: scale(1.05);
+            }
+        }
+        
+        /* Mobile button sizing - ensure 44px minimum touch targets */
+        .btn-brutal {
+            position: relative;
+            background-color: #000;
+            color: #fff;
+            border: 2px solid #000;
+            transition: all 0.15s ease;
+            box-shadow: 4px 4px 0px 0px var(--acid-green);
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            min-height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            touch-action: manipulation;
+        }
+        
+        @media (min-width: 768px) {
+            .btn-brutal {
+                padding: 1rem 2rem;
+                font-size: 1.125rem;
+            }
+        }
+        
+        .btn-brutal:active {
+            transform: translate(0, 0);
+            box-shadow: 0px 0px 0px 0px var(--acid-green);
+        }
+        
+        @media (hover: hover) {
+            .btn-brutal:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 6px 6px 0px 0px var(--acid-green);
+            }
+        }
+        
+        /* Cart drawer mobile optimizations */
+        .cart-drawer {
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            max-width: 100%;
+            background: white;
+            z-index: 50;
+            border-left: 4px solid black;
+            transform: translateX(100%);
+            transition: transform 0.4s var(--transition-bounce);
+            will-change: transform;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (min-width: 640px) {
+            .cart-drawer {
+                width: 450px;
+                max-width: 450px;
+            }
+        }
+        
+        .cart-drawer.open {
+            transform: translateX(0);
+        }
+        
+        /* Modal mobile optimizations */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 0;
+        }
+        
+        @media (min-width: 768px) {
+            .modal-overlay {
+                align-items: center;
+                padding: 20px;
+                background: rgba(0,0,0,0.8);
+                backdrop-filter: blur(4px);
+            }
+        }
+        
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background: white;
+            border: 3px solid black;
+            width: 100%;
+            height: 90vh;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(100%);
+            transition: transform 0.3s var(--transition-bounce);
+        }
+        
+        @media (min-width: 768px) {
+            .modal-content {
+                max-width: 900px;
+                height: auto;
+                max-height: 90vh;
+                transform: scale(0.9);
+                border: 3px solid black;
+            }
+        }
+        
+        .modal-overlay.open .modal-content {
+            transform: translateY(0);
+        }
+        
+        @media (min-width: 768px) {
+            .modal-overlay.open .modal-content {
+                transform: scale(1);
+            }
+        }
+        
+        /* Search overlay mobile */
+        .search-input-mobile {
+            font-size: 2rem !important;
+            padding-bottom: 0.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .search-input-mobile {
+                font-size: 4.5rem !important;
+                padding-bottom: 1rem;
+            }
+        }
+        
+        /* Size selector mobile */
+        .size-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+        
+        @media (min-width: 640px) {
+            .size-grid {
+                display: flex;
+                flex-wrap: wrap;
+            }
+        }
+        
+        .size-btn {
+            min-height: 48px;
+            min-width: 48px;
+            border: 2px solid black;
+            background: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.875rem;
+            touch-action: manipulation;
+        }
+        
+        @media (min-width: 768px) {
+            .size-btn {
+                min-width: 56px;
+            }
+        }
+        
+        /* Toast mobile positioning */
+        .toast-container {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            left: 16px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+        
+        @media (min-width: 640px) {
+            .toast-container {
+                bottom: 24px;
+                right: 24px;
+                left: auto;
+                width: auto;
+            }
+        }
+        
+        .toast {
+            pointer-events: all;
+            background: #000;
+            color: #fff;
+            border: 2px solid var(--acid-green);
+            padding: 12px 16px;
+            font-weight: 700;
+            box-shadow: 4px 4px 0px 0px #000;
+            transform: translateY(100px);
+            transition: transform 0.3s var(--transition-bounce);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.875rem;
+            width: 100%;
+        }
+        
+        @media (min-width: 640px) {
+            .toast {
+                min-width: 300px;
+                width: auto;
+                padding: 16px 24px;
+                font-size: 1rem;
+                transform: translateX(400px);
+            }
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+        }
+        
+        @media (min-width: 640px) {
+            .toast.show {
+                transform: translateX(0);
+            }
+        }
+        
+        /* Grid mobile optimizations */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Breadcrumb mobile hiding */
+        .breadcrumb-desktop {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .breadcrumb-desktop {
+                display: block;
+            }
+        }
+        
+        /* Navigation mobile */
+        .nav-links-desktop {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .nav-links-desktop {
+                display: flex;
+            }
+        }
+        
+        /* Prevent zoom on input focus for iOS */
+        @media screen and (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px;
+            }
+        }
+        
+        /* Skeleton loading mobile */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e4e4e4 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+        }
+        
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Safe area insets for notched phones */
+        @supports (padding: max(0px)) {
+            .safe-area-inset {
+                padding-left: max(1rem, env(safe-area-inset-left));
+                padding-right: max(1rem, env(safe-area-inset-right));
+            }
+        }
+        
+        /* Skip link accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #000;
+            color: #fff;
+            padding: 8px;
+            z-index: 100;
+            font-weight: bold;
+            border: 2px solid var(--acid-green);
+            transition: top 0.3s;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Focus visible styles */
+        *:focus-visible {
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+        }
+        
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Wishlist button mobile sizing */
+        .wishlist-btn {
+            background: white;
+            border: 2px solid black;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            min-width: 44px;
+            min-height: 44px;
+        }
+        
+        @media (min-width: 768px) {
+            .wishlist-btn {
+                width: 40px;
+                height: 40px;
+            }
+        }
+        
+        /* Quick view button mobile */
+        .quick-view-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+        }
+        
+        @media (min-width: 768px) {
+            .quick-view-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body class="text-black antialiased selection:bg-[#ccff00] selection:text-black prevent-overflow">
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container" role="region" aria-live="polite"></div>
+
+    <!-- Cart Overlay -->
+    <div id="cartOverlay" class="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleCart()" aria-hidden="true"></div>
+
+    <!-- Cart Drawer -->
+    <aside id="cartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-heading">
+        <header class="p-4 md:p-6 border-b-4 border-black flex justify-between items-center bg-[#ccff00] safe-area-inset">
+            <h2 id="cart-heading" class="text-xl md:text-2xl font-black brand-font">YOUR CART (<span id="cartCount" aria-live="polite">0</span>)</h2>
+            <button onclick="toggleCart()" aria-label="Close cart" class="p-2 hover:rotate-90 transition-transform duration-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black rounded">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </header>
+        
+        <div id="cartItems" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 safe-area-inset" role="list" aria-label="Cart items"></div>
+        
+        <footer class="p-4 md:p-6 border-t-4 border-black bg-black text-white safe-area-inset pb-safe">
+            <div class="flex justify-between mb-2 text-lg">
+                <span class="text-gray-400">Subtotal</span>
+                <span id="cartTotal" class="font-bold text-[#ccff00]">£0.00</span>
+            </div>
+            <div class="flex justify-between mb-4 text-xs md:text-sm text-gray-400">
+                <span>Shipping calculated at checkout</span>
+                <span id="cartSavings"></span>
+            </div>
+            <button onclick="proceedToCheckout()" class="w-full py-3 md:py-4 bg-[#ccff00] text-black font-bold text-base md:text-lg btn-brutal border-2 border-[#ccff00] hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white mb-2">
+                CHECKOUT
+            </button>
+            <button onclick="toggleCart()" class="w-full py-2 md:py-3 bg-transparent text-white font-bold text-sm md:text-base border-2 border-white hover:bg-white hover:text-black transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white">
+                Continue Shopping
+            </button>
+        </footer>
+    </aside>
+
+    <!-- Quick View Modal -->
+    <div id="quickViewModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="quick-view-title" onclick="closeQuickView(event)">
+        <div class="modal-content" onclick="event.stopPropagation()" role="document">
+            <button onclick="closeQuickView()" class="absolute top-2 right-2 md:top-4 md:right-4 z-10 p-2 bg-white border-2 border-black hover:bg-[#ccff00] transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ccff00] shadow-md" aria-label="Close quick view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div id="quickViewContent" class="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
+                <!-- Content injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Remove Modal -->
+    <div id="confirmModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <div class="modal-content max-w-md mx-auto md:mx-0 md:my-auto p-6 md:p-8 text-center h-auto max-h-[50vh]">
+            <h3 id="confirm-title" class="text-xl md:text-2xl font-bold brand-font mb-4">Remove Item?</h3>
+            <p id="confirm-desc" class="mb-6 md:mb-8 text-gray-600 text-sm md:text-base">Are you sure you want to remove this item from your cart?</p>
+            <div class="flex gap-3 md:gap-4 justify-center">
+                <button onclick="cancelRemove()" class="flex-1 md:flex-none px-4 md:px-6 py-2 md:py-3 border-2 border-black font-bold text-sm md:text-base hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black">CANCEL</button>
+                <button onclick="confirmRemove()" class="flex-1 md:flex-none px-4 md:px-6 py-2 md:py-3 bg-[#ff006e] text-white border-2 border-black font-bold text-sm md:text-base hover:bg-[#d6005c] transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ff006e]">REMOVE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div id="searchOverlay" class="fixed inset-0 bg-black/95 z-50 hidden flex items-start md:items-center justify-center p-4 md:p-4 pt-20 md:pt-4" role="dialog" aria-modal="true" aria-label="Search products">
+        <button onclick="toggleSearch()" class="absolute top-4 right-4 md:top-8 md:right-8 text-white hover:text-[#ccff00] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ccff00] p-2" aria-label="Close search">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="w-full max-w-3xl">
+            <label for="searchInput" class="sr-only">Search products</label>
+            <input type="search" id="searchInput" placeholder="SEARCH PRODUCTS..." 
+                class="w-full bg-transparent border-b-4 border-[#ccff00] text-white search-input-mobile font-black brand-font outline-none placeholder-gray-700 focus-visible:border-white transition-colors"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false">
+            <p class="text-gray-500 mt-4 text-xs md:text-sm flex items-center justify-between" id="searchStatus" aria-live="polite">
+                <span>Type to search...</span>
+                <span class="hidden md:inline">Press ESC to close</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-30 bg-white/90 backdrop-blur-md border-b-2 border-black transition-all duration-300" role="banner">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
+            <div class="flex-shrink-0">
+                <a href="/" onclick="window.scrollTo(0,0); return false;" aria-label="UK Store Home" class="block focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black rounded">
+                    <h1 class="text-2xl md:text-3xl font-black brand-font tracking-tighter glitch" data-text="UK Store">UK Store</h1>
+                </a>
+            </div>
+            
+            <div class="nav-links-desktop space-x-8">
+                <a href="#products" class="text-lg font-medium hover:text-[#ccff00] hover:bg-black px-3 py-1 transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black rounded">COLLECTION</a>
+                <a href="#archive" class="text-lg font-medium hover:text-[#ccff00] hover:bg-black px-3 py-1 transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black rounded">ARCHIVE</a>
+            </div>
+
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <button class="p-2 hover:bg-[#ccff00] border-2 border-transparent hover:border-black transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black rounded" onclick="toggleSearch()" aria-label="Open search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+                <button class="relative p-2 hover:bg-[#ccff00] border-2 border-transparent hover:border-black transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black rounded" onclick="toggleCart()" aria-label="Shopping cart">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <path d="M9 2L6 9H3L5 20H19L21 9H18L15 2H9Z"/>
+                        <path d="M9 2V9M15 2V9" stroke-linecap="square"/>
+                    </svg>
+                    <span id="cartBadge" class="absolute -top-1 -right-1 bg-[#ff006e] text-white text-xs font-bold w-5 h-5 flex items-center justify-center border-2 border-black hidden" aria-live="polite">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumbs (Desktop only) -->
+    <nav aria-label="Breadcrumb" class="pt-20 md:pt-24 pb-2 md:pb-4 bg-[#fafafa] border-b border-gray-200 breadcrumb-desktop">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ol class="flex items-center space-x-2 text-sm font-medium" id="breadcrumbs">
+                <li><a href="/" onclick="window.scrollTo(0,0); return false;" class="text-gray-600 hover:text-black transition-colors">Home</a></li>
+                <li aria-hidden="true" class="text-gray-400">/</li>
+                <li aria-current="page" class="text-black font-bold">Collection</li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="pt-16 md:pt-0">
+        
+        <!-- Hero Section -->
+        <section class="relative min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-[#fafafa] px-4 py-12 md:py-0">
+            <!-- Background Elements -->
+            <div class="absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
+                <div class="absolute top-10 left-2 w-32 h-32 md:w-72 md:h-72 bg-[#ccff00] rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+                <div class="absolute top-20 right-2 w-32 h-32 md:w-72 md:h-72 bg-[#ff006e] rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+                <div class="absolute -bottom-8 left-1/2 w-32 h-32 md:w-72 md:h-72 bg-[#7000ff] rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+            </div>
+
+            <div class="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div class="space-y-6 md:space-y-8 text-center lg:text-left">
+                    <div class="inline-block px-3 py-1 md:px-4 md:py-2 border-2 border-black bg-white transform -rotate-2 hover:rotate-0 transition-transform">
+                        <span class="font-bold tracking-widest text-xs md:text-sm">NEW SEASON 2026</span>
+                    </div>
+                    <h1 id="hero-heading" class="hero-title font-black leading-none brand-font scramble-target cursor-default select-none" data-value="DIGITAL_DREAMS">
+                        DIGITAL<br>DREAMS
+                    </h1>
+                    <p class="text-base md:text-xl lg:text-2xl max-w-lg mx-auto lg:mx-0 font-medium text-gray-900 border-l-0 lg:border-l-4 border-black lg:pl-6 px-4 lg:px-0">
+                        Next-gen streetwear meets cybernetic aesthetics. Limited drops for the brave.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center lg:justify-start px-4 md:px-0">
+                        <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})" 
+                            class="w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 bg-black text-white font-bold btn-brutal border-2 border-black focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ccff00]">
+                            SHOP NOW
+                        </button>
+                        <button class="w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 bg-transparent text-black font-bold text-sm md:text-lg border-2 border-black hover:bg-[#ccff00] transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black">
+                            VIEW LOOKBOOK
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="relative px-4 md:px-0 mt-8 lg:mt-0">
+                    <div class="relative w-full aspect-[4/5] bg-black border-2 md:border-4 border-black overflow-hidden group max-w-md mx-auto lg:max-w-none">
+                        <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=800&q=80" 
+                            alt="CYBER HOODIE V2 - Featured Product" 
+                            loading="eager"
+                            class="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-4 md:p-8 text-white pointer-events-none">
+                            <p class="text-[#ccff00] font-bold mb-1 md:mb-2 uppercase tracking-wider text-xs md:text-sm">Featured Drop</p>
+                            <h3 class="text-xl md:text-3xl font-bold brand-font">CYBER HOODIE v2</h3>
+                            <p class="text-lg md:text-2xl font-mono mt-1 md:mt-2">£189.00</p>
+                        </div>
+                    </div>
+                    <!-- Floating Badge -->
+                    <div class="absolute -top-3 -right-3 md:-top-6 md:-right-6 w-20 h-20 md:w-32 md:h-32 bg-[#ff006e] rounded-full flex items-center justify-center text-white font-black text-center transform rotate-12 border-2 md:border-4 border-black animate-pulse" aria-hidden="true">
+                        <span class="transform -rotate-12 text-xs md:text-base">HOT<br>DROP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block" aria-hidden="true">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Marquee -->
+        <div class="bg-black text-[#ccff00] py-2 md:py-4 border-y-2 md:border-y-4 border-[#ccff00] overflow-hidden" role="region" aria-label="Announcements">
+            <div class="marquee-container font-black brand-font uppercase tracking-tighter">
+                <div class="marquee-content px-4">
+                    FREE SHIPPING OVER £200 • NEW ARRIVALS EVERY FRIDAY • CYBER MONDAY ALL WEEK • DIGITAL FASHION WEEK • 
+                    FREE SHIPPING OVER £200 • NEW ARRIVALS EVERY FRIDAY • CYBER MONDAY ALL WEEK • DIGITAL FASHION WEEK •
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <section class="sticky top-16 md:top-20 z-20 bg-white border-b-2 border-black py-3 md:py-4 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 safe-area-inset">
+                <div class="filter-scroll" id="filters" role="toolbar" aria-label="Product filters">
+                    <button class="filter-tag active" data-filter="all" aria-pressed="true">All Items</button>
+                    <button class="filter-tag" data-filter="apparel" aria-pressed="false">Apparel</button>
+                    <button class="filter-tag" data-filter="accessories" aria-pressed="false">Accessories</button>
+                    <button class="filter-tag" data-filter="footwear" aria-pressed="false">Footwear</button>
+                    <button class="filter-tag" data-filter="tech" aria-pressed="false">Tech</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Grid -->
+        <section id="products" class="py-12 md:py-20 bg-[#fafafa] min-h-screen" aria-labelledby="collection-heading">
+            <div class="max-w-7xl mx-auto px-4 safe-area-inset">
+                <header class="flex flex-col md:flex-row md:justify-between md:items-end mb-6 md:mb-12 gap-4">
+                    <div>
+                        <h2 id="collection-heading" class="text-3xl md:text-5xl lg:text-7xl font-black brand-font mb-2">COLLECTION</h2>
+                        <p class="text-gray-900 text-sm md:text-lg font-medium" id="productCount" aria-live="polite">Showing all items</p>
+                    </div>
+                    <div class="w-full md:w-auto">
+                        <label for="sortSelect" class="sr-only">Sort products</label>
+                        <select id="sortSelect" onchange="sortProducts()" class="w-full md:w-auto bg-white border-2 border-black px-3 py-2 text-sm md:text-base font-bold focus:outline-none focus:bg-[#ccff00] cursor-pointer focus-visible:ring-4 focus-visible:ring-black rounded-none">
+                            <option value="default">SORT BY</option>
+                            <option value="price-low">PRICE: LOW TO HIGH</option>
+                            <option value="price-high">PRICE: HIGH TO LOW</option>
+                            <option value="newest">NEWEST FIRST</option>
+                        </select>
+                    </div>
+                </header>
+
+                <!-- Skeleton Loader -->
+                <div id="skeletonLoader" class="product-grid" aria-hidden="true">
+                    ${Array(4).fill(0).map(() => `
+                        <div class="bg-white border-2 border-gray-200">
+                            <div class="aspect-[4/5] skeleton bg-gray-200"></div>
+                            <div class="p-3 md:p-6 space-y-3">
+                                <div class="h-4 md:h-6 skeleton bg-gray-200 w-3/4 rounded"></div>
+                                <div class="h-3 md:h-4 skeleton bg-gray-200 w-1/4 rounded"></div>
+                                <div class="h-8 md:h-12 skeleton bg-gray-200 w-full rounded mt-4"></div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <!-- Product Grid -->
+                <div id="productGrid" class="product-grid hidden" role="region" aria-live="polite" aria-label="Product grid"></div>
+
+                <!-- No Results -->
+                <div id="noResults" class="hidden text-center py-12 md:py-20" role="status">
+                    <p class="text-xl md:text-2xl font-bold mb-4 text-black">NO RESULTS FOUND</p>
+                    <p class="text-gray-700 text-sm md:text-base font-medium mb-6">Try adjusting your search or filters</p>
+                    <button onclick="resetFilters()" class="px-4 md:px-6 py-2 md:py-3 bg-[#ccff00] border-2 border-black font-bold text-sm md:text-base hover:shadow-[4px_4px_0px_0px_#000] transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black">
+                        CLEAR ALL FILTERS
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter -->
+        <section class="bg-[#ccff00] py-12 md:py-20 border-t-4 border-black relative overflow-hidden" aria-labelledby="newsletter-heading">
+            <div class="absolute inset-0 opacity-10 pointer-events-none" aria-hidden="true">
+                <div class="absolute inset-0" style="background-image: repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, #ccff00 25%, #ccff00 75%, #000 75%, #000); background-position: 0 0, 10px 10px; background-size: 20px 20px;"></div>
+            </div>
+            
+            <div class="max-w-4xl mx-auto px-4 relative z-10 text-center safe-area-inset">
+                <h2 id="newsletter-heading" class="text-3xl md:text-5xl lg:text-7xl font-black brand-font mb-4 md:mb-6">JOIN THE<br>RESISTANCE</h2>
+                <p class="text-base md:text-xl font-medium mb-6 md:mb-8 max-w-2xl mx-auto text-black px-4 md:px-0">Get exclusive access to limited drops, secret sales, and cybernetic upgrades.</p>
+                
+                <form id="newsletterForm" onsubmit="handleSubscribe(event)" class="flex flex-col md:flex-row gap-3 md:gap-4 max-w-xl mx-auto px-4 md:px-0" novalidate>
+                    <div class="flex-1 relative text-left">
+                        <label for="emailInput" class="sr-only">Email address</label>
+                        <input type="email" id="emailInput" placeholder="ENTER EMAIL ADDRESS" required
+                            class="w-full px-4 md:px-6 py-3 md:py-4 border-2 border-black font-bold text-sm md:text-lg outline-none focus:shadow-[4px_4px_0px_0px_#ff006e] transition-shadow bg-white"
+                            aria-required="true"
+                            aria-describedby="email-error"
+                            autocomplete="email">
+                        <p id="email-error" class="hidden absolute -bottom-6 left-0 text-[#ff006e] font-bold text-xs md:text-sm flex items-center gap-1" role="alert">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            <span>Please enter a valid email</span>
+                        </p>
+                    </div>
+                    <button type="submit" class="w-full md:w-auto px-6 md:px-8 py-3 md:py-4 bg-black text-white font-bold text-sm md:text-lg border-2 border-black hover:bg-[#ff006e] transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-black">
+                        SUBSCRIBE
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12 md:py-16 border-t-4 border-[#ccff00]" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 safe-area-inset">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
+                <div class="col-span-2 md:col-span-2">
+                    <h3 class="text-3xl md:text-4xl font-black brand-font mb-4 text-[#ccff00] glitch" data-text="UK Store">UK Store</h3>
+                    <p class="text-gray-300 text-sm md:text-base max-w-sm">Redefining digital fashion through bold aesthetics and uncompromising quality. Est. 2026.</p>
+                    <div class="flex space-x-3 md:space-x-4 mt-4 md:mt-6">
+                        <a href="#" class="w-9 h-9 md:w-10 md:h-10 border-2 border-white flex items-center justify-center hover:bg-[#ccff00] hover:border-[#ccff00] hover:text-black transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ccff00]" aria-label="Instagram">
+                            <span class="font-bold text-xs md:text-sm">IG</span>
+                        </a>
+                        <a href="#" class="w-9 h-9 md:w-10 md:h-10 border-2 border-white flex items-center justify-center hover:bg-[#ccff00] hover:border-[#ccff00] hover:text-black transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ccff00]" aria-label="Twitter">
+                            <span class="font-bold text-xs md:text-sm">TW</span>
+                        </a>
+                        <a href="#" class="w-9 h-9 md:w-10 md:h-10 border-2 border-white flex items-center justify-center hover:bg-[#ccff00] hover:border-[#ccff00] hover:text-black transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ccff00]" aria-label="TikTok">
+                            <span class="font-bold text-xs md:text-sm">TK</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <nav aria-label="Shop links">
+                    <h4 class="font-bold text-base md:text-lg mb-3 md:mb-4 text-[#ccff00] uppercase tracking-wider">Shop</h4>
+                    <ul class="space-y-2 md:space-y-3 text-sm md:text-base text-gray-300">
+                        <li><a href="#products" class="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00] px-1 -ml-1 inline-block">New Arrivals</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00] px-1 -ml-1 inline-block">Best Sellers</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00] px-1 -ml-1 inline-block">Sale</a></li>
+                    </ul>
+                </nav>
+                
+                <nav aria-label="Help links">
+                    <h4 class="font-bold text-base md:text-lg mb-3 md:mb-4 text-[#ccff00] uppercase tracking-wider">Help</h4>
+                    <ul class="space-y-2 md:space-y-3 text-sm md:text-base text-gray-300">
+                        <li><a href="#" class="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00] px-1 -ml-1 inline-block">Shipping</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00] px-1 -ml-1 inline-block">Returns</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00] px-1 -ml-1 inline-block">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="mt-8 md:mt-16 pt-6 md:pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs md:text-sm gap-4">
+                <p>&copy; 2026 UK Store. All rights reserved.</p>
+                <div class="flex space-x-4 md:space-x-6">
+                    <a href="#" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00] px-1">Privacy</a>
+                    <a href="#" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ccff00] px-1">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile-optimized JavaScript
+        const products = [
+            {
+                id: 1,
+                name: "CYBER HOODIE V2",
+                price: 189,
+                category: "apparel",
+                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=80",
+                badge: "BESTSELLER",
+                colors: [{ name: "Black", value: "#000000" }, { name: "Gray", value: "#808080" }, { name: "Neon", value: "#ccff00" }],
+                sizes: ["XS", "S", "M", "L", "XL"],
+                description: "Heavyweight cotton hoodie with reflective cyber detailing.",
+                sku: "UK-HOOD-001"
+            },
+            {
+                id: 2,
+                name: "NEON BOMBER",
+                price: 249,
+                category: "apparel",
+                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80",
+                badge: "NEW",
+                colors: [{ name: "Black", value: "#000000" }, { name: "Yellow", value: "#ffff00" }],
+                sizes: ["S", "M", "L", "XL"],
+                description: "Water-resistant bomber jacket with neon piping.",
+                sku: "UK-BOMB-002"
+            },
+            {
+                id: 3,
+                name: "TACTICAL CARGO",
+                price: 129,
+                category: "apparel",
+                image: "https://images.unsplash.com/photo-1517445312882-fa99b53d29ee?auto=format&fit=crop&w=800&q=80",
+                badge: null,
+                colors: [{ name: "Green", value: "#556b2f" }, { name: "Black", value: "#000000" }],
+                sizes: ["28", "30", "32", "34", "36"],
+                description: "Six-pocket cargo pants with adjustable waist.",
+                sku: "UK-CRGO-003"
+            },
+            {
+                id: 4,
+                name: "MATRIX SNEAKERS",
+                price: 299,
+                category: "footwear",
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+                badge: "LIMITED",
+                colors: [{ name: "Red", value: "#ff0000" }, { name: "Black", value: "#000000" }],
+                sizes: ["7", "8", "9", "10", "11", "12"],
+                description: "High-top sneakers with LED light-up soles.",
+                sku: "UK-SNEK-004"
+            },
+            {
+                id: 5,
+                name: "CYBERPUNK BOOT",
+                price: 349,
+                category: "footwear",
+                image: "https://images.unsplash.com/photo-1605034313761-73ea4a0cfbf3?auto=format&fit=crop&w=800&q=80",
+                badge: null,
+                colors: [{ name: "Black", value: "#000000" }],
+                sizes: ["7", "8", "9", "10", "11", "12"],
+                description: "Steel-toe combat boots with weatherproof coating.",
+                sku: "UK-BOOT-005"
+            },
+            {
+                id: 6,
+                name: "SMART RING PRO",
+                price: 199,
+                category: "tech",
+                image: "https://images.unsplash.com/photo-1616353071588-708dcff912e2?auto=format&fit=crop&w=800&q=80",
+                badge: "TECH",
+                colors: [{ name: "Silver", value: "#c0c0c0" }, { name: "Black", value: "#000000" }],
+                sizes: ["S", "M", "L"],
+                description: "Titanium smart ring with health tracking.",
+                sku: "UK-RING-006"
+            },
+            {
+                id: 7,
+                name: "LED BACKPACK",
+                price: 159,
+                category: "accessories",
+                image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
+                badge: null,
+                colors: [{ name: "Black", value: "#000000" }],
+                sizes: ["ONE SIZE"],
+                description: "Waterproof backpack with programmable LED display.",
+                sku: "UK-BAG-007"
+            },
+            {
+                id: 8,
+                name: "HOLOGRAPHIC CAP",
+                price: 49,
+                category: "accessories",
+                image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=800&q=80",
+                badge: "SALE",
+                compareAtPrice: 79,
+                colors: [{ name: "Silver", value: "#c0c0c0" }, { name: "Iridescent", value: "linear-gradient(45deg, #ff006e, #ccff00)" }],
+                sizes: ["ONE SIZE"],
+                description: "Adjustable cap with holographic finish.",
+                sku: "UK-CAP-008"
+            }
+        ];
+
+        let state = {
+            cart: [],
+            wishlist: [],
+            currentFilter: 'all',
+            searchQuery: '',
+            currentProductOptions: null,
+            itemToRemove: null
+        };
+
+        const sanitizeHTML = (str) => {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        };
+
+        const formatPrice = (amount) => {
+            return new Intl.NumberFormat('en-GB', {
+                style: 'currency',
+                currency: 'GBP'
+            }).format(amount);
+        };
+
+        const debounce = (func, wait) => {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        };
+
+        const renderProducts = () => {
+            const grid = document.getElementById('productGrid');
+            let filtered = products;
+            
+            if (state.currentFilter === 'search') {
+                filtered = products.filter(p => 
+                    p.name.toLowerCase().includes(state.searchQuery.toLowerCase()) || 
+                    p.category.toLowerCase().includes(state.searchQuery.toLowerCase())
+                );
+            } else if (state.currentFilter !== 'all') {
+                filtered = products.filter(p => p.category === state.currentFilter);
+            }
+            
+            const noResults = document.getElementById('noResults');
+            const productCount = document.getElementById('productCount');
+            
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                productCount.textContent = '0 items found';
+                return;
+            }
+            
+            grid.classList.remove('hidden');
+            noResults.classList.add('hidden');
+            productCount.textContent = `Showing ${filtered.length} item${filtered.length !== 1 ? 's' : ''}`;
+            
+            grid.innerHTML = filtered.map((product) => {
+                const isWishlisted = state.wishlist.includes(product.id);
+                const hasComparePrice = product.compareAtPrice && product.compareAtPrice > product.price;
+                
+                return `
+                    <article class="product-card group relative bg-white border-2 border-black" 
+                        role="article"
+                        aria-label="${sanitizeHTML(product.name)}, ${formatPrice(product.price)}"
+                        data-product-id="${product.id}">
+                        
+                        <div class="img-zoom-container relative overflow-hidden aspect-[4/5] border-b-2 border-black bg-gray-100">
+                            <img src="${product.image}" 
+                                alt="${sanitizeHTML(product.name)}"
+                                loading="lazy"
+                                class="img-zoom w-full h-full object-cover"
+                                onload="this.classList.add('loaded')"
+                                onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'500\'%3E%3Crect width=\'400\' height=\'500\' fill=\'%23f0f0f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23999\' font-size=\'16\'%3EImage unavailable%3C/text%3E%3C/svg%3E'">
+                            
+                            ${product.badge ? `
+                                <div class="absolute top-2 left-2 md:top-4 md:left-4 px-2 py-0.5 md:px-3 md:py-1 bg-[#ccff00] border-2 border-black font-bold text-[10px] md:text-xs transform -rotate-2 shadow-sm">
+                                    ${sanitizeHTML(product.badge)}
+                                </div>
+                            ` : ''}
+                            
+                            <button type="button" onclick="toggleWishlist(${product.id})" 
+                                class="wishlist-btn absolute top-2 right-2 md:top-4 md:right-4 rounded-full shadow-md ${isWishlisted ? 'active' : ''}"
+                                aria-label="${isWishlisted ? 'Remove from' : 'Add to'} wishlist"
+                                aria-pressed="${isWishlisted}">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </button>
+                            
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2 md:gap-4 pointer-events-none md:pointer-events-auto">
+                                <button type="button" onclick="openQuickView(${product.id})" 
+                                    class="quick-view-btn bg-white text-black font-bold border-2 border-black transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 hover:bg-[#ccff00] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white pointer-events-auto"
+                                    aria-label="Quick view ${sanitizeHTML(product.name)}">
+                                    QUICK VIEW
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="p-3 md:p-6 product-card-content">
+                            <div class="flex justify-between items-start mb-1 md:mb-2 gap-2">
+                                <h3 class="text-xs md:text-lg font-bold brand-font leading-tight flex-1">${sanitizeHTML(product.name)}</h3>
+                                <div class="text-right">
+                                    ${hasComparePrice ? `<span class="block text-[10px] md:text-sm text-gray-400 line-through">${formatPrice(product.compareAtPrice)}</span>` : ''}
+                                    <span class="text-sm md:text-lg font-mono font-bold">${formatPrice(product.price)}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-1.5 md:gap-2 mb-2 md:mb-4" role="group" aria-label="Available colors">
+                                ${product.colors.map((color) => `
+                                    <span class="color-swatch w-5 h-5 md:w-7 md:h-7" 
+                                        style="background: ${color.value}; border-radius: 50%; border: 1.5px solid black; display: inline-block;"
+                                        aria-label="Color: ${sanitizeHTML(color.name)}">
+                                    </span>
+                                `).join('')}
+                            </div>
+                            
+                            <button type="button" onclick="openProductOptions(${product.id})" 
+                                class="w-full py-2 md:py-3 bg-black text-white font-bold text-xs md:text-base border-2 border-black hover:bg-[#ccff00] hover:text-black transition-all duration-200 flex items-center justify-center gap-1 md:gap-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#ccff00]">
+                                <span>ADD TO CART</span>
+                                <svg class="w-3 h-3 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        };
+
+        const renderCart = () => {
+            const cartItems = document.getElementById('cartItems');
+            const cartBadge = document.getElementById('cartBadge');
+            const cartCount = document.getElementById('cartCount');
+            const cartTotal = document.getElementById('cartTotal');
+            const cartSavings = document.getElementById('cartSavings');
+            
+            const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+            const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const originalTotal = state.cart.reduce((sum, item) => {
+                const product = products.find(p => p.id === item.id);
+                const comparePrice = product?.compareAtPrice || item.price;
+                return sum + (comparePrice * item.quantity);
+            }, 0);
+            const savings = originalTotal - subtotal;
+            
+            if (totalItems > 0) {
+                cartBadge.textContent = totalItems;
+                cartBadge.classList.remove('hidden');
+            } else {
+                cartBadge.classList.add('hidden');
+            }
+            
+            cartCount.textContent = totalItems;
+            cartTotal.textContent = formatPrice(subtotal);
+            cartSavings.innerHTML = savings > 0 ? `<span class="text-[#ccff00] text-xs md:text-sm">Save ${formatPrice(savings)}</span>` : '';
+            
+            if (state.cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-gray-500 py-8 md:py-12" role="status">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mb-4 opacity-50" aria-hidden="true">
+                            <path d="M9 2L6 9H3L5 20H19L21 9H18L15 2H9Z"/>
+                        </svg>
+                        <p class="text-base md:text-lg font-medium mb-2">Your cart is empty</p>
+                        <button onclick="toggleCart()" class="text-sm md:text-base text-black underline hover:text-[#ccff00] font-bold py-1 px-2">Continue Shopping</button>
+                    </div>
+                `;
+            } else {
+                cartItems.innerHTML = state.cart.map(item => `
+                    <div class="flex gap-3 md:gap-4 border-2 border-black p-2 md:p-4 bg-white" role="listitem">
+                        <div class="w-16 h-16 md:w-24 md:h-24 flex-shrink-0 bg-gray-100 border border-black">
+                            <img src="${item.image}" alt="" class="w-full h-full object-cover" loading="lazy">
+                        </div>
+                        <div class="flex-1 min-w-0 flex flex-col">
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold brand-font text-xs md:text-sm leading-tight pr-2">${sanitizeHTML(item.name)}</h4>
+                                <button type="button" onclick="promptRemoveItem(${item.cartId})" 
+                                    class="text-gray-400 hover:text-[#ff006e] p-1"
+                                    aria-label="Remove item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="text-[10px] md:text-xs text-gray-600 mb-0.5 md:mb-1">${item.color.name} / ${item.size}</p>
+                            <p class="font-mono font-bold text-xs md:text-sm mb-auto">${formatPrice(item.price * item.quantity)}</p>
+                            <div class="flex items-center gap-1 mt-1 md:mt-2">
+                                <button onclick="${item.quantity <= 1 ? `promptRemoveItem(${item.cartId})` : `updateQuantity(${item.cartId}, -1)`}" 
+                                    class="w-6 h-6 md:w-8 md:h-8 border-2 border-black flex items-center justify-center font-bold text-xs md:text-base">-</button>
+                                <span class="font-bold w-6 md:w-8 text-center text-xs md:text-sm">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.cartId}, 1)" 
+                                    class="w-6 h-6 md:w-8 md:h-8 border-2 border-black flex items-center justify-center font-bold text-xs md:text-base">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        };
+
+        const openQuickView = (productId, showOptions = false) => {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            if (showOptions) {
+                state.currentProductOptions = { 
+                    ...product, 
+                    selectedColor: product.colors[0], 
+                    selectedSize: product.sizes[0] 
+                };
+            }
+            
+            const isWishlisted = state.wishlist.includes(productId);
+            const hasComparePrice = product.compareAtPrice && product.compareAtPrice > product.price;
+            const modal = document.getElementById('quickViewModal');
+            const content = document.getElementById('quickViewContent');
+            
+            content.innerHTML = `
+                <div class="h-64 md:h-full bg-gray-100 border-b-2 md:border-b-0 md:border-r-2 border-black relative">
+                    <img src="${product.image}" alt="${sanitizeHTML(product.name)}" class="w-full h-full object-cover">
+                </div>
+                <div class="p-4 md:p-8 flex flex-col justify-center bg-white overflow-y-auto">
+                    <div class="flex justify-between items-start mb-2 md:mb-4">
+                        <div>
+                            <p class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-wider mb-1">${product.category}</p>
+                            <h2 id="quick-view-title" class="text-2xl md:text-4xl font-black brand-font mb-1 md:mb-2 leading-tight">${sanitizeHTML(product.name)}</h2>
+                            <div class="flex items-baseline gap-2">
+                                <p class="text-lg md:text-2xl font-mono font-bold">${formatPrice(product.price)}</p>
+                                ${hasComparePrice ? `<p class="text-sm md:text-lg text-gray-400 line-through">${formatPrice(product.compareAtPrice)}</p>` : ''}
+                            </div>
+                        </div>
+                        <button onclick="toggleWishlist(${product.id}); openQuickView(${product.id}, true)" 
+                            class="p-2 md:p-3 border-2 border-black ${isWishlisted ? 'bg-[#ff006e] text-white border-[#ff006e]' : 'bg-white'}"
+                            aria-label="Toggle wishlist">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="${isWishlisted ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <p class="text-gray-700 mb-4 md:mb-8 text-sm md:text-lg leading-relaxed">${sanitizeHTML(product.description)}</p>
+                    
+                    <div class="space-y-4 md:space-y-6">
+                        <div>
+                            <label class="block font-bold mb-2 md:mb-3 uppercase tracking-wide text-xs md:text-sm">Color: <span class="text-gray-600 normal-case font-normal">${product.colors[0].name}</span></label>
+                            <div class="flex gap-2" role="radiogroup">
+                                ${product.colors.map((color, idx) => `
+                                    <button type="button" onclick="selectColor(${idx})"
+                                        class="w-6 h-6 md:w-8 md:h-8 rounded-full border-2 border-black ${idx === 0 ? 'ring-2 ring-black ring-offset-2' : ''}"
+                                        style="background: ${color.value};"
+                                        aria-label="${sanitizeHTML(color.name)}"></button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block font-bold mb-2 md:mb-3 uppercase tracking-wide text-xs md:text-sm">Size: <span class="text-gray-600 normal-case font-normal">${product.sizes[0]}</span></label>
+                            <div class="size-grid" role="radiogroup">
+                                ${product.sizes.map((size, idx) => `
+                                    <button type="button" onclick="selectSize('${size}')"
+                                        class="size-btn text-xs md:text-base ${idx === 0 ? 'bg-[#ccff00]' : ''}">
+                                        ${size}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="pt-2 md:pt-4 border-t-2 border-black">
+                            <button type="button" onclick="${showOptions ? 'addToCartWithOptions()' : `addToCart(${product.id})`}; closeQuickView();" 
+                                class="w-full py-2.5 md:py-4 bg-black text-white font-bold text-sm md:text-lg border-2 border-black hover:bg-[#ccff00] hover:text-black transition-colors mb-2">
+                                ADD TO CART - ${formatPrice(product.price)}
+                            </button>
+                            <button type="button" onclick="closeQuickView()" class="w-full py-2 md:py-3 bg-transparent text-black font-bold text-xs md:text-base border-2 border-black">
+                                Continue Shopping
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeQuickView = () => {
+            document.getElementById('quickViewModal').classList.remove('open');
+            document.body.style.overflow = '';
+        };
+
+        const selectColor = (index) => {
+            if (!state.currentProductOptions) return;
+            state.currentProductOptions.selectedColor = state.currentProductOptions.colors[index];
+        };
+
+        const selectSize = (size) => {
+            if (!state.currentProductOptions) return;
+            state.currentProductOptions.selectedSize = size;
+        };
+
+        const addToCartWithOptions = () => {
+            const { id, selectedSize, selectedColor, price, name, image } = state.currentProductOptions;
+            
+            const existingItem = state.cart.find(item => 
+                item.id === id && 
+                item.size === selectedSize && 
+                item.color.name === selectedColor.name
+            );
+            
+            if (existingItem) {
+                existingItem.quantity++;
+                showToast(`Updated: ${sanitizeHTML(name)}`, 'success');
+            } else {
+                state.cart.push({
+                    id, name, price, image, size: selectedSize, color: selectedColor,
+                    quantity: 1, cartId: Date.now()
+                });
+                showToast(`Added: ${sanitizeHTML(name)}`, 'success');
+            }
+            
+            renderCart();
+        };
+
+        const addToCart = (productId) => {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                openQuickView(productId, true);
+            }
+        };
+
+        const promptRemoveItem = (cartId) => {
+            state.itemToRemove = cartId;
+            document.getElementById('confirmModal').classList.add('open');
+        };
+
+        const confirmRemove = () => {
+            if (state.itemToRemove) {
+                state.cart = state.cart.filter(i => i.cartId !== state.itemToRemove);
+                renderCart();
+                showToast('Item removed', 'error');
+            }
+            cancelRemove();
+        };
+
+        const cancelRemove = () => {
+            document.getElementById('confirmModal').classList.remove('open');
+        };
+
+        const updateQuantity = (cartId, delta) => {
+            const item = state.cart.find(i => i.cartId === cartId);
+            if (!item) return;
+            
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                promptRemoveItem(cartId);
+            } else {
+                renderCart();
+            }
+        };
+
+        const toggleCart = () => {
+            const drawer = document.getElementById('cartDrawer');
+            const overlay = document.getElementById('cartOverlay');
+            const isOpen = drawer.classList.contains('open');
+            
+            if (isOpen) {
+                drawer.classList.remove('open');
+                overlay.classList.remove('open');
+                document.body.style.overflow = '';
+            } else {
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                renderCart();
+            }
+        };
+
+        const toggleWishlist = (productId) => {
+            const index = state.wishlist.indexOf(productId);
+            const product = products.find(p => p.id === productId);
+            
+            if (index > -1) {
+                state.wishlist.splice(index, 1);
+                showToast('Removed from wishlist', 'error');
+            } else {
+                state.wishlist.push(productId);
+                showToast('Added to wishlist', 'success');
+            }
+            renderProducts();
+        };
+
+        const toggleSearch = () => {
+            const overlay = document.getElementById('searchOverlay');
+            if (overlay.classList.contains('hidden')) {
+                overlay.classList.remove('hidden');
+                document.getElementById('searchInput').focus();
+            } else {
+                overlay.classList.add('hidden');
+            }
+        };
+
+        const handleSearch = (term) => {
+            const status = document.getElementById('searchStatus');
+            if (term.length > 0) {
+                state.currentFilter = 'search';
+                state.searchQuery = term;
+                status.textContent = `Searching...`;
+                renderProducts();
+            } else {
+                state.currentFilter = 'all';
+                state.searchQuery = '';
+                status.textContent = 'Type to search...';
+                renderProducts();
+            }
+        };
+
+        const sortProducts = () => {
+            const sortValue = document.getElementById('sortSelect').value;
+            const sortMap = {
+                'price-low': (a, b) => a.price - b.price,
+                'price-high': (a, b) => b.price - a.price,
+                'newest': (a, b) => b.id - a.id,
+                'default': (a, b) => a.id - b.id
+            };
+            products.sort(sortMap[sortValue] || sortMap['default']);
+            renderProducts();
+        };
+
+        const resetFilters = () => {
+            state.currentFilter = 'all';
+            state.searchQuery = '';
+            document.querySelectorAll('.filter-tag').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
+            document.querySelector('[data-filter="all"]').classList.add('active');
+            document.querySelector('[data-filter="all"]').setAttribute('aria-pressed', 'true');
+            document.getElementById('searchInput').value = '';
+            renderProducts();
+        };
+
+        const showToast = (message, type = 'success') => {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${type === 'success' ? '#ccff00' : '#fff'}" stroke-width="3">
+                    ${type === 'success' ? '<polyline points="20 6 9 17 4 12"></polyline>' : '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'}
+                </svg>
+                <span class="text-sm">${sanitizeHTML(message)}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        };
+
+        const proceedToCheckout = () => {
+            if (state.cart.length === 0) {
+                showToast('Your cart is empty!', 'error');
+                return;
+            }
+            alert('Proceeding to checkout...');
+        };
+
+        const handleSubscribe = (e) => {
+            e.preventDefault();
+            const email = document.getElementById('emailInput');
+            const error = document.getElementById('email-error');
+            const btn = e.target.querySelector('button');
+            
+            if (!email.value.includes('@')) {
+                error.classList.remove('hidden');
+                return;
+            }
+            
+            error.classList.add('hidden');
+            btn.disabled = true;
+            btn.textContent = 'SUBSCRIBING...';
+            
+            setTimeout(() => {
+                btn.textContent = 'SUBSCRIBED!';
+                btn.classList.add('bg-[#ccff00]', 'text-black');
+                showToast('Welcome to UK Store!');
+                setTimeout(() => {
+                    btn.textContent = 'SUBSCRIBE';
+                    btn.classList.remove('bg-[#ccff00]', 'text-black');
+                    btn.disabled = false;
+                    e.target.reset();
+                }, 2000);
+            }, 1000);
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            
+            document.querySelectorAll('.filter-tag').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-tag').forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-pressed', 'false');
+                    });
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-pressed', 'true');
+                    state.currentFilter = btn.dataset.filter;
+                    renderProducts();
+                });
+            });
+            
+            document.getElementById('searchInput').addEventListener('input', debounce((e) => {
+                handleSearch(e.target.value);
+            }, 300));
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay, #searchOverlay').forEach(el => {
+                        el.classList.remove('open', 'hidden');
+                        if(el.id !== 'searchOverlay') el.classList.remove('open');
+                        else el.classList.add('hidden');
+                    });
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
